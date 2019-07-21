@@ -13,6 +13,14 @@ import java.util.Map;
 public class JsonMapRepresentation extends WriterRepresentation {
 
     private final Map map;
+    public static final JsonMapRepresentation SUCCESS_JSON;
+
+
+    static {   // static class initialization
+        Map<String, Object> m = new HashMap<>();
+        m.put("success", "success");
+        SUCCESS_JSON = new JsonMapRepresentation(m);
+    }
 
     public JsonMapRepresentation(Map map) {
         super(MediaType.APPLICATION_JSON);
@@ -43,7 +51,7 @@ public class JsonMapRepresentation extends WriterRepresentation {
 
     public static JsonMapRepresentation getJSONforError(String message) {
         Map<String, Object> map = new HashMap<>();
-        map.put("error", null);
+        map.put("error", "error");
         map.put("message", message);
         return new JsonMapRepresentation(map);
     }

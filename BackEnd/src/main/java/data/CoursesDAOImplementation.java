@@ -33,4 +33,20 @@ public class CoursesDAOImplementation implements CoursesDAO {
     public List<Course> getAllCourses(int studentId) throws DataAccessException {
         return dataAccess.getAllCourses(studentId);
     }
+
+    @Override
+    public void submitCourse(Course course) throws DataAccessException {
+        dataAccess.submitCourse(course);
+    }
+
+    @Override
+    public void editCourse(Course course) throws DataAccessException {
+        dataAccess.editCourse(course);
+    }
+
+    @Override
+    public void deleteCourse(int courseId) throws DataAccessException {
+        dataAccess.deleteCourse(courseId);
+    }
+
 }

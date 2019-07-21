@@ -15,4 +15,10 @@ public interface CoursesDAO {
 
     List<Course> getAllCourses(int studentId) throws DataAccessException;   // this also gets grades associated with given user
 
+    void submitCourse(Course course) throws DataAccessException;
+
+    void editCourse(Course course) throws DataAccessException;
+
+    void deleteCourse(int courseId) throws DataAccessException;
+
 }

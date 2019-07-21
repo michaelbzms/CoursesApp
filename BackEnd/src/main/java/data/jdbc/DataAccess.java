@@ -35,7 +35,6 @@ public class DataAccess {
         bds.setTestOnBorrow(true);
         bds.setDefaultAutoCommit(true);
 
-
         // check that everything works OK
         bds.getConnection().close();
 
@@ -72,4 +71,29 @@ public class DataAccess {
                      "WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?";
         return jdbcTemplate.query(sql, new Object[]{studentId}, new CourseForStudentRowMapper());
     }
+
+    public void submitCourse(Course course) throws DataAccessException {
+        String sql = "INSERT INTO courses (idCourses, title, ects, path, type, specificpath) " +
+                     "VALUES (default, ?, ?, ?, ?, ?);";
+        jdbcTemplate.update(sql, course.getTitle(), course.getEcts(), course.getPath(), course.getType(), course.getSpecificpath());
+    }
+
+    public void editCourse(Course newCourse) throws DataAccessException {
+        transactionTemplate.execute(status -> {
+            Course oldCourse = getCourse(newCourse.getId());
+            String title = (newCourse.getTitle() != null) ? newCourse.getTitle() : oldCourse.getTitle();
+            int ects = (newCourse.getEcts() != -1) ? newCourse.getEcts() : oldCourse.getEcts();
+            String path = (newCourse.getPath() != null) ? newCourse.getPath() : oldCourse.getPath();
+            String type = (newCourse.getType() != null) ? newCourse.getType() : oldCourse.getType();
+            String specificpath = (newCourse.getSpecificpath() != null) ? newCourse.getSpecificpath() : oldCourse.getSpecificpath();
+            jdbcTemplate.update("UPDATE courses SET title = ?, ects = ?, path = ?, type = ?, specificpath = ? WHERE idCourses = ?",
+                                     title, ects, path, type, specificpath, newCourse.getId());
+            return true;
+        });
+    }
+
+    public void deleteCourse(int courseId) throws DataAccessException {
+        jdbcTemplate.update("DELETE FROM courses WHERE idCourses = ?", courseId);
+    }
+
 }
