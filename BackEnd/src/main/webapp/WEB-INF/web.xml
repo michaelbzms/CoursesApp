@@ -14,6 +14,19 @@
         <param-value>/app.properties</param-value>
     </context-param>
 
+    <error-page>
+        <error-code>403</error-code>
+        <location>/error-403.html</location>
+    </error-page>
+
+    <!-- //////// -->
+    <!-- Filters -->
+    <!-- //////// -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>api.AuthorisationFilter</filter-class>
+    </filter>
+
     <!-- //////// -->
     <!-- Servlets -->
     <!-- //////// -->
@@ -23,10 +36,17 @@
         <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
         <init-param>
             <param-name>org.restlet.application</param-name>
-            <param-value>back.api.RestfulApp</param-value>
+            <param-value>api.RestfulApp</param-value>
         </init-param>
     </servlet>
 
+    <!-- //////////////////// -->
+    <!-- Filter URL Mappings -->
+    <!-- //////////////////// -->
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/api/*</url-pattern>
+    </filter-mapping>
 
     <!-- //////////////////// -->
     <!-- Servlet URL Mappings -->

@@ -10,7 +10,13 @@ public class RestfulApp extends Application {
     public synchronized Restlet createInboundRoot() {
         Router router = new Router(getContext());
 
-        // TODO: url and uri matches
+        router.attach("/courses", CoursesResource.class);
+        router.attach("/courses/{courseId}", CourseResource.class);
+
+        router.attach("/students", StudentsResource.class);
+        router.attach("/students/{studentId}", StudentResource.class);
+
+        router.attach("/login", LoginResource.class);
 
         return router;
     }
