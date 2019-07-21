@@ -15,12 +15,22 @@ public class CoursesDAOImplementation implements CoursesDAO {
     }
 
     @Override
+    public Course getCourse(int courseId) throws DataAccessException {
+        return dataAccess.getCourse(courseId);
+    }
+
+    @Override
+    public Course getCourse(int courseId, int studentId) throws DataAccessException {
+        return dataAccess.getCourse(courseId, studentId);
+    }
+
+    @Override
     public List<Course> getAllCourses() throws DataAccessException {
         return dataAccess.getAllCourses();
     }
 
     @Override
-    public List<Course> getAllCourses(int userId) throws DataAccessException {
-        return dataAccess.getAllCourses(userId);
+    public List<Course> getAllCourses(int studentId) throws DataAccessException {
+        return dataAccess.getAllCourses(studentId);
     }
 }

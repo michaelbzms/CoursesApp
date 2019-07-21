@@ -52,14 +52,24 @@ public class DataAccess {
         dataSource = bds;
     }
 
+    public Course getCourse(int courseId) throws DataAccessException {
+        return jdbcTemplate.queryForObject("SELECT * FROM courses WHERE idCourses = ?", new Object[]{courseId}, new CourseRowMapper());
+    }
+
+    public Course getCourse(int courseId, int studentId) throws DataAccessException {
+        String sql = "SELECT c.*, shc.grade FROM courses c, students_has_courses shc " +
+                     "WHERE idCourses = ? AND shc.idCourses = c.idCourses AND shc.idStudents = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{courseId, studentId}, new CourseRowMapper());
+    }
+
     public List<Course> getAllCourses() throws DataAccessException {
         return jdbcTemplate.query("SELECT * FROM courses", new CourseRowMapper());
     }
 
-    public List<Course> getAllCourses(int userId) throws DataAccessException {
+    public List<Course> getAllCourses(int studentId) throws DataAccessException {
         String sql = "SELECT c.*, shc.grade " +
-                    "FROM courses c, students_has_courses shc " +
-                    "WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?";
-        return jdbcTemplate.query(sql, new Object[]{userId}, new CourseForStudentRowMapper());
+                     "FROM courses c, students_has_courses shc " +
+                     "WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?";
+        return jdbcTemplate.query(sql, new Object[]{studentId}, new CourseForStudentRowMapper());
     }
 }

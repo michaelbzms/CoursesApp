@@ -19,13 +19,12 @@ public class CoursesResource extends ServerResource {
     @Override
     protected Representation get() throws ResourceException {
         List<Course> allCourses;
-
         String jwt = JWT.getJWTFromHeaders(getRequest());
         if (jwt == null){    // no session
             allCourses = coursesDAO.getAllCourses();
-            System.out.println("HEEY");
         } else {
             User u;
+            // noinspection Duplicates
             try {
                 u = JWT.getUserFromJWT(jwt);
                 if (u == null) throw new Exception();
@@ -36,11 +35,6 @@ public class CoursesResource extends ServerResource {
                 return JsonMapRepresentation.getJSONforError("Jason Web Token contains no user id");
             }
             allCourses = coursesDAO.getAllCourses(u.getId());
-
-            for (Course c : allCourses){
-                System.out.println(c.getTitle());
-            }
-
         }
         return JsonMapRepresentation.getJSONforList("courses", allCourses);
     }
