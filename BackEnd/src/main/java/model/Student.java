@@ -1,5 +1,7 @@
 package model;
 
+import java.util.LinkedHashMap;
+
 public class Student extends User {
 
     private String firstName, lastName;
@@ -14,6 +16,10 @@ public class Student extends User {
         super(id, email, isAdmin);
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public static Student getStudentFromMap(LinkedHashMap map) {
+        return new Student((Integer) map.get("id"), (String) map.get("email"), (boolean) map.get("isAdmin"), (String) map.get("firstName"), (String) map.get("lastName"));
     }
 
     public String getFirstName() { return firstName; }
