@@ -1,0 +1,40 @@
+plugins {
+    id 'java'                       // for java-only project
+    id 'war'                        // for generating war files
+    id 'org.gretty' version "2.3.1" // web app development plugin
+}
+
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    jcenter()
+    maven {
+        url "http://maven.restlet.org/"
+    }
+}
+
+dependencies {
+    compile "javax.servlet:javax.servlet-api:3.1.0"              // the Java servlet libraries
+    compile "org.restlet.jee:org.restlet:2.3.12"                 // for writing RESTful APIs
+    compile "com.google.code.gson:gson:2.8.2"                    // json library
+    compile "org.apache.commons:commons-dbcp2:2.6.0"             // db connection pool
+    compile "org.springframework:spring-jdbc:5.0.2.RELEASE"      // spring JDBC template utility
+    compile 'io.jsonwebtoken:jjwt-jackson:0.10.5'
+    runtime "org.restlet.jee:org.restlet.ext.servlet:2.3.12"     // servlet adapter for Restlet framework
+    runtime "mysql:mysql-connector-java:8.0.16"                  // connect to database
+
+    // JSon Web Tokens
+    compile 'io.jsonwebtoken:jjwt-api:0.10.5'
+    runtime 'io.jsonwebtoken:jjwt-impl:0.10.5',
+            'io.jsonwebtoken:jjwt-jackson:0.10.5'
+}
+
+gretty {
+    httpEnabled = true
+    httpPort = 8765
+    httpsEnabled = false   // TODO: switch to https after development
+    contextPath = 'CoursesApp'
+}
