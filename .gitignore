@@ -1,0 +1,3 @@
+BackEnd/.*/*
+back_end/build/*
+back_end/out/*
