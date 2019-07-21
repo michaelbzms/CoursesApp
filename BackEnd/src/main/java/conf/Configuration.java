@@ -10,6 +10,7 @@ public class Configuration {
 
     // set this to false for easier API testing without needing to login
     public static boolean CHECK_AUTHORISATION;
+    public static boolean ALLOW_CORS;    // should allow CORS only for development purposes!
 
     private static final Configuration self = new Configuration();
 
@@ -30,8 +31,8 @@ public class Configuration {
         this.contextPath = contextPath;
         this.props = props;
 
-        // true if not specified
-        CHECK_AUTHORISATION = !("false".equals(getProperty("check_authorisation")));
+        CHECK_AUTHORISATION = !("false".equals(getProperty("check_authorisation")));   // true if not specified
+        ALLOW_CORS = "true".equals(getProperty("allow_CORS"));                         // false if not specified
 
         try {
             dataAccess.setup(
