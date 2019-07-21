@@ -10,20 +10,20 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `mydb` ;
+DROP SCHEMA IF EXISTS `CoursesAppDB` ;
 
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `CoursesAppDB` DEFAULT CHARACTER SET utf8 ;
+USE `CoursesAppDB` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Courses`
+-- Table `CoursesAppDB`.`Courses`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Courses` ;
+DROP TABLE IF EXISTS `CoursesAppDB`.`Courses` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Courses` (
+CREATE TABLE IF NOT EXISTS `CoursesAppDB`.`Courses` (
   `idCourses` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(128) NOT NULL,
   `ects` INT NOT NULL,
@@ -35,11 +35,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Users`
+-- Table `CoursesAppDB`.`Users`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Users` ;
+DROP TABLE IF EXISTS `CoursesAppDB`.`Users` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Users` (
+CREATE TABLE IF NOT EXISTS `CoursesAppDB`.`Users` (
   `idUsers` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(128) NOT NULL,
   `password` VARCHAR(256) NOT NULL,
@@ -49,50 +49,50 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Students`
+-- Table `CoursesAppDB`.`Students`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Students` ;
+DROP TABLE IF EXISTS `CoursesAppDB`.`Students` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Students` (
+CREATE TABLE IF NOT EXISTS `CoursesAppDB`.`Students` (
   `idStudents` INT NOT NULL,
   `firstname` VARCHAR(128) NOT NULL,
   `lastname` VARCHAR(128) NOT NULL,
   PRIMARY KEY (`idStudents`),
   CONSTRAINT `fk_Students_Users1`
     FOREIGN KEY (`idStudents`)
-    REFERENCES `mydb`.`Users` (`idUsers`)
+    REFERENCES `CoursesAppDB`.`Users` (`idUsers`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_Students_Users1_idx` ON `mydb`.`Students` (`idStudents` ASC) VISIBLE;
+CREATE INDEX `fk_Students_Users1_idx` ON `CoursesAppDB`.`Students` (`idStudents` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Students_has_Courses`
+-- Table `CoursesAppDB`.`Students_has_Courses`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Students_has_Courses` ;
+DROP TABLE IF EXISTS `CoursesAppDB`.`Students_has_Courses` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Students_has_Courses` (
+CREATE TABLE IF NOT EXISTS `CoursesAppDB`.`Students_has_Courses` (
   `idStudents` INT NOT NULL,
   `idCourses` INT NOT NULL,
   `grade` DOUBLE NULL,
   PRIMARY KEY (`idStudents`, `idCourses`),
   CONSTRAINT `fk_Students_has_Courses_Students1`
     FOREIGN KEY (`idStudents`)
-    REFERENCES `mydb`.`Students` (`idStudents`)
+    REFERENCES `CoursesAppDB`.`Students` (`idStudents`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Students_has_Courses_Courses1`
     FOREIGN KEY (`idCourses`)
-    REFERENCES `mydb`.`Courses` (`idCourses`)
+    REFERENCES `CoursesAppDB`.`Courses` (`idCourses`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_Students_has_Courses_Courses1_idx` ON `mydb`.`Students_has_Courses` (`idCourses` ASC) VISIBLE;
+CREATE INDEX `fk_Students_has_Courses_Courses1_idx` ON `CoursesAppDB`.`Students_has_Courses` (`idCourses` ASC) VISIBLE;
 
-CREATE INDEX `fk_Students_has_Courses_Students1_idx` ON `mydb`.`Students_has_Courses` (`idStudents` ASC) VISIBLE;
+CREATE INDEX `fk_Students_has_Courses_Students1_idx` ON `CoursesAppDB`.`Students_has_Courses` (`idStudents` ASC) VISIBLE;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
