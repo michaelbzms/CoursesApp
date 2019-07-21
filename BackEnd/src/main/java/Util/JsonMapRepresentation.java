@@ -7,6 +7,7 @@ import org.restlet.representation.WriterRepresentation;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JsonMapRepresentation extends WriterRepresentation {
@@ -24,23 +25,27 @@ public class JsonMapRepresentation extends WriterRepresentation {
         writer.write(gson.toJson(map));
     }
 
-    public static JsonMapRepresentation getJSONfromMap(Map data){
+    public static JsonMapRepresentation getJSONforMap(Map data) {
         return new JsonMapRepresentation(data);
     }
 
-    // TODO: Figure out JSON array from array/list maybe?
+    public static JsonMapRepresentation getJSONforList(String fieldName, List list) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(fieldName, list);
+        return new JsonMapRepresentation(map);
+    }
 
-    public static JsonMapRepresentation getJSONforSimpleResult(String fieldName, Object o) {
+    public static JsonMapRepresentation getJSONforObject(String fieldName, Object o) {
         Map<String, Object> map = new HashMap<>();
         map.put(fieldName, o);
         return new JsonMapRepresentation(map);
     }
 
-    public static JsonMapRepresentation getJSONforComplicatedResult(boolean success, String message, Map data){
-        HashMap<String,Object> res = new HashMap<>();
-        res.put("success", success);
-        res.put("message", message);
-        res.put("data", data);
-        return new JsonMapRepresentation(res);
+    public static JsonMapRepresentation getJSONforError(String message) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("error", null);
+        map.put("message", message);
+        return new JsonMapRepresentation(map);
     }
+
 }

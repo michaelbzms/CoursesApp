@@ -2,25 +2,28 @@ package model;
 
 public class Course {
 
-    private Integer id;            // Might be null for objects with unknown database user id
+    private Integer id;             // Might be null for objects with unknown database user id
     private String title;
     private int ects;
     private String path;
     private String type = null;
     private String specificpath = null;
+    private Double grade;           // to be associated with student-user in session
 
-    public Course(Integer id, String title, int ects, String path){
+    public Course(Integer id, String title, int ects, String path, Double grade){
         this.id = id;
         this.title = title;
         this.ects = ects;
         this.path = path;
+        this.grade = grade;
     }
 
-    public Course(Integer id, String title, int ects, String path, String type, String specificpath){
+    public Course(Integer id, String title, int ects, String path, Double grade, String type, String specificpath){
         this.id = id;
         this.title = title;
         this.ects = ects;
         this.path = path;
+        this.grade = grade;
         this.type = type;
         this.specificpath = specificpath;
     }
@@ -40,6 +43,10 @@ public class Course {
     public String getPath() { return path; }
 
     public void setPath(String path) { this.path = path; }
+
+    public Double getGrade() { return grade; }
+
+    public void setGrade(Double grade) { this.grade = grade; }
 
     public String getType() { return type; }
 

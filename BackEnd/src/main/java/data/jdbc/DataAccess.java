@@ -1,14 +1,15 @@
 package data.jdbc;
 
+import model.Course;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.List;
 
 
 public class DataAccess {
@@ -51,5 +52,14 @@ public class DataAccess {
         dataSource = bds;
     }
 
+    public List<Course> getAllCourses() throws DataAccessException {
+        return jdbcTemplate.query("SELECT * FROM courses", new CourseRowMapper());
+    }
 
+    public List<Course> getAllCourses(int userId) throws DataAccessException {
+        String sql = "SELECT c.*, shc.grade " +
+                    "FROM courses c, students_has_courses shc " +
+                    "WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?";
+        return jdbcTemplate.query(sql, new Object[]{userId}, new CourseForStudentRowMapper());
+    }
 }

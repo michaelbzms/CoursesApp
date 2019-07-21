@@ -10,9 +10,12 @@ import java.security.Key;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import model.User;
+import org.restlet.Request;
+import org.restlet.data.Header;
+import org.restlet.util.Series;
 
-
-public class JasonWebTokens {
+// Jason Web Token Handling class
+public class JWT {
     // TODO: Test when done with login logic
 
     // The secret key. This should be in a property file NOT under source
@@ -43,7 +46,7 @@ public class JasonWebTokens {
             Claims claims = decodeJWT(jwt);
             return User.getUserFromMap((LinkedHashMap) claims.get("user"));
         } catch (Exception e){
-            throw new Exception("Could not decode JasonWebTokens token");
+            throw new Exception("Could not decode JWT token");
         }
     }
 
@@ -55,5 +58,16 @@ public class JasonWebTokens {
                 .parseClaimsJws(jwt).getBody();
         return claims;
     }
+
+    public static String getJWTFromHeaders(Request request) {
+        if (request == null) return null;
+        try {
+            Series<Header> headers = request.getHeaders();
+            return (headers != null) ? headers.getFirstValue("token") : null;
+        } catch (Exception e){
+            return null;    // there was no jwt in Headers
+        }
+    }
+
 
 }
