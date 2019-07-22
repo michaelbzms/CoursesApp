@@ -33,6 +33,8 @@ public class RestfulApp extends Application {
 
         router.attach("/login", LoginResource.class);
 
+        router.attach("/users/{userId}", UsersResource.class);
+
         return router;
     }
 }

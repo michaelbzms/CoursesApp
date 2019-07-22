@@ -10,5 +10,4 @@ public interface UsersDAO {
 
     Feedback changeUserPassword(int userId, String oldHashedPassword, String newHashedPassword) throws DataAccessException;
 
-
 }

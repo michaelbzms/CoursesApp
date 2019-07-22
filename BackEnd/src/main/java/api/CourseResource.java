@@ -98,7 +98,6 @@ public class CourseResource extends ServerResource {
         }
     }
 
-    ///////////////////////////////////////
 
     private int getCourseId() throws Exception {
         int courseId;

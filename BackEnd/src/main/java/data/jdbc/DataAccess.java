@@ -77,6 +77,17 @@ public class DataAccess {
         return exists;
     }
 
+    private boolean checkIfUserIdExists(int userId) throws DataAccessException {
+        boolean exists;
+        try {
+            Integer res = jdbcTemplate.queryForObject("SELECT 1 FROM users WHERE idUsers = ?", new Object[]{userId}, Integer.class);
+            exists = (res == null || res == 1);  // should be true but just in case
+        } catch (EmptyResultDataAccessException e) {
+            exists = false;
+        }
+        return exists;
+    }
+
     private boolean checkIfPasswordIsCorrect(int userId, String hashedPassword) throws DataAccessException {
         boolean correct;
         try {
@@ -111,15 +122,20 @@ public class DataAccess {
     }
 
     public Feedback changeUserPassword(int userId, String oldHashedPassword, String newHashedPassword) throws DataAccessException {
-        Boolean success = transactionTemplate.execute(status -> {
+        Integer code = transactionTemplate.execute(status -> {
+            // check if user exists
+            if (!checkIfUserIdExists(userId)){
+                return -1;
+            }
             // given old password must be correct
             if (!checkIfPasswordIsCorrect(userId, oldHashedPassword)){
-                return false;
+                return -2;
             }
             jdbcTemplate.update("UPDATE users SET password = ? WHERE idUsers = ?", newHashedPassword, userId);
-            return true;
+            return 0;
         });
-        if (success != null && !success) return new Feedback(false, "User does not exist or given password is incorrect");
+        if (code != null && code == -1) return new Feedback(false, -1, "User does not exist");
+        else if (code != null && code == -2) return new Feedback(false, -2, "Given password is incorrect");
         return new Feedback(true);
     }
 

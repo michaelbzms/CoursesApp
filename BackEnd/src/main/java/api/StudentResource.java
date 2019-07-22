@@ -43,6 +43,7 @@ public class StudentResource extends ServerResource {
             String firstname = form.getFirstValue("firstname");
             String lastname = form.getFirstValue("lastname");
             Feedback fb = studentsDAO.editStudent(new Student(studentId, email, false, firstname, lastname));
+            // noinspection Duplicates
             if (!fb.SUCCESS && fb.STATUS == -1) {
                 this.setStatus(Status.CLIENT_ERROR_NOT_FOUND);
                 return null;
@@ -76,7 +77,6 @@ public class StudentResource extends ServerResource {
         }
     }
 
-    ///////////////////////////////////////
 
     private int getStudentId() throws Exception {
         int studentId;
@@ -89,7 +89,7 @@ public class StudentResource extends ServerResource {
             }
         } catch (NullPointerException e){
             System.err.println("Warning: NullPointerException in fetching variable from URI");
-            throw new Exception("Could not fetch URI course id");
+            throw new Exception("Could not fetch URI student id");
         }
         return studentId;
     }
