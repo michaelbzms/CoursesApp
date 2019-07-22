@@ -1,5 +1,6 @@
 package data;
 
+import Util.Feedback;
 import model.Course;
 import org.springframework.dao.DataAccessException;
 
@@ -17,8 +18,8 @@ public interface CoursesDAO {
 
     void submitCourse(Course course) throws DataAccessException;
 
-    void editCourse(Course course) throws DataAccessException;
+    Feedback editCourse(Course course) throws DataAccessException;
 
-    void deleteCourse(int courseId) throws DataAccessException;
+    Feedback deleteCourse(int courseId) throws DataAccessException;
 
 }

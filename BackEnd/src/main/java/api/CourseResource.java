@@ -1,5 +1,6 @@
 package api;
 
+import Util.Feedback;
 import Util.JWT;
 import Util.JsonMapRepresentation;
 import conf.Configuration;
@@ -7,6 +8,7 @@ import data.CoursesDAO;
 import model.Course;
 import model.User;
 import org.restlet.data.Form;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
@@ -38,6 +40,10 @@ public class CourseResource extends ServerResource {
                 }
                 course = coursesDAO.getCourse(courseId, u.getId());
             }
+            if (course == null) {
+                this.setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+                return null;
+            }
             return JsonMapRepresentation.getJSONforObject("course", course);
         } catch (DataAccessException e) {
             return JsonMapRepresentation.getJSONforError("data base error");
@@ -57,7 +63,11 @@ public class CourseResource extends ServerResource {
             String path = form.getFirstValue("path");
             String type = form.getFirstValue("type");
             String specificpath = form.getFirstValue("specificpath");
-            coursesDAO.editCourse(new Course(courseId, title, (ectsStr == null) ? -1 : Integer.parseInt(ectsStr), (semesterStr == null) ? -1 : Integer.parseInt(semesterStr), path, null, type, specificpath));
+            Feedback fb = coursesDAO.editCourse(new Course(courseId, title, (ectsStr == null) ? -1 : Integer.parseInt(ectsStr), (semesterStr == null) ? -1 : Integer.parseInt(semesterStr), path, null, type, specificpath));
+            if (!fb.SUCCESS) {
+                this.setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+                return null;
+            }
             return JsonMapRepresentation.SUCCESS_JSON;
         } catch (NumberFormatException e) {
             return JsonMapRepresentation.getJSONforError("Non-integer given to parameter that must be an integer number");
@@ -72,7 +82,11 @@ public class CourseResource extends ServerResource {
     protected Representation delete() throws ResourceException {
         try {
             int courseId = getCourseId();
-            coursesDAO.deleteCourse(courseId);
+            Feedback fb = coursesDAO.deleteCourse(courseId);
+            if (!fb.SUCCESS) {
+                this.setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+                return null;
+            }
             return JsonMapRepresentation.SUCCESS_JSON;
         } catch (DataAccessException e) {
             return JsonMapRepresentation.getJSONforError("data base error");

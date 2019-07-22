@@ -20,8 +20,6 @@ public class AuthorisationFilter implements Filter {
     // doFilter() method is invoked every time when user request to any resource, to which the filter is mapped.
     // It is used to perform filtering tasks
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
-
         /* PRE-FILTERING */
         boolean isAuthorized;
         if (Configuration.CHECK_AUTHORISATION) {

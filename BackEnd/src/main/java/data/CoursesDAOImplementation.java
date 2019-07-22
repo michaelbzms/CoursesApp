@@ -1,5 +1,6 @@
 package data;
 
+import Util.Feedback;
 import data.jdbc.DataAccess;
 import model.Course;
 import org.springframework.dao.DataAccessException;
@@ -40,13 +41,13 @@ public class CoursesDAOImplementation implements CoursesDAO {
     }
 
     @Override
-    public void editCourse(Course course) throws DataAccessException {
-        dataAccess.editCourse(course);
+    public Feedback editCourse(Course course) throws DataAccessException {
+        return dataAccess.editCourse(course);
     }
 
     @Override
-    public void deleteCourse(int courseId) throws DataAccessException {
-        dataAccess.deleteCourse(courseId);
+    public Feedback deleteCourse(int courseId) throws DataAccessException {
+        return dataAccess.deleteCourse(courseId);
     }
 
 }

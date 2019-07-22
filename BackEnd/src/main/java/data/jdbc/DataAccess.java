@@ -1,8 +1,11 @@
 package data.jdbc;
 
+import Util.Feedback;
 import model.Course;
+import model.Student;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -51,14 +54,26 @@ public class DataAccess {
         dataSource = bds;
     }
 
+    public List<Student> getALlStudents() throws DataAccessException {
+        return jdbcTemplate.query("SELECT u.*, s.* FROM users u, students s WHERE u.idUsers = s.idStudents", new StudentRowMapper());
+    }
+
     public Course getCourse(int courseId) throws DataAccessException {
-        return jdbcTemplate.queryForObject("SELECT * FROM courses WHERE idCourses = ?", new Object[]{courseId}, new CourseRowMapper());
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM courses WHERE idCourses = ?", new Object[]{courseId}, new CourseRowMapper());
+        } catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     public Course getCourse(int courseId, int studentId) throws DataAccessException {
         String sql = "SELECT c.*, shc.grade FROM courses c, students_has_courses shc " +
                      "WHERE idCourses = ? AND shc.idCourses = c.idCourses AND shc.idStudents = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{courseId, studentId}, new CourseRowMapper());
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{courseId, studentId}, new CourseRowMapper());
+        } catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     public List<Course> getAllCourses() throws DataAccessException {
@@ -78,9 +93,10 @@ public class DataAccess {
         jdbcTemplate.update(sql, course.getTitle(), course.getEcts(), course.getSemester(), course.getPath(), course.getType(), course.getSpecificpath());
     }
 
-    public void editCourse(Course newCourse) throws DataAccessException {
-        transactionTemplate.execute(status -> {
+    public Feedback editCourse(Course newCourse) throws DataAccessException {
+        Boolean success = transactionTemplate.execute(status -> {
             Course oldCourse = getCourse(newCourse.getId());
+            if (oldCourse == null) return false;
             String title = (newCourse.getTitle() != null) ? newCourse.getTitle() : oldCourse.getTitle();
             int ects = (newCourse.getEcts() != -1) ? newCourse.getEcts() : oldCourse.getEcts();
             int semester  = (newCourse.getSemester() != -1) ? newCourse.getSemester() : oldCourse.getSemester();
@@ -91,10 +107,19 @@ public class DataAccess {
                                      title, ects, semester, path, type, specificpath, newCourse.getId());
             return true;
         });
+        if (success != null && !success) return new Feedback(false, "Tried to edit course that does not exist");
+        else return new Feedback(true);
     }
 
-    public void deleteCourse(int courseId) throws DataAccessException {
-        jdbcTemplate.update("DELETE FROM courses WHERE idCourses = ?", courseId);
+    public Feedback deleteCourse(int courseId) throws DataAccessException {
+        Boolean success = transactionTemplate.execute(status -> {
+            Course oldCourse = getCourse(courseId);
+            if (oldCourse == null) return false;
+            jdbcTemplate.update("DELETE FROM courses WHERE idCourses = ?", courseId);
+            return true;
+        });
+        if (success != null && !success) return new Feedback(false, "Tried to edit course that does not exist");
+        else return new Feedback(true);
     }
 
 }
