@@ -41,6 +41,7 @@ public class CoursesResource extends ServerResource {
             }
             return JsonMapRepresentation.getJSONforList("courses", allCourses);
         } catch (DataAccessException e) {
+            e.printStackTrace();
             return JsonMapRepresentation.getJSONforError("data base error");
         }
     }
@@ -59,13 +60,14 @@ public class CoursesResource extends ServerResource {
                 ectsStr == null || "".equals(ectsStr) ||
                 semesterStr == null || "".equals(semesterStr) ||
                 path == null || "".equals(path)) {
-                return JsonMapRepresentation.getJSONforError("Missing necessary parameter(s)");
+                return JsonMapRepresentation.getJSONforError("Missing or empty necessary parameter(s)");
             }
             coursesDAO.submitCourse(new Course(null, title, Integer.parseInt(ectsStr), Integer.parseInt(semesterStr), path, null, type, specificpath));
             return JsonMapRepresentation.SUCCESS_JSON;
         } catch (NumberFormatException e) {
             return JsonMapRepresentation.getJSONforError("Non-integer given to parameter that must be an integer number");
         } catch (DataAccessException e) {
+            e.printStackTrace();
             return JsonMapRepresentation.getJSONforError("data base error");
         }
     }

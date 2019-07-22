@@ -6,12 +6,18 @@ import model.Student;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.UncategorizedDataAccessException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 
@@ -56,6 +62,29 @@ public class DataAccess {
 
     public List<Student> getALlStudents() throws DataAccessException {
         return jdbcTemplate.query("SELECT u.*, s.* FROM users u, students s WHERE u.idUsers = s.idStudents", new StudentRowMapper());
+    }
+
+    public void registerStudent(Student student, String hashedPassword) throws DataAccessException {
+        transactionTemplate.execute(status -> {
+            // insert into user and keep id
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO users (idUsers, email, password, isAdmin) VALUES (default, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, student.getEmail());
+                ps.setString(2, hashedPassword);
+                ps.setBoolean(3, false);   // never register an admin by accident / trick for security
+                return ps;
+            }, keyHolder);
+            Integer userId = null;
+            try {
+                userId = keyHolder.getKey().intValue();
+            } catch (NullPointerException ignored) { }
+            if (userId == null) {
+                System.err.println("(!) WARNING: Could not get generated keys in insert student to db!");
+            }
+            jdbcTemplate.update("INSERT INTO students(idStudents, firstname, lastname) values (?, ?, ?)", userId, student.getFirstName(), student.getLastName());
+            return true;
+        });
     }
 
     public Course getCourse(int courseId) throws DataAccessException {

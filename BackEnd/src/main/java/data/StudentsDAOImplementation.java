@@ -19,4 +19,9 @@ public class StudentsDAOImplementation implements StudentsDAO {
         return dataAccess.getALlStudents();
     }
 
+    @Override
+    public void registerStudent(Student student, String hashedPassword) throws DataAccessException {
+        dataAccess.registerStudent(student, hashedPassword);
+    }
+
 }

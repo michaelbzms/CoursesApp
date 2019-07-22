@@ -9,4 +9,6 @@ public interface StudentsDAO {
 
     List<Student> getALlStudents() throws DataAccessException;
 
+    void registerStudent(Student student, String hashedPassword) throws DataAccessException;
+
 }

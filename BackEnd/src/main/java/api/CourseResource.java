@@ -46,6 +46,7 @@ public class CourseResource extends ServerResource {
             }
             return JsonMapRepresentation.getJSONforObject("course", course);
         } catch (DataAccessException e) {
+            e.printStackTrace();
             return JsonMapRepresentation.getJSONforError("data base error");
         } catch (Exception e) {
             return JsonMapRepresentation.getJSONforError(e.getMessage());
@@ -72,6 +73,7 @@ public class CourseResource extends ServerResource {
         } catch (NumberFormatException e) {
             return JsonMapRepresentation.getJSONforError("Non-integer given to parameter that must be an integer number");
         } catch (DataAccessException e) {
+            e.printStackTrace();
             return JsonMapRepresentation.getJSONforError("data base error");
         } catch (Exception e) {
             return JsonMapRepresentation.getJSONforError(e.getMessage());
@@ -89,6 +91,7 @@ public class CourseResource extends ServerResource {
             }
             return JsonMapRepresentation.SUCCESS_JSON;
         } catch (DataAccessException e) {
+            e.printStackTrace();
             return JsonMapRepresentation.getJSONforError("data base error");
         } catch (Exception e) {
             return JsonMapRepresentation.getJSONforError(e.getMessage());
