@@ -62,15 +62,47 @@ public class DataAccess {
         dataSource = bds;
     }
 
+
     /* USERS - STUDENTS */
-    public boolean authenticateUser(String email, String hashedPassword) throws DataAccessException {
-        // TODO
-        return false;
+    public User authenticateUser(String email, String hashedPassword) throws DataAccessException {
+        try {
+            // try to authenticate a Student
+            return jdbcTemplate.queryForObject("SELECT u.*, s.* FROM users u, students s WHERE u.idUsers = s.idStudents AND u.email = ? AND u.password = ? AND isAdmin = false",
+                                                new Object[]{email, hashedPassword}, new StudentRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+            try {
+                // if not a student then try to authenticate an admin
+                return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email = ? AND password = ? AND isAdmin = true",
+                        new Object[]{email, hashedPassword}, new UserRowMapper());
+            } catch (EmptyResultDataAccessException ignored){
+            } catch (IncorrectResultSizeDataAccessException e2){
+                System.err.println("(!) WARNING: Same email for multiple users detected!");
+            }
+        } catch (IncorrectResultSizeDataAccessException e) {
+            System.err.println("(!) WARNING: Same email for multiple users detected!");
+        }
+        return null;
     }
 
-    public Feedback changeUserPassword() throws DataAccessException {
-        // TODO
-        return null;
+    public Feedback changeUserPassword(int userId, String oldHashedPassword, String newHashedPassword) throws DataAccessException {
+        Boolean success = transactionTemplate.execute(status -> {
+            // given old password must be correct
+            if (!checkIfPasswordIsCorrect(userId, oldHashedPassword)){
+                return false;
+            }
+            jdbcTemplate.update("UPDATE users SET password = ? WHERE idUsers = ?", newHashedPassword, userId);
+            return true;
+        });
+        if (success != null && !success) return new Feedback(false, "User does not exist or given password is incorrect");
+        return new Feedback(true);
+    }
+
+    public Student getStudent(int studentId) throws DataAccessException {
+        try {
+            return jdbcTemplate.queryForObject("SELECT u.*, s.* FROM users u, students s WHERE u.idUsers = s.idStudents AND s.idStudents = ?", new Object[]{studentId}, new StudentRowMapper());
+        } catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     public List<Student> getALlStudents() throws DataAccessException {
@@ -80,17 +112,7 @@ public class DataAccess {
     public Feedback registerStudent(Student student, String hashedPassword) throws DataAccessException {
         Boolean success = transactionTemplate.execute(status -> {
             // check if email exists
-            boolean exists;
-            try {
-                Integer res = jdbcTemplate.queryForObject("SELECT 1 FROM users WHERE email = ?", new Object[]{student.getEmail()}, Integer.class);
-                exists = (res == null || res == 1);  // should be true but just in case
-            } catch (EmptyResultDataAccessException e){
-                exists = false;
-            } catch (IncorrectResultSizeDataAccessException e){
-                System.err.println("(!) WARNING: Same email for multiple users detected!");
-                exists = true;       // this means that there are more than one (which would render our database wrong)
-            }
-            if (exists){
+            if (checkIfEmailExists(student.getEmail())){
                 return false;
             }
             // insert into user and keep id
@@ -113,13 +135,67 @@ public class DataAccess {
             jdbcTemplate.update("INSERT INTO students(idStudents, firstname, lastname) values (?, ?, ?)", userId, student.getFirstName(), student.getLastName());
             return true;
         });
-        if (success != null && !success) return new Feedback(false, "email given is taken");
+        if (success != null && !success) return new Feedback(false, "Email given is taken");
         return new Feedback(true);
     }
 
-    public void editStudent(Student student) throws DataAccessException {
-        // TODO
+    public Feedback editStudent(Student newStudent) throws DataAccessException {
+        Boolean success = transactionTemplate.execute(status -> {
+            Student oldStudent = getStudent(newStudent.getId());
+            if (oldStudent == null) return false;
+            String email = (newStudent.getEmail() != null) ? newStudent.getEmail() : oldStudent.getEmail();
+            String firstname = (newStudent.getFirstName() != null) ? newStudent.getFirstName() : oldStudent.getFirstName();
+            String lastname = (newStudent.getLastName() != null) ? newStudent.getLastName() : oldStudent.getLastName();
+            // check if email exists
+            if (checkIfEmailExists(newStudent.getEmail())){
+                return false;
+            }
+            jdbcTemplate.update("UPDATE users SET email = ? WHERE idUsers = ? AND isAdmin = false", email, newStudent.getId());
+            jdbcTemplate.update("UPDATE students SET firstname = ?, lastname = ? WHERE idStudents = ?", firstname, lastname, newStudent.getId());
+            return true;
+        });
+        if (success != null && !success) return new Feedback(false, "Student does not exist");
+        return new Feedback(true);
     }
+
+    public Feedback deleteStudent(int studentId) {
+        Boolean success = transactionTemplate.execute(status -> {
+            Student oldStudent = getStudent(studentId);
+            if (oldStudent == null) return false;
+            jdbcTemplate.update("DELETE FROM students WHERE idStudents = ?", studentId);
+            jdbcTemplate.update("DELETE FROM users WHERE idUsers = ?", studentId);
+            jdbcTemplate.update("DELETE FROM students_has_courses WHERE idStudents = ?", studentId);
+            return true;
+        });
+        if (success != null && !success) return new Feedback(false, "Student does not exist");
+        return new Feedback(true);
+    }
+
+    private boolean checkIfEmailExists(String email) throws DataAccessException {
+        boolean exists;
+        try {
+            Integer res = jdbcTemplate.queryForObject("SELECT 1 FROM users WHERE email = ?", new Object[]{email}, Integer.class);
+            exists = (res == null || res == 1);  // should be true but just in case
+        } catch (EmptyResultDataAccessException e) {
+            exists = false;
+        } catch (IncorrectResultSizeDataAccessException e) {
+            System.err.println("(!) WARNING: Same email for multiple users detected!");
+            exists = true;                       // this means that there are more than one (which would render our database wrong)
+        }
+        return exists;
+    }
+
+    private boolean checkIfPasswordIsCorrect(int userId, String hashedPassword) throws DataAccessException {
+        boolean correct;
+        try {
+            Integer res = jdbcTemplate.queryForObject("SELECT 1 FROM users WHERE idUsers  = ? AND password = ?", new Object[]{userId, hashedPassword}, Integer.class);
+            correct = (res == null || res == 1);  // should be true but just in case
+        } catch (EmptyResultDataAccessException e) {
+            correct = false;
+        }
+        return correct;
+    }
+
 
     /* COURSES */
     public Course getCourse(int courseId) throws DataAccessException {
@@ -171,7 +247,7 @@ public class DataAccess {
                                      title, ects, semester, path, type, specificpath, newCourse.getId());
             return true;
         });
-        if (success != null && !success) return new Feedback(false, "Tried to edit course that does not exist");
+        if (success != null && !success) return new Feedback(false, "Course that does not exist");
         else return new Feedback(true);
     }
 
@@ -180,9 +256,10 @@ public class DataAccess {
             Course oldCourse = getCourse(courseId);
             if (oldCourse == null) return false;
             jdbcTemplate.update("DELETE FROM courses WHERE idCourses = ?", courseId);
+            jdbcTemplate.update("DELETE FROM students_has_courses WHERE idCourses = ?", courseId);
             return true;
         });
-        if (success != null && !success) return new Feedback(false, "Tried to edit course that does not exist");
+        if (success != null && !success) return new Feedback(false, "Course that does not exist");
         return new Feedback(true);
     }
 
