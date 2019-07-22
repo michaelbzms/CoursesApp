@@ -14,6 +14,7 @@ public class CourseRowMapper implements RowMapper<Course> {
                 rs.getInt("idCourses"),
                 rs.getString("title"),
                 rs.getInt("ects"),
+                rs.getInt("semester"),
                 rs.getString("path"),
                 null,
                 rs.getString("type"),

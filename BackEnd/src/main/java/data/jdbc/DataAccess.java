@@ -73,9 +73,9 @@ public class DataAccess {
     }
 
     public void submitCourse(Course course) throws DataAccessException {
-        String sql = "INSERT INTO courses (idCourses, title, ects, path, type, specificpath) " +
-                     "VALUES (default, ?, ?, ?, ?, ?);";
-        jdbcTemplate.update(sql, course.getTitle(), course.getEcts(), course.getPath(), course.getType(), course.getSpecificpath());
+        String sql = "INSERT INTO courses (idCourses, title, ects, semester, path, type, specificpath) " +
+                     "VALUES (default, ?, ?, ?, ?, ?, ?);";
+        jdbcTemplate.update(sql, course.getTitle(), course.getEcts(), course.getSemester(), course.getPath(), course.getType(), course.getSpecificpath());
     }
 
     public void editCourse(Course newCourse) throws DataAccessException {
@@ -83,11 +83,12 @@ public class DataAccess {
             Course oldCourse = getCourse(newCourse.getId());
             String title = (newCourse.getTitle() != null) ? newCourse.getTitle() : oldCourse.getTitle();
             int ects = (newCourse.getEcts() != -1) ? newCourse.getEcts() : oldCourse.getEcts();
+            int semester  = (newCourse.getSemester() != -1) ? newCourse.getSemester() : oldCourse.getSemester();
             String path = (newCourse.getPath() != null) ? newCourse.getPath() : oldCourse.getPath();
             String type = (newCourse.getType() != null) ? newCourse.getType() : oldCourse.getType();
             String specificpath = (newCourse.getSpecificpath() != null) ? newCourse.getSpecificpath() : oldCourse.getSpecificpath();
-            jdbcTemplate.update("UPDATE courses SET title = ?, ects = ?, path = ?, type = ?, specificpath = ? WHERE idCourses = ?",
-                                     title, ects, path, type, specificpath, newCourse.getId());
+            jdbcTemplate.update("UPDATE courses SET title = ?, ects = ?, semester = ?, path = ?, type = ?, specificpath = ? WHERE idCourses = ?",
+                                     title, ects, semester, path, type, specificpath, newCourse.getId());
             return true;
         });
     }

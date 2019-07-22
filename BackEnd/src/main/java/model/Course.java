@@ -5,23 +5,26 @@ public class Course {
     private Integer id;             // Might be null for objects with unknown database user id
     private String title;
     private int ects;
+    private int semester;
     private String path;
     private String type = null;
     private String specificpath = null;
     private Double grade;           // to be associated with student-user in session
 
-    public Course(Integer id, String title, int ects, String path, Double grade){
+    public Course(Integer id, String title, int ects, int semester, String path, Double grade){
         this.id = id;
         this.title = title;
         this.ects = ects;
+        this.semester = semester;
         this.path = path;
         this.grade = grade;
     }
 
-    public Course(Integer id, String title, int ects, String path, Double grade, String type, String specificpath){
+    public Course(Integer id, String title, int ects, int semester, String path, Double grade, String type, String specificpath){
         this.id = id;
         this.title = title;
         this.ects = ects;
+        this.semester = semester;
         this.path = path;
         this.grade = grade;
         this.type = type;
@@ -39,6 +42,10 @@ public class Course {
     public int getEcts() { return ects; }
 
     public void setEcts(int ects) { this.ects = ects; }
+
+    public int getSemester() { return semester; }
+
+    public void setSemester(int semester) { this.semester = semester; }
 
     public String getPath() { return path; }
 

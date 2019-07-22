@@ -53,13 +53,14 @@ public class CourseResource extends ServerResource {
             Form form = new Form(entity);
             String title = form.getFirstValue("title");
             String ectsStr = form.getFirstValue("ects");
+            String semesterStr = form.getFirstValue("semester");
             String path = form.getFirstValue("path");
             String type = form.getFirstValue("type");
             String specificpath = form.getFirstValue("specificpath");
-            coursesDAO.editCourse(new Course(courseId, title, (ectsStr == null) ? -1 : Integer.parseInt(ectsStr), path, null, type, specificpath));
+            coursesDAO.editCourse(new Course(courseId, title, (ectsStr == null) ? -1 : Integer.parseInt(ectsStr), (semesterStr == null) ? -1 : Integer.parseInt(semesterStr), path, null, type, specificpath));
             return JsonMapRepresentation.SUCCESS_JSON;
         } catch (NumberFormatException e) {
-            return JsonMapRepresentation.getJSONforError("ects parameter must be an integer number");
+            return JsonMapRepresentation.getJSONforError("Non-integer given to parameter that must be an integer number");
         } catch (DataAccessException e) {
             return JsonMapRepresentation.getJSONforError("data base error");
         } catch (Exception e) {
@@ -70,7 +71,6 @@ public class CourseResource extends ServerResource {
     @Override
     protected Representation delete() throws ResourceException {
         try {
-            System.out.println("\nGOT HERE");
             int courseId = getCourseId();
             coursesDAO.deleteCourse(courseId);
             return JsonMapRepresentation.SUCCESS_JSON;
