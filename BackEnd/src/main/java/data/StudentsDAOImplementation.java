@@ -17,16 +17,6 @@ public class StudentsDAOImplementation implements StudentsDAO {
     }
 
     @Override
-    public User authenticateUser(String email, String hashedPassword) throws DataAccessException {
-        return dataAccess.authenticateUser(email, hashedPassword);
-    }
-
-    @Override
-    public Feedback changeUserPassword(int userId, String oldHashedPassword, String newHashedPassword) throws DataAccessException {
-        return dataAccess.changeUserPassword(userId, oldHashedPassword, newHashedPassword);
-    }
-
-    @Override
     public Student getStudent(int studentId) throws DataAccessException {
         return dataAccess.getStudent(studentId);
     }

@@ -62,13 +62,39 @@ public class DataAccess {
         dataSource = bds;
     }
 
+    /* GENERAL */
+    private boolean checkIfEmailExists(String email) throws DataAccessException {
+        boolean exists;
+        try {
+            Integer res = jdbcTemplate.queryForObject("SELECT 1 FROM users WHERE email = ?", new Object[]{email}, Integer.class);
+            exists = (res == null || res == 1);  // should be true but just in case
+        } catch (EmptyResultDataAccessException e) {
+            exists = false;
+        } catch (IncorrectResultSizeDataAccessException e) {
+            System.err.println("(!) WARNING: Same email for multiple users detected!");
+            exists = true;                       // this means that there are more than one (which would render our database wrong)
+        }
+        return exists;
+    }
 
-    /* USERS - STUDENTS */
+    private boolean checkIfPasswordIsCorrect(int userId, String hashedPassword) throws DataAccessException {
+        boolean correct;
+        try {
+            Integer res = jdbcTemplate.queryForObject("SELECT 1 FROM users WHERE idUsers  = ? AND password = ?", new Object[]{userId, hashedPassword}, Integer.class);
+            correct = (res == null || res == 1);  // should be true but just in case
+        } catch (EmptyResultDataAccessException e) {
+            correct = false;
+        }
+        return correct;
+    }
+
+
+    /* USERS */
     public User authenticateUser(String email, String hashedPassword) throws DataAccessException {
         try {
             // try to authenticate a Student
             return jdbcTemplate.queryForObject("SELECT u.*, s.* FROM users u, students s WHERE u.idUsers = s.idStudents AND u.email = ? AND u.password = ? AND isAdmin = false",
-                                                new Object[]{email, hashedPassword}, new StudentRowMapper());
+                    new Object[]{email, hashedPassword}, new StudentRowMapper());
         } catch (EmptyResultDataAccessException e) {
             try {
                 // if not a student then try to authenticate an admin
@@ -105,6 +131,7 @@ public class DataAccess {
         }
     }
 
+    /* STUDENTS */
     public List<Student> getALlStudents() throws DataAccessException {
         return jdbcTemplate.query("SELECT u.*, s.* FROM users u, students s WHERE u.idUsers = s.idStudents", new StudentRowMapper());
     }
@@ -169,31 +196,6 @@ public class DataAccess {
         });
         if (success != null && !success) return new Feedback(false, "Student does not exist");
         return new Feedback(true);
-    }
-
-    private boolean checkIfEmailExists(String email) throws DataAccessException {
-        boolean exists;
-        try {
-            Integer res = jdbcTemplate.queryForObject("SELECT 1 FROM users WHERE email = ?", new Object[]{email}, Integer.class);
-            exists = (res == null || res == 1);  // should be true but just in case
-        } catch (EmptyResultDataAccessException e) {
-            exists = false;
-        } catch (IncorrectResultSizeDataAccessException e) {
-            System.err.println("(!) WARNING: Same email for multiple users detected!");
-            exists = true;                       // this means that there are more than one (which would render our database wrong)
-        }
-        return exists;
-    }
-
-    private boolean checkIfPasswordIsCorrect(int userId, String hashedPassword) throws DataAccessException {
-        boolean correct;
-        try {
-            Integer res = jdbcTemplate.queryForObject("SELECT 1 FROM users WHERE idUsers  = ? AND password = ?", new Object[]{userId, hashedPassword}, Integer.class);
-            correct = (res == null || res == 1);  // should be true but just in case
-        } catch (EmptyResultDataAccessException e) {
-            correct = false;
-        }
-        return correct;
     }
 
 
