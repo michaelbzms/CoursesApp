@@ -1,3 +1,4 @@
 BackEnd/.*/*
 BackEnd/build/*
 BackEnd/out/*
+*.bak

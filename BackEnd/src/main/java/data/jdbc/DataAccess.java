@@ -167,21 +167,22 @@ public class DataAccess {
     }
 
     public Feedback editStudent(Student newStudent) throws DataAccessException {
-        Boolean success = transactionTemplate.execute(status -> {
+        Integer code = transactionTemplate.execute(status -> {
             Student oldStudent = getStudent(newStudent.getId());
-            if (oldStudent == null) return false;
+            if (oldStudent == null) return -1;
             String email = (newStudent.getEmail() != null) ? newStudent.getEmail() : oldStudent.getEmail();
             String firstname = (newStudent.getFirstName() != null) ? newStudent.getFirstName() : oldStudent.getFirstName();
             String lastname = (newStudent.getLastName() != null) ? newStudent.getLastName() : oldStudent.getLastName();
             // check if email exists
             if (checkIfEmailExists(newStudent.getEmail())){
-                return false;
+                return -2;
             }
             jdbcTemplate.update("UPDATE users SET email = ? WHERE idUsers = ? AND isAdmin = false", email, newStudent.getId());
             jdbcTemplate.update("UPDATE students SET firstname = ?, lastname = ? WHERE idStudents = ?", firstname, lastname, newStudent.getId());
-            return true;
+            return 0;
         });
-        if (success != null && !success) return new Feedback(false, "Student does not exist");
+        if (code != null && code == -1) return new Feedback(false, -1, "Student does not exist");
+        else if (code != null && code == -2) return new Feedback(false, -2, "New email is taken");
         return new Feedback(true);
     }
 
@@ -190,7 +191,7 @@ public class DataAccess {
             Student oldStudent = getStudent(studentId);
             if (oldStudent == null) return false;
             jdbcTemplate.update("DELETE FROM students WHERE idStudents = ?", studentId);
-            jdbcTemplate.update("DELETE FROM users WHERE idUsers = ?", studentId);
+            jdbcTemplate.update("DELETE FROM users WHERE idUsers = ? AND isAdmin = false", studentId);
             jdbcTemplate.update("DELETE FROM students_has_courses WHERE idStudents = ?", studentId);
             return true;
         });
