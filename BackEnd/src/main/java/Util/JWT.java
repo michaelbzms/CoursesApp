@@ -44,8 +44,10 @@ public class JWT {
         try {
             if (jwt == null) return null;
             Claims claims = decodeJWT(jwt);
+            if (claims == null) return null;
             return User.getUserFromMap((LinkedHashMap) claims.get("user"));
         } catch (Exception e){
+            e.printStackTrace();
             throw new Exception("Could not decode JWT token");
         }
     }
@@ -63,7 +65,7 @@ public class JWT {
         if (request == null) return null;
         try {
             Series<Header> headers = request.getHeaders();
-            return (headers != null) ? headers.getFirstValue("token") : null;
+            return (headers != null) ? headers.getFirstValue("jwt") : null;
         } catch (Exception e){
             return null;    // there was no jwt in Headers
         }

@@ -8,8 +8,6 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
-import org.springframework.dao.UncategorizedDataAccessException;
-import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -67,7 +65,7 @@ public class DataAccess {
         boolean exists;
         try {
             Integer res = jdbcTemplate.queryForObject("SELECT 1 FROM users WHERE email = ?", new Object[]{email}, Integer.class);
-            exists = (res == null || res == 1);  // should be true but just in case
+            exists = (res != null && res == 1);  // should be true but just in case
         } catch (EmptyResultDataAccessException e) {
             exists = false;
         } catch (IncorrectResultSizeDataAccessException e) {
@@ -81,7 +79,7 @@ public class DataAccess {
         boolean exists;
         try {
             Integer res = jdbcTemplate.queryForObject("SELECT 1 FROM users WHERE idUsers = ?", new Object[]{userId}, Integer.class);
-            exists = (res == null || res == 1);  // should be true but just in case
+            exists = (res != null && res == 1);  // should be true but just in case
         } catch (EmptyResultDataAccessException e) {
             exists = false;
         }
@@ -92,7 +90,7 @@ public class DataAccess {
         boolean correct;
         try {
             Integer res = jdbcTemplate.queryForObject("SELECT 1 FROM users WHERE idUsers  = ? AND password = ?", new Object[]{userId, hashedPassword}, Integer.class);
-            correct = (res == null || res == 1);  // should be true but just in case
+            correct = (res != null && res == 1);  // should be true but just in case
         } catch (EmptyResultDataAccessException e) {
             correct = false;
         }
@@ -227,9 +225,9 @@ public class DataAccess {
 
     public Course getCourse(int courseId, int studentId) throws DataAccessException {
         String sql = "SELECT c.*, shc.grade FROM courses c, students_has_courses shc " +
-                     "WHERE idCourses = ? AND shc.idCourses = c.idCourses AND shc.idStudents = ?";
+                     "WHERE c.idCourses = ? AND shc.idCourses = c.idCourses AND shc.idStudents = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, new Object[]{courseId, studentId}, new CourseRowMapper());
+            return jdbcTemplate.queryForObject(sql, new Object[]{courseId, studentId}, new CourseForStudentRowMapper());
         } catch (EmptyResultDataAccessException e){
             return null;
         }
@@ -240,10 +238,15 @@ public class DataAccess {
     }
 
     public List<Course> getAllCourses(int studentId) throws DataAccessException {
-        String sql = "SELECT c.*, shc.grade " +
+        String sql = "(SELECT c.*, shc.grade " +
                      "FROM courses c, students_has_courses shc " +
-                     "WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?";
-        return jdbcTemplate.query(sql, new Object[]{studentId}, new CourseForStudentRowMapper());
+                     "WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?) " +
+                        "UNION " +
+                     "(SELECT *, null AS \"grade\" FROM courses WHERE idCourses NOT IN " +
+                        "(SELECT c.*, shc.grade " +
+                        "FROM courses c, students_has_courses shc " +
+                        "WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?))";
+        return jdbcTemplate.query(sql, new Object[]{studentId, studentId}, new CourseForStudentRowMapper());
     }
 
     public void submitCourse(Course course) throws DataAccessException {
@@ -280,6 +283,29 @@ public class DataAccess {
         });
         if (success != null && !success) return new Feedback(false, "Course that does not exist");
         return new Feedback(true);
+    }
+
+    public void setGradeForCourse(int studentId, int courseId, Double grade) throws DataAccessException {
+        transactionTemplate.execute(status -> {
+            boolean gradeExists;
+            try {
+                Integer res = jdbcTemplate.queryForObject("SELECT 1 FROM students_has_courses WHERE idStudents = ? AND idCourses = ?", new Object[]{studentId, courseId}, Integer.class);
+                gradeExists = (res != null && res == 1);   // should be true just in case
+            } catch (EmptyResultDataAccessException e){
+                gradeExists = false;
+            }
+            if (gradeExists && grade != null){
+                // update existing grade
+                jdbcTemplate.update("UPDATE students_has_courses SET grade = ? WHERE idStudents = ? AND idCourses = ?", grade, studentId, courseId);
+            } else if (gradeExists && grade == null){
+                // delete existing grade
+                jdbcTemplate.update("DELETE FROM students_has_courses WHERE idStudents = ? AND idCourses = ?", studentId, courseId);
+            } else if (grade != null){
+                // insert new grade
+                jdbcTemplate.update("INSERT INTO students_has_courses (idStudents, idCourses, grade) VALUES (?, ?, ?)", studentId, courseId, grade);
+            }   // else there is nothing to do
+            return true;
+        });
     }
 
 }

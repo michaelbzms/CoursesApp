@@ -16,10 +16,12 @@ public class User {
 
 
     public static User getUserFromMap(LinkedHashMap map){
-        if (map.get("isAdmin").equals("false")){
+        //System.out.println("\n>>>>>>>>DEBUG<<<<<<<<<");
+        //System.out.println(map.toString());
+        if ("false".equals(map.get("admin"))){
             return Student.getStudentFromMap(map);
         }
-        return new User((Integer) map.get("id"), (String) map.get("email"), (boolean) map.get("isAdmin"));
+        return new User((Integer) map.get("id"), (String) map.get("email"), (boolean) map.get("admin"));
     }
 
     public Integer getId() { return id; }

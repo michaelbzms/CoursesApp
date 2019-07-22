@@ -22,4 +22,6 @@ public interface CoursesDAO {
 
     Feedback deleteCourse(int courseId) throws DataAccessException;
 
+    void setGradeForCourse(int studentId, int courseId, Double grade) throws DataAccessException;
+
 }

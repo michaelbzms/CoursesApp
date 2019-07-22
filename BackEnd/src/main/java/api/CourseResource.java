@@ -27,6 +27,7 @@ public class CourseResource extends ServerResource {
             if (jwt == null) {    // no session
                 course = coursesDAO.getCourse(courseId);
             } else {
+                // if there is a student(!)-user in session then any registered grade will also be returned
                 User u;
                 // noinspection Duplicates
                 try {
@@ -38,13 +39,55 @@ public class CourseResource extends ServerResource {
                 if (u.getId() == null) {
                     return JsonMapRepresentation.getJSONforError("Jason Web Token contains no user id");
                 }
-                course = coursesDAO.getCourse(courseId, u.getId());
+                if (u.isAdmin()) course = coursesDAO.getCourse(courseId);
+                else course = coursesDAO.getCourse(courseId, u.getId());
             }
             if (course == null) {
                 this.setStatus(Status.CLIENT_ERROR_NOT_FOUND);
                 return null;
             }
             return JsonMapRepresentation.getJSONforObject("course", course);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            return JsonMapRepresentation.getJSONforError("data base error");
+        } catch (Exception e) {
+            return JsonMapRepresentation.getJSONforError(e.getMessage());
+        }
+    }
+
+    @Override
+    protected Representation post(Representation entity) throws ResourceException {
+        // stores grade for user in session and this course
+        try {
+            int courseId = getCourseId();
+            Form form = new Form(entity);
+            Double grade = Double.parseDouble(form.getFirstValue("grade"));
+            if (grade != null && (grade < 0.0 || grade > 10.0)){
+                return JsonMapRepresentation.getJSONforError("Invalid grade (must be between 0 and 10)");
+            }
+            String jwt = JWT.getJWTFromHeaders(getRequest());
+            if (jwt == null) {    // no session
+                return JsonMapRepresentation.getJSONforError("You need to be logged in to register a grade for a course");
+            }
+            User u;
+            // noinspection Duplicates
+            try {
+                u = JWT.getUserFromJWT(jwt);
+                if (u == null) throw new Exception();
+            } catch (Exception e) {
+                return JsonMapRepresentation.getJSONforError("Could not decode Jason Web Token " + (e.getMessage() != null ? ": " : "") + e.getMessage());
+            }
+            if (u.getId() == null) {
+                return JsonMapRepresentation.getJSONforError("Jason Web Token contains no user id");
+            }
+            if (u.isAdmin()){
+                return JsonMapRepresentation.getJSONforError("You are not a student and therefore cannot have a grade on courses");
+            }
+            // register grade (might be null -> reset grade)
+            coursesDAO.setGradeForCourse(u.getId(), courseId, grade);
+            return JsonMapRepresentation.SUCCESS_JSON;
+        } catch (NumberFormatException e) {
+            return JsonMapRepresentation.getJSONforError("Non-number given to parameter that must be a number");
         } catch (DataAccessException e) {
             e.printStackTrace();
             return JsonMapRepresentation.getJSONforError("data base error");

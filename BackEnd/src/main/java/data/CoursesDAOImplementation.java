@@ -50,4 +50,9 @@ public class CoursesDAOImplementation implements CoursesDAO {
         return dataAccess.deleteCourse(courseId);
     }
 
+    @Override
+    public void setGradeForCourse(int studentId, int courseId, Double grade) throws DataAccessException {
+        dataAccess.setGradeForCourse(studentId, courseId, grade);
+    }
+
 }
