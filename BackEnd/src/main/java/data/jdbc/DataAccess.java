@@ -224,12 +224,19 @@ public class DataAccess {
     }
 
     public Course getCourse(int courseId, int studentId) throws DataAccessException {
-        String sql = "SELECT c.*, shc.grade FROM courses c, students_has_courses shc " +
-                     "WHERE c.idCourses = ? AND shc.idCourses = c.idCourses AND shc.idStudents = ?";
+        String sql1 = "SELECT c.*, shc.grade FROM courses c, students_has_courses shc " +
+                      "WHERE c.idCourses = ? AND shc.idCourses = c.idCourses AND shc.idStudents = ?";
+        String sql2 = "SELECT *, -1.0 AS \"grade\" FROM courses WHERE idCourses = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, new Object[]{courseId, studentId}, new CourseForStudentRowMapper());
+            // first try for a course with a grade for given studentId
+            return jdbcTemplate.queryForObject(sql1, new Object[]{courseId, studentId}, new CourseForStudentRowMapper());
         } catch (EmptyResultDataAccessException e){
-            return null;
+            try {
+                // if not exists then try for a course without one
+                return jdbcTemplate.queryForObject(sql2, new Object[]{courseId}, new CourseForStudentRowMapper());
+            } catch (EmptyResultDataAccessException e2){
+                return null;
+            }
         }
     }
 
@@ -238,12 +245,13 @@ public class DataAccess {
     }
 
     public List<Course> getAllCourses(int studentId) throws DataAccessException {
+        // TODO: Is there a faster query?
         String sql = "(SELECT c.*, shc.grade " +
                      "FROM courses c, students_has_courses shc " +
                      "WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?) " +
                         "UNION " +
-                     "(SELECT *, null AS \"grade\" FROM courses WHERE idCourses NOT IN " +
-                        "(SELECT c.*, shc.grade " +
+                     "(SELECT *, -1.0 AS \"grade\" FROM courses WHERE idCourses NOT IN " +
+                        "(SELECT c.idCourses " +
                         "FROM courses c, students_has_courses shc " +
                         "WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?))";
         return jdbcTemplate.query(sql, new Object[]{studentId, studentId}, new CourseForStudentRowMapper());
