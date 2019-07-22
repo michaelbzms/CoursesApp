@@ -1,5 +1,6 @@
 package api;
 
+import Util.Feedback;
 import Util.Hashing;
 import Util.JsonMapRepresentation;
 import conf.Configuration;
@@ -43,8 +44,9 @@ public class StudentsResource extends ServerResource {
                 lastname == null || "".equals(lastname)) {
                 return JsonMapRepresentation.getJSONforError("Missing or empty necessary parameter(s)");
             }
-            String hashedPassword = Hashing.getHashSHA256(password);   // hash password for security
-            studentsDAO.registerStudent(new Student(null, email, false, firstname, lastname), hashedPassword);
+            String hashedPassword = Hashing.getHashSHA256(password);    // hash password for security
+            Feedback fb = studentsDAO.registerStudent(new Student(null, email, false, firstname, lastname), hashedPassword);
+            if (!fb.SUCCESS) return JsonMapRepresentation.getJSONforError(fb.MESSAGE);   // aka email already taken
             return JsonMapRepresentation.SUCCESS_JSON;
         } catch (NumberFormatException e) {
             return JsonMapRepresentation.getJSONforError("Non-integer given to parameter that must be an integer number");

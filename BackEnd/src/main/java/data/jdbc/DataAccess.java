@@ -3,9 +3,11 @@ package data.jdbc;
 import Util.Feedback;
 import model.Course;
 import model.Student;
+import model.User;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -60,12 +62,37 @@ public class DataAccess {
         dataSource = bds;
     }
 
+    /* USERS - STUDENTS */
+    public boolean authenticateUser(String email, String hashedPassword) throws DataAccessException {
+        // TODO
+        return false;
+    }
+
+    public Feedback changeUserPassword() throws DataAccessException {
+        // TODO
+        return null;
+    }
+
     public List<Student> getALlStudents() throws DataAccessException {
         return jdbcTemplate.query("SELECT u.*, s.* FROM users u, students s WHERE u.idUsers = s.idStudents", new StudentRowMapper());
     }
 
-    public void registerStudent(Student student, String hashedPassword) throws DataAccessException {
-        transactionTemplate.execute(status -> {
+    public Feedback registerStudent(Student student, String hashedPassword) throws DataAccessException {
+        Boolean success = transactionTemplate.execute(status -> {
+            // check if email exists
+            boolean exists;
+            try {
+                Integer res = jdbcTemplate.queryForObject("SELECT 1 FROM users WHERE email = ?", new Object[]{student.getEmail()}, Integer.class);
+                exists = (res == null || res == 1);  // should be true but just in case
+            } catch (EmptyResultDataAccessException e){
+                exists = false;
+            } catch (IncorrectResultSizeDataAccessException e){
+                System.err.println("(!) WARNING: Same email for multiple users detected!");
+                exists = true;       // this means that there are more than one (which would render our database wrong)
+            }
+            if (exists){
+                return false;
+            }
             // insert into user and keep id
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
@@ -81,12 +108,20 @@ public class DataAccess {
             } catch (NullPointerException ignored) { }
             if (userId == null) {
                 System.err.println("(!) WARNING: Could not get generated keys in insert student to db!");
+                // do not return so that we get exception on next update
             }
             jdbcTemplate.update("INSERT INTO students(idStudents, firstname, lastname) values (?, ?, ?)", userId, student.getFirstName(), student.getLastName());
             return true;
         });
+        if (success != null && !success) return new Feedback(false, "email given is taken");
+        return new Feedback(true);
     }
 
+    public void editStudent(Student student) throws DataAccessException {
+        // TODO
+    }
+
+    /* COURSES */
     public Course getCourse(int courseId) throws DataAccessException {
         try {
             return jdbcTemplate.queryForObject("SELECT * FROM courses WHERE idCourses = ?", new Object[]{courseId}, new CourseRowMapper());
@@ -148,7 +183,7 @@ public class DataAccess {
             return true;
         });
         if (success != null && !success) return new Feedback(false, "Tried to edit course that does not exist");
-        else return new Feedback(true);
+        return new Feedback(true);
     }
 
 }
