@@ -10,8 +10,8 @@
         <a id="courses_page" class="nav-link link-color1" href="#" (click)="selected_page('courses')">Μαθήματα</a>
       </li>
       <div *ngIf="jwt === null; else loggedInBlock">
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" title="Login to unlock profile options!">Ο Λογαριασμός μου</a>
+        <li class="nav-item tooltip-bottom" data-tooltip="Συνδεθείτε για να έχετε πρόσβαση στον λογαριασμό σας." style="cursor: default !important;">
+          <a class="nav-link disabled" href="#" >Ο Λογαριασμός μου</a>
         </li>
       </div>
       <ng-template #loggedInBlock>

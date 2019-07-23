@@ -6,7 +6,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { CoursesComponent } from './components/courses/courses.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
-import {FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import {FormsModule} from '@angular/forms';
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
