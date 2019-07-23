@@ -36,3 +36,19 @@
   border-bottom-style: solid;
   border-bottom-width: 2px;
 }
+
+::-webkit-input-placeholder {
+  font-size: 90%;
+}
+
+:-moz-placeholder {
+  font-size: 90%;
+}
+
+::-moz-placeholder {
+  font-size: 90%;
+}
+
+:-ms-input-placeholder {
+  font-size: 90%;
+}
