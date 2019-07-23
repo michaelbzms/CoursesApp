@@ -5,6 +5,7 @@
 .logo-text {
   font-size: 125%;
   font-weight: 500;
+  font-family: 'Ubuntu', sans-serif !important;
 }
 
 .nav-link {
@@ -12,20 +13,24 @@
 }
 
 .link-color1 {
-  color: #54a854 !important;
+  color: #5cb85c !important;
   border-bottom-color: transparent;
   border-bottom-style: solid;
   border-bottom-width: 2px;
 }
 
 .link-color1:hover {
-  color: #5cb85c !important;
-  border-bottom-color: #5cb85c;
+  color: #4d9a4d !important;
+  border-bottom-color: #4D9A4D;
   border-bottom-style: solid;
   border-bottom-width: 2px;
 }
 
-.isSelected{
+.navbar-brand:hover {
+  color: #4D9A4D !important;
+}
+
+.isSelected {
   color: #5cb85c !important;
   border-bottom-color: #5cb85c;
   border-bottom-style: solid;

@@ -1,3 +1,34 @@
-<p>
-  homepage works!
-</p>
+<div class="text-center">
+  <img class="d-inline-block" src="/assets/grad_cap1.png">
+  <h1 class="text-color1">CoursesApp</h1>
+</div>
+<div class="bg-light-transparent container text-center my-3 p-4">
+  <p>
+    To <span class="text-color1">Courses App</span> είναι μία εφαρμογή για φοιτητές του
+    <a class="text-color2" href="http://di.uoa.gr">τμήματος Πληροφορικής και Τηλεπικοινωνιών</a> με την οποία οι τελευταίοι
+    μπορούν να καταγράφουν και να παρακολουθούν τους βαθμούς τους στα μαθήματα του τμήματος και να
+    βλέπουν τον μέσο όρο τους όπως και τα ECTs που έχουν μαζέψει.
+  </p>
+  <p>
+    Ενώ μπορείτε να χρησιμοποιήσετε την εφαρμογή αυτήν χωρίς να δημιουργήσετε λογαριασμό, σας συνιστούμε
+    να δημιουργήσετε προκειμένου οι βαθμοί σας σε μαθήματα να αποθηκευτούν μόνιμα.
+  </p>
+</div>
+<div *ngIf="jwt === null" class="container p-4 text-left">
+  <form class="registerForm bg-light-transparent">
+    <h2 class="text-center">Εγγραφή Φοιτητή</h2>
+    <label class="mt-2 mb-0" for="emailInput">Email</label>
+    <input id="emailInput" class="form-control" type="email" name="email">
+    <label class="mt-2 mb-0" for="password1">Κωδικός</label>
+    <input id="password1" class="form-control"  type="password" name="password1">
+    <label class="mt-2 mb-0" for="password2">Επανάληψη κωδικού</label>
+    <input id="password2" class="form-control"  type="password" name="password2">
+    <label class="mt-2 mb-0" for="firstNameInput">Όνομα</label>
+    <input id="firstNameInput" class="form-control"  type="text" name="firstname">
+    <label class="mt-2 mb-0" for="lastNameInput">Επίθετο</label>
+    <input id="lastNameInput" class="form-control"  type="text" name="lastname">
+    <div class="text-center mt-3">
+      <button class="btn btn-success" type="submit">Εγγραφή</button>
+    </div>
+  </form>
+</div>

@@ -1,11 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.min.css';
-@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto+Mono:500|Ubuntu+Condensed&display=swap&subset=greek');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto+Mono:500|Ubuntu&display=swap&subset=greek');
 
 
 /* FONTS */
-h1 , h2 > * {
-  font-family: sans-serif !important;
+h1 , h2, h2 > * {
+  font-family: 'Ubuntu', sans-serif !important;
 }
 
 body {
@@ -38,6 +38,12 @@ body {
   background-color: #ffb252 !important;
 }
 
+.bg-light-transparent {
+  background-color: rgba(245, 245, 245, 0.75);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
 
 /* MACROS */
 ::-webkit-input-placeholder {
