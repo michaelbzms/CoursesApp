@@ -1,18 +1,35 @@
 <nav id="mynavbar" class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-  <a class="navbar-brand text-color1" href="#"><h2>CoursesApp</h2></a>
-
+  <a class="navbar-brand text-color1 p-0 mr-sm-0 mr-3 mr-lg-5" href="#" (click)="selected_page('homepage')">
+    <img class="d-inline-block" style="height: 40%; width: 40%" src="/assets/grad_cap1.png">
+    <span class="logo-text">CoursesApp</span>
+  </a>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#" title="Login to unlock profile options!">Profile</a>
+      <li class="nav-item mr-2">
+        <a id="courses_page" class="nav-link link-color1" href="#" (click)="selected_page('courses')">Μαθήματα</a>
       </li>
+      <div *ngIf="jwt === null; else loggedInBlock">
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" title="Login to unlock profile options!">Ο Λογαριασμός μου</a>
+        </li>
+      </div>
+      <ng-template #loggedInBlock>
+        <li class="nav-item">
+          <a id="profile_page" class="nav-link link-color1" href="#" (click)="selected_page('profile')">Ο Λογαριασμός μου</a>
+        </li>
+      </ng-template>
     </ul>
 
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="email" placeholder="email" aria-label="Login">
-      <input class="form-control mr-sm-2" type="password" placeholder="password" aria-label="Login">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
-    </form>
+    <div *ngIf="jwt === null; else loggedInBlock2">
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="email" placeholder="Εισάγετε το email σας" aria-label="Login">
+        <input class="form-control mr-sm-2" type="password" placeholder="Εισάγετε τον κωδικό σας" aria-label="Login">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Σύνδεση</button>
+      </form>
+    </div>
+    <ng-template #loggedInBlock2>
+      Όνομα Επώνυμο
+    </ng-template>
   </div>
 </nav>

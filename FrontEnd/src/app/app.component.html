@@ -1,4 +1,15 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<app-navbar></app-navbar>
+<app-navbar (loggedIn)="getJWT($event)" (selectedPage)="getCurrentPage($event)"></app-navbar>
 <div class="main-body">
 </div>
+<div *ngIf="currentPage === 'courses'; else notCourses">
+  <app-courses [jwt]="jwt"></app-courses>
+</div>
+<ng-template #notCourses>
+  <div *ngIf="currentPage === 'profile'; else notCoursesNorProfile">
+    <app-profile [jwt]="jwt"></app-profile>
+  </div>
+  <ng-template #notCoursesNorProfile>
+    <app-homepage [jwt]="jwt"></app-homepage>
+  </ng-template>
+</ng-template>

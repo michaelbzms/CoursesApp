@@ -41,21 +41,17 @@ body {
 
 /* MACROS */
 ::-webkit-input-placeholder {
-  font-style: italic;
-  color: dimgrey;
+  color: darkgrey;
 }
 
 :-moz-placeholder {
-  font-style: italic;
-  color: dimgrey;
+  color: darkgrey;
 }
 
 ::-moz-placeholder {
-  font-style: italic;
-  color: dimgrey;
+  color: darkgrey;
 }
 
 :-ms-input-placeholder {
-  font-style: italic;
-  color: dimgrey;
+  color: darkgrey;
 }

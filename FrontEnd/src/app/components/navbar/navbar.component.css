@@ -1,3 +1,33 @@
 #mynavbar {
   box-shadow: 0 2px 15px -2px lightslategrey;
 }
+
+.logo-text {
+  font-size: 125%;
+  font-weight: 500;
+}
+
+.nav-link {
+  font-size: 125%;
+}
+
+.link-color1 {
+  color: #54a854 !important;
+  border-bottom-color: transparent;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+}
+
+.link-color1:hover {
+  color: #5cb85c !important;
+  border-bottom-color: #5cb85c;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+}
+
+.isSelected{
+  color: #5cb85c !important;
+  border-bottom-color: #5cb85c;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+}
