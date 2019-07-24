@@ -3,17 +3,7 @@
     <img class="d-inline-block" style="height: 40%; width: 40%" src="/assets/grad_cap1.png">
     <span class="logo-text">CoursesApp</span>
   </a>
-
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ng-template #loggedInBlock2>
-      <div *ngIf="user.isAdmin; else studentId">
-        {{this.user.email}}
-      </div>
-      <ng-template #studentId>
-        {{this.user.firstName}} {{this.user.lastName}}
-      </ng-template>
-    </ng-template>
-
     <ul class="navbar-nav mr-auto">
       <li class="nav-item mr-2">
         <a id="courses_page" class="nav-link link-color1" href="#" (click)="selected_page('courses')">Μαθήματα</a>
@@ -30,11 +20,20 @@
       </ng-template>
     </ul>
     <div *ngIf="jwt === null; else loggedInBlock2">
-      <form (submit)="login()" class="form-inline my-2 my-lg-0">
+      <form id="loginForm" (submit)="login()" class="form-inline my-2 my-lg-0">
         <input id="emailLogin" class="form-control mr-sm-2" type="email" placeholder="Εισάγετε το email σας" aria-label="Login" required>
         <input id="passwordLogin" class="form-control mr-sm-2" type="password" placeholder="Εισάγετε τον κωδικό σας" aria-label="Login" required>
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Σύνδεση</button>
       </form>
     </div>
+    <ng-template #loggedInBlock2>
+      <div *ngIf="user.isAdmin; else studentId">
+        {{this.user.email}}
+      </div>
+      <ng-template #studentId>
+        {{this.user.firstName}} {{this.user.lastName}}
+      </ng-template>
+      <button (click)="logout()" class="btn btn-outline-secondary">Αποσύνδεση</button>
+    </ng-template>
   </div>
 </nav>

@@ -1,6 +1,5 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { environment } from '../../../environments/environment';
-
 import * as $ from 'jquery';
 
 @Component({
@@ -11,14 +10,24 @@ import * as $ from 'jquery';
 export class NavbarComponent implements OnInit {
   jwt: string;
   user: object;
-  @Output() loggedIn = new EventEmitter();
+
+  @Output() loggedInOrOut = new EventEmitter();
   @Output() selectedPage = new EventEmitter();
+
+  public static getJWT(): string {
+    return localStorage.getItem('jwt');
+  }
+
+  public static getUser(): object {
+    console.log('user = ' + localStorage.getItem('user'));
+    return JSON.parse(localStorage.getItem('user'));
+  }
 
   constructor() {}
 
   ngOnInit() {
-    this.jwt = null;
-    this.user = null;
+    this.jwt = NavbarComponent.getJWT();
+    this.user = NavbarComponent.getUser();
   }
 
   login() {
@@ -40,13 +49,31 @@ export class NavbarComponent implements OnInit {
     }).done(results => {
       console.log(results);
       if (results.hasOwnProperty('jwt') && results.hasOwnProperty('user')) {
+        this.setSession(results.jwt, results.user);
         this.jwt = results.jwt;
         this.user = results.user;
+        this.loggedInOrOut.emit(true);
       } else {
         alert('Error: ' + ((results.hasOwnProperty('message')) ? results.message : 'Unknown'));
       }
     });
-    this.loggedIn.emit({jwt: this.jwt, user: this.user});
+  }
+
+  logout() {
+    this.unsetSession();
+    this.jwt = null;
+    this.user = null;
+    this.loggedInOrOut.emit(false);
+  }
+
+  private setSession(token, user) {
+    localStorage.setItem('jwt', token);
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  private unsetSession() {
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
   }
 
   selected_page(page: string) {

@@ -1,4 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {environment} from '../../../environments/environment';
+import {NavbarComponent} from '../navbar/navbar.component';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-homepage',
@@ -7,11 +10,64 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class HomepageComponent implements OnInit {
   @Input() jwt: string;
+  @Input() user: object;
 
   constructor() { }
 
+  static validateEmail(email) {
+    let re: RegExp;
+    // tslint:disable-next-line:max-line-length
+    re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
   ngOnInit() {
-    this.jwt = null;
+    this.jwt = NavbarComponent.getJWT();
+    this.user = NavbarComponent.getUser();
+  }
+
+  registerStudent() {
+    console.log('Registering...');
+    const form = $('#registerForm');
+    const email = form.find('input[name="email"]').val();
+    const password1 = form.find('input[name="password1"]').val();
+    // check input
+    if (!HomepageComponent.validateEmail(email)) {
+      alert('Λάθος email.');
+      return;
+    } else if (password1 !== form.find('input[name="password2"]').val()) {
+      alert('Διαφορετικοί κωδικοί.');
+      return;
+    } else if (password1.length < 6) {
+      alert('Πολύ μικρός κωδικός. Πρέπει να είναι τουλάχιστον 6 χαρακτήρες.');
+      return;
+    }
+    $.ajax({
+      url: environment.apiUrl + '/students',
+      method: 'POST',
+      dataType: 'json',
+      headers: {},
+      data: {
+        email,
+        password: password1,
+        firstname: form.find('input[name="firstname"]').val(),
+        lastname: form.find('input[name="lastname"]').val()
+      },
+      statusCode: {
+        404: () => {
+          alert('Error 404');
+        }
+      }
+    }).done(results => {
+      console.log(results);
+      if (results.hasOwnProperty('error')) {
+        alert(results.message);
+      } else {
+        alert('Επιτυχής εγγραφή!');
+        $('#registerForm').find('input').val('');
+      }
+    });
+
   }
 
 }

@@ -1,15 +1,15 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="main-body">
-  <app-navbar (loggedIn)="getJWTandUser($event)" (selectedPage)="getCurrentPage($event)"></app-navbar>
+  <app-navbar (loggedInOrOut)="loggedInEvent($event)" (selectedPage)="getCurrentPage($event)"></app-navbar>
   <div *ngIf="currentPage === 'courses'; else notCourses">
-  <app-courses [jwt]="jwt"></app-courses>
+  <app-courses [jwt]="jwt" [user]="user"></app-courses>
 </div>
 <ng-template #notCourses>
   <div *ngIf="currentPage === 'profile'; else notCoursesNorProfile">
-    <app-profile [jwt]="jwt"></app-profile>
+    <app-profile [jwt]="jwt" [user]="user"></app-profile>
   </div>
   <ng-template #notCoursesNorProfile>
-    <app-homepage [jwt]="jwt"></app-homepage>
+    <app-homepage [jwt]="jwt" [user]="user"></app-homepage>
   </ng-template>
 </ng-template>
 </div>

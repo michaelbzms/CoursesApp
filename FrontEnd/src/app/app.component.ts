@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {NavbarComponent} from './components/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
@@ -13,18 +14,19 @@ export class AppComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.jwt = null;
-    this.user = null;
+    this.jwt = NavbarComponent.getJWT();
+    this.user = NavbarComponent.getUser();
     this.currentPage = '';
-  }
-
-  getJWTandUser(jwtAndUser) {
-    this.jwt = jwtAndUser.jwt;
-    this.user = jwtAndUser.user;
   }
 
   getCurrentPage(page) {
     this.currentPage = page;
+  }
+
+  loggedInEvent(inOrOut: boolean) {
+    console.log('Detected login or logout.. re-fetching JWT and user from local storage')
+    this.jwt = NavbarComponent.getJWT();
+    this.user = NavbarComponent.getUser();
   }
 
 }

@@ -1,8 +1,7 @@
 <div class="text-center">
-  <img class="d-inline-block" src="/assets/grad_cap1.png">
-  <h1 class="text-color1">CoursesApp</h1>
+  <h1 class="d-inline-block text-color1 mt-3 mb-0 font-weight-bold"><img src="/assets/grad_cap1.png">CoursesApp</h1>
 </div>
-<div class="bg-light-transparent container text-center my-3 p-4">
+<div class="bg-light-transparent container text-center my-2 p-4">
   <p>
     To <span class="text-color1">Courses App</span> είναι μία εφαρμογή για φοιτητές του
     <a class="text-color2" href="http://di.uoa.gr">τμήματος Πληροφορικής και Τηλεπικοινωνιών</a> με την οποία οι τελευταίοι
@@ -14,21 +13,33 @@
     να δημιουργήσετε προκειμένου οι βαθμοί σας σε μαθήματα να αποθηκευτούν μόνιμα.
   </p>
 </div>
-<div *ngIf="jwt === null" class="container p-4 text-left">
-  <form class="registerForm bg-light-transparent">
+<div *ngIf="jwt === null; else loggedInHP" class="container p-4 text-left">
+  <form id="registerForm" (submit)="registerStudent()" class="registerForm bg-light-transparent">
     <h2 class="text-center">Εγγραφή Φοιτητή</h2>
+
     <label class="mt-2 mb-0" for="emailInput">Email</label>
-    <input id="emailInput" class="form-control" type="email" name="email">
-    <label class="mt-2 mb-0" for="password1">Κωδικός</label>
-    <input id="password1" class="form-control"  type="password" name="password1">
+    <input id="emailInput" class="form-control" type="email" name="email" required>
+
+    <label class="mt-2 mb-0 " for="password1">Κωδικός</label>
+    <div class="d-inline-block float-right mt-1 tooltip-right" data-tooltip="Ο κωδικός σας θα πρέπει να είναι τουλάχιστον 6 χαρακτήρες.">
+      <img style="height: 20px; width: 20px" src="/assets/help_icon.png">
+    </div>
+    <input id="password1" class="form-control"  type="password" name="password1" required>
+
     <label class="mt-2 mb-0" for="password2">Επανάληψη κωδικού</label>
-    <input id="password2" class="form-control"  type="password" name="password2">
+    <input id="password2" class="form-control"  type="password" name="password2" required>
+
     <label class="mt-2 mb-0" for="firstNameInput">Όνομα</label>
-    <input id="firstNameInput" class="form-control"  type="text" name="firstname">
+    <input id="firstNameInput" class="form-control"  type="text" name="firstname" required>
+
     <label class="mt-2 mb-0" for="lastNameInput">Επίθετο</label>
-    <input id="lastNameInput" class="form-control"  type="text" name="lastname">
+    <input id="lastNameInput" class="form-control"  type="text" name="lastname" required>
+
     <div class="text-center mt-3">
       <button class="btn btn-success" type="submit">Εγγραφή</button>
     </div>
   </form>
 </div>
+<ng-template #loggedInHP>
+  <!-- <div class="container bg-light-transparent"></div> -->
+</ng-template>
