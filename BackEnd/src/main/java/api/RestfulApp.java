@@ -17,6 +17,7 @@ public class RestfulApp extends Application {
             corsService.setAllowingAllRequestedHeaders(true);
             corsService.setAllowedOrigins(new HashSet(Arrays.asList("*")));
             corsService.setAllowedCredentials(true);
+            corsService.setSkippingResourceForCorsOptions(true);
             getServices().add(corsService);
         }
     }
