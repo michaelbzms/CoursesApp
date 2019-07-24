@@ -7,17 +7,20 @@ import {Component, OnInit} from '@angular/core';
 })
 export class AppComponent implements OnInit {
   jwt: string;      // Jason Web Token got from logging in
+  user: object;
   currentPage: string;
 
   constructor() {}
 
   ngOnInit() {
     this.jwt = null;
+    this.user = null;
     this.currentPage = '';
   }
 
-  getJWT(token) {
-    this.jwt = token;
+  getJWTandUser(jwtAndUser) {
+    this.jwt = jwtAndUser.jwt;
+    this.user = jwtAndUser.user;
   }
 
   getCurrentPage(page) {

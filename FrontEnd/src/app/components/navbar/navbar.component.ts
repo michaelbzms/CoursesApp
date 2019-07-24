@@ -1,4 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { environment } from '../../../environments/environment';
+
 import * as $ from 'jquery';
 
 @Component({
@@ -8,6 +10,7 @@ import * as $ from 'jquery';
 })
 export class NavbarComponent implements OnInit {
   jwt: string;
+  user: object;
   @Output() loggedIn = new EventEmitter();
   @Output() selectedPage = new EventEmitter();
 
@@ -15,11 +18,35 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.jwt = null;
+    this.user = null;
   }
 
   login() {
-    this.jwt = /* sth */ 'token';
-    this.loggedIn.emit(this.jwt);
+    console.log('Loggin in...');
+    $.ajax({
+      url: environment.apiUrl + '/login',
+      method: 'POST',
+      dataType: 'json',
+      headers: {},
+      data: {
+        email: $('#emailLogin').val(),
+        password: $('#passwordLogin').val()
+      },
+      statusCode: {
+        404: () => {
+          alert('Error 404');
+        }
+      }
+    }).done(results => {
+      console.log(results);
+      if (results.hasOwnProperty('jwt') && results.hasOwnProperty('user')) {
+        this.jwt = results.jwt;
+        this.user = results.user;
+      } else {
+        alert('Error: ' + ((results.hasOwnProperty('message')) ? results.message : 'Unknown'));
+      }
+    });
+    this.loggedIn.emit({jwt: this.jwt, user: this.user});
   }
 
   selected_page(page: string) {

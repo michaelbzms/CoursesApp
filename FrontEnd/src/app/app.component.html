@@ -1,6 +1,6 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="main-body">
-  <app-navbar (loggedIn)="getJWT($event)" (selectedPage)="getCurrentPage($event)"></app-navbar>
+  <app-navbar (loggedIn)="getJWTandUser($event)" (selectedPage)="getCurrentPage($event)"></app-navbar>
   <div *ngIf="currentPage === 'courses'; else notCourses">
   <app-courses [jwt]="jwt"></app-courses>
 </div>
