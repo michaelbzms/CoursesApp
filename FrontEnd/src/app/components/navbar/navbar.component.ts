@@ -53,6 +53,7 @@ export class NavbarComponent implements OnInit {
         this.jwt = results.jwt;
         this.user = results.user;
         this.loggedInOrOut.emit(true);
+        this.selected_page('courses');  // redirect
       } else {
         alert('Error: ' + ((results.hasOwnProperty('message')) ? results.message : 'Unknown'));
       }

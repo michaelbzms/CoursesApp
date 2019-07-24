@@ -28,12 +28,12 @@
     </div>
     <ng-template #loggedInBlock2>
       <div *ngIf="user.isAdmin; else studentId">
-        {{this.user.email}}
+        <h3 class="text-color3">{{this.user.email}}</h3>
       </div>
       <ng-template #studentId>
-        {{this.user.firstName}} {{this.user.lastName}}
+        <h3 class="text-color2">{{this.user.firstName}} {{this.user.lastName}}</h3>
       </ng-template>
-      <button (click)="logout()" class="btn btn-outline-secondary">Αποσύνδεση</button>
+      <button (click)="logout()" class="btn btn-outline-secondary ml-3">Αποσύνδεση</button>
     </ng-template>
   </div>
 </nav>
