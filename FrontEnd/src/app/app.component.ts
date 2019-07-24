@@ -24,8 +24,11 @@ export class AppComponent implements OnInit {
   }
 
   loggedInEvent(inOrOut: boolean) {
-    console.log('Detected login or logout.. re-fetching JWT and user from local storage')
     this.jwt = NavbarComponent.getJWT();
+    this.user = NavbarComponent.getUser();
+  }
+
+  sessionChangedEvent() {
     this.user = NavbarComponent.getUser();
   }
 

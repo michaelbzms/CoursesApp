@@ -5,7 +5,7 @@
       <h1 class="text-color2">{{user.firstName}} {{user.lastName}}</h1>
       <hr>
       <h3 class="text-color2">Αλλαγή προσωπικών στοιχείων</h3>
-      <form class="py-2">
+      <form (submit)="updateStudent()" id="updateForm" class="py-2">
         <label class="mt-2 mb-0" for="emailInput">Email</label>
         <input id="emailInput" class="form-control" type="email" name="email" [value]="user.email" required>
 
@@ -22,7 +22,7 @@
       </form>
       <hr>
       <h3 class="text-color2">Αλλαγή κωδικού πρόσβασης</h3>
-      <form class="py-2">
+      <form (submit)="changePassword()" id="changePasswordForm" class="py-2">
         <label class="mt-2 mb-0" for="oldpassword">Παλιός κωδικός</label>
         <input id="oldpassword" class="form-control"  type="password" name="oldpassword" required>
 
@@ -36,7 +36,7 @@
         <input id="repassword" class="form-control"  type="password" name="repassword" required>
       </form>
       <hr>
-      <button class="btn btn-outline-danger mt-2">Διαγραφή Λογαριασμού</button>
+      <button (click)="deleteAccount()" id="deleteAccountButton" class="btn btn-outline-danger mt-2">Διαγραφή Λογαριασμού</button>
     </div>
     <!-- Admin -->
     <ng-template #AdminPage>

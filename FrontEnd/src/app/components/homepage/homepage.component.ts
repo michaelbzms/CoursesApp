@@ -63,8 +63,8 @@ export class HomepageComponent implements OnInit {
       if (results.hasOwnProperty('error')) {
         alert(results.message);
       } else {
-        alert('Επιτυχής εγγραφή!');
         $('#registerForm').find('input').val('');
+        alert('Επιτυχής εγγραφή!');
       }
     });
 

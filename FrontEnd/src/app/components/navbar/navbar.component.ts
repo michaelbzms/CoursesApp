@@ -23,6 +23,24 @@ export class NavbarComponent implements OnInit {
     return JSON.parse(localStorage.getItem('user'));
   }
 
+  static setSession(token, user) {
+    localStorage.setItem('jwt', token);
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  static unsetSession() {
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
+  }
+
+  static setUser(user) {
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  static unsetUser() {
+    localStorage.removeItem('user');
+  }
+
   constructor() {}
 
   ngOnInit() {
@@ -49,7 +67,7 @@ export class NavbarComponent implements OnInit {
     }).done(results => {
       console.log(results);
       if (results.hasOwnProperty('jwt') && results.hasOwnProperty('user')) {
-        this.setSession(results.jwt, results.user);
+        NavbarComponent.setSession(results.jwt, results.user);
         this.jwt = results.jwt;
         this.user = results.user;
         this.loggedInOrOut.emit(true);
@@ -61,23 +79,13 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    this.unsetSession();
+    NavbarComponent.unsetSession();
     this.jwt = null;
     this.user = null;
     this.loggedInOrOut.emit(false);
     if ($('#profile_page').hasClass('isSelected')) {
       this.select_page('homepage');  // redirect
     }
-  }
-
-  private setSession(token, user) {
-    localStorage.setItem('jwt', token);
-    localStorage.setItem('user', JSON.stringify(user));
-  }
-
-  private unsetSession() {
-    localStorage.removeItem('jwt');
-    localStorage.removeItem('user');
   }
 
   select_page(page: string) {

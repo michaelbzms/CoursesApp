@@ -6,7 +6,7 @@
 </div>
 <ng-template #notCourses>
   <div *ngIf="currentPage === 'profile'; else notCoursesNorProfile">
-    <app-profile [jwt]="jwt" [user]="user"></app-profile>
+    <app-profile (sessionChanged)="sessionChangedEvent()" [jwt]="jwt" [user]="user"></app-profile>
   </div>
   <ng-template #notCoursesNorProfile>
     <app-homepage [jwt]="jwt" [user]="user"></app-homepage>
