@@ -66,7 +66,7 @@ export class NavbarComponent implements OnInit {
     this.user = null;
     this.loggedInOrOut.emit(false);
     if ($('#profile_page').hasClass('isSelected')) {
-      this.select_page('homepage');
+      this.select_page('homepage');  // redirect
     }
   }
 
