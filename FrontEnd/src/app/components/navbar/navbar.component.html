@@ -1,12 +1,12 @@
 <nav id="mynavbar" class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-  <a class="navbar-brand text-color1 p-0 mr-sm-0 mr-3 mr-lg-5" href="#" (click)="selected_page('homepage')">
+  <a class="navbar-brand text-color1 p-0 mr-sm-0 mr-3 mr-lg-5" href="#" (click)="select_page('homepage')">
     <img class="d-inline-block" style="height: 40%; width: 40%" src="/assets/grad_cap1.png">
     <span class="logo-text">CoursesApp</span>
   </a>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item mr-2">
-        <a id="courses_page" class="nav-link link-color1" href="#" (click)="selected_page('courses')">Μαθήματα</a>
+        <a id="courses_page" class="nav-link link-color1" href="#" (click)="select_page('courses')">Μαθήματα</a>
       </li>
       <div *ngIf="jwt === null; else loggedInBlock">
         <li class="nav-item tooltip-bottom" data-tooltip="Συνδεθείτε για να έχετε πρόσβαση στον λογαριασμό σας." style="cursor: default !important;">
@@ -15,7 +15,7 @@
       </div>
       <ng-template #loggedInBlock>
         <li class="nav-item">
-          <a id="profile_page" class="nav-link link-color1" href="#" (click)="selected_page('profile')">Ο Λογαριασμός μου</a>
+          <a id="profile_page" class="nav-link link-color1" href="#" (click)="select_page('profile')">Ο Λογαριασμός μου</a>
         </li>
       </ng-template>
     </ul>

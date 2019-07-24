@@ -1,3 +1,8 @@
-<p>
-  profile works!
-</p>
+<div *ngIf="jwt !== null && user !== null; else forbidden">
+  <p>
+    profile works!
+  </p>
+</div>
+<ng-template #forbidden>
+  Forbidden
+</ng-template>

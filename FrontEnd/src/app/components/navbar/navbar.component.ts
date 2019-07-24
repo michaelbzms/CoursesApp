@@ -53,7 +53,7 @@ export class NavbarComponent implements OnInit {
         this.jwt = results.jwt;
         this.user = results.user;
         this.loggedInOrOut.emit(true);
-        this.selected_page('courses');  // redirect
+        this.select_page('courses');  // redirect
       } else {
         alert('Error: ' + ((results.hasOwnProperty('message')) ? results.message : 'Unknown'));
       }
@@ -65,6 +65,9 @@ export class NavbarComponent implements OnInit {
     this.jwt = null;
     this.user = null;
     this.loggedInOrOut.emit(false);
+    if ($('#profile_page').hasClass('isSelected')) {
+      this.select_page('homepage');
+    }
   }
 
   private setSession(token, user) {
@@ -77,7 +80,7 @@ export class NavbarComponent implements OnInit {
     localStorage.removeItem('user');
   }
 
-  selected_page(page: string) {
+  select_page(page: string) {
     console.log('Selected ' + page + ' page!');
     $('.nav-link').removeClass('isSelected');
     $('#' + page + '_page').addClass('isSelected');
