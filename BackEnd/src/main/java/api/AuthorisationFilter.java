@@ -71,7 +71,7 @@ public class AuthorisationFilter implements Filter {
             switch (segments[5]) {
                 case "courses":
                     if (segments.length == 7){   // courses/{courseId}
-                        switch(method) {
+                        switch (method) {
                             case "POST":         // only students can post grades for courses
                                 // Note: if user is null then backend will give back 200 OK but with an error message
                                 allowed = user == null || !user.isAdmin();
@@ -84,7 +84,7 @@ public class AuthorisationFilter implements Filter {
                                 break;
                         }
                     } else {                     // courses
-                        switch(method) {
+                        switch (method) {
                             case "POST":         // only an admin should be able to post a new course
                                 allowed = user != null && user.isAdmin();
                                 break;
@@ -94,7 +94,7 @@ public class AuthorisationFilter implements Filter {
                 case "students":
                     if (segments.length == 7){   // students/{studentId}
                         int sid = Integer.parseInt(segments[6]);
-                        switch(method) {
+                        switch (method) {
                             case "GET":          // only student himself or admin can get his info
                                 allowed = user != null && (user.isAdmin() || (sid == user.getId()));
                                 break;
@@ -115,9 +115,13 @@ public class AuthorisationFilter implements Filter {
                     break;
                 case "users":
                     if (segments.length == 7) {
-                        // Only user himself should be able to change his password
-                        int uid = Integer.parseInt(segments[6]);
-                        allowed = user != null && (uid == user.getId());
+                        switch (method) {
+                            case "PUT":
+                                // Only user himself should be able to change his password
+                                int uid = Integer.parseInt(segments[6]);
+                                allowed = user != null && (uid == user.getId());
+                                break;
+                        }
                     }
                     break;
                 case "login":

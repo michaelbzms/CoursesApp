@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { environment } from '../../../environments/environment';
 import * as $ from 'jquery';
 
@@ -9,7 +9,7 @@ import * as $ from 'jquery';
 })
 export class NavbarComponent implements OnInit {
   jwt: string;
-  user: object;
+  @Input() user: object;
 
   @Output() loggedInOrOut = new EventEmitter();
   @Output() selectedPage = new EventEmitter();
@@ -83,9 +83,7 @@ export class NavbarComponent implements OnInit {
     this.jwt = null;
     this.user = null;
     this.loggedInOrOut.emit(false);
-    if ($('#profile_page').hasClass('isSelected')) {
-      this.select_page('homepage');  // redirect
-    }
+    this.select_page('homepage');  // redirect
   }
 
   select_page(page: string) {

@@ -53,6 +53,9 @@ export class ProfileComponent implements OnInit {
       headers: { jwt: this.jwt },
       data,
       statusCode: {
+        403: () => {
+          alert('Error 403');
+        },
         404: () => {
           alert('Error 404');
         }
@@ -79,16 +82,23 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  resetUpdateForm() {
+    console.log('Resetting update form...');
+    const form = $('#updateForm');
+    // @ts-ignore
+    form.find('input[name="email"]').val(this.user.email);
+    // @ts-ignore
+    form.find('input[name="firstname"]').val(this.user.firstName);
+    // @ts-ignore
+    form.find('input[name="lastname"]').val(this.user.lastName);
+  }
+
   changePassword() {
     console.log('Changing password...');
     const form = $('#changePasswordForm');
-    const email = form.find('input[name="email"]').val();
     const newpassword = form.find('input[name="newpassword"]').val();
     // check input
-    if (!ProfileComponent.validateEmail(email)) {
-      alert('Λάθος email.');
-      return;
-    } else if (newpassword !== form.find('input[name="repassword"]').val()) {
+    if (newpassword !== form.find('input[name="repassword"]').val()) {
       alert('Διαφορετικοί κωδικοί.');
       return;
     } else if (newpassword.length < 6) {
@@ -102,10 +112,13 @@ export class ProfileComponent implements OnInit {
       dataType: 'json',
       headers: { jwt: this.jwt },
       data: {
-        oldpassword: form.find('input[name="oldpassword"]'),
+        oldpassword: form.find('input[name="oldpassword"]').val(),
         newpassword
       },
       statusCode: {
+        403: () => {
+          alert('Error 403');
+        },
         404: () => {
           alert('Error 404');
         }
@@ -133,6 +146,9 @@ export class ProfileComponent implements OnInit {
       headers: { jwt: this.jwt },
       data: {},
       statusCode: {
+        403: () => {
+          alert('Error 403');
+        },
         404: () => {
           alert('Error 404');
         }
@@ -145,7 +161,7 @@ export class ProfileComponent implements OnInit {
         NavbarComponent.unsetSession();  // auto-logout
         this.sessionChanged.emit();
         alert('Επιτυχής διαγραφή λογαριασμού.');
-        // TODO: how do I redirect from here?
+        window.location.replace('/');  // in this case only redirect the old fashioned way
       }
     });
   }

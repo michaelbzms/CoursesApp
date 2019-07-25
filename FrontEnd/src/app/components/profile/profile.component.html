@@ -2,11 +2,11 @@
   <div class="container bg-light-transparent mt-3 p-4">
     <!-- Student -->
     <div *ngIf="!user.isAdmin; else AdminPage">
-      <h1 class="text-color2">{{user.firstName}} {{user.lastName}}</h1>
+      <h2 class="text-color2">{{user.firstName}} {{user.lastName}}</h2>
       <hr>
       <h3 class="text-color2">Αλλαγή προσωπικών στοιχείων</h3>
       <form (submit)="updateStudent()" id="updateForm" class="py-2">
-        <label class="mt-2 mb-0" for="emailInput">Email</label>
+        <label class="mb-0" for="emailInput">Email</label>
         <input id="emailInput" class="form-control" type="email" name="email" [value]="user.email" required>
 
         <label class="mt-2 mb-0" for="firstNameInput">Όνομα</label>
@@ -15,15 +15,15 @@
         <label class="mt-2 mb-0" for="lastNameInput">Επίθετο</label>
         <input id="lastNameInput" class="form-control"  type="text" name="lastname" [value]="user.lastName" required>
 
-        <div class="mt-4">
-          <button class="btn btn-success d-inline-block mr-2">Αποθήκευση</button>
-          <button class="btn btn-outline-secondary d-inline-block">Ακύρωση</button>
+        <div class="mt-3">
+          <button class="btn btn-success d-inline-block mr-2" type="submit" onclick="this.blur();">Αποθήκευση</button>
+          <button (click)="resetUpdateForm()" class="btn btn-outline-secondary d-inline-block" type="button" onclick="this.blur();">Ακύρωση</button>
         </div>
       </form>
       <hr>
       <h3 class="text-color2">Αλλαγή κωδικού πρόσβασης</h3>
       <form (submit)="changePassword()" id="changePasswordForm" class="py-2">
-        <label class="mt-2 mb-0" for="oldpassword">Παλιός κωδικός</label>
+        <label class="mb-0" for="oldpassword">Παλιός κωδικός</label>
         <input id="oldpassword" class="form-control"  type="password" name="oldpassword" required>
 
         <label class="mt-2 mb-0 " for="newpassword">Νέος κωδικός</label>
@@ -34,9 +34,14 @@
 
         <label class="mt-2 mb-0" for="repassword">Επανάληψη νέου κωδικού</label>
         <input id="repassword" class="form-control"  type="password" name="repassword" required>
+
+        <div class="mt-3">
+          <button class="btn btn-success d-inline-block mr-2" type="submit" onclick="this.blur();">Αποθήκευση</button>
+          <button class="btn btn-outline-secondary d-inline-block" type="reset" onclick="this.blur();">Ακύρωση</button>
+        </div>
       </form>
       <hr>
-      <button (click)="deleteAccount()" id="deleteAccountButton" class="btn btn-outline-danger mt-2">Διαγραφή Λογαριασμού</button>
+      <button (click)="deleteAccount()" id="deleteAccountButton" class="btn btn-outline-danger mt-2" onclick="this.blur();">Διαγραφή Λογαριασμού</button>
     </div>
     <!-- Admin -->
     <ng-template #AdminPage>
