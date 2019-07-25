@@ -241,19 +241,22 @@ public class DataAccess {
     }
 
     public List<Course> getAllCourses() throws DataAccessException {
-        return jdbcTemplate.query("SELECT * FROM courses", new CourseRowMapper());
+        return jdbcTemplate.query("SELECT * FROM courses ORDER BY semester", new CourseRowMapper());
     }
 
     public List<Course> getAllCourses(int studentId) throws DataAccessException {
         // TODO: Is there a faster query?
-        String sql = "(SELECT c.*, shc.grade " +
-                     "FROM courses c, students_has_courses shc " +
-                     "WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?) " +
-                        "UNION " +
-                     "(SELECT *, -1.0 AS \"grade\" FROM courses WHERE idCourses NOT IN " +
-                        "(SELECT c.idCourses " +
-                        "FROM courses c, students_has_courses shc " +
-                        "WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?))";
+        String sql = "SELECT *\n" +
+                     "FROM ((SELECT c.*, shc.grade\n" +
+                     "      FROM courses c, students_has_courses shc\n" +
+                     "      WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?)\n" +
+                     "        UNION\n" +
+                     "      (SELECT *, -1.0 AS grade FROM courses WHERE idCourses NOT IN\n" +
+                     "      (SELECT c.idCourses\n" +
+                     "      FROM courses c, students_has_courses shc\n" +
+                     "      WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?))\n" +
+                     "     ) AS courses\n" +
+                     "ORDER BY semester;";
         return jdbcTemplate.query(sql, new Object[]{studentId, studentId}, new CourseForStudentRowMapper());
     }
 

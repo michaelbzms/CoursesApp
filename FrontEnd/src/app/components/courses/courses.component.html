@@ -5,8 +5,10 @@
       <div class="bg-light-transparent p-4">
         <h2 class="text-color2">Μαθήματα</h2>
         <hr>
-        <div *ngFor="let c of courses">
-          <app-course [course]="c" [jwt]="jwt" [user]="user"></app-course>
+        <div class="coursesDiv">
+          <div *ngFor="let c of courses">
+            <app-course [course]="c" [jwt]="jwt" [user]="user" (gradesChanged)="calculateAVGandECTS()"></app-course>
+          </div>
         </div>
       </div>
     </div>
@@ -15,12 +17,12 @@
       <div class="bg-light-transparent p-4">
         <h2 class="text-color2">Μέσος Όρος</h2>
         <hr>
-        <div class="text-center grade">9.42</div>
+        <div class="text-center grade"><h3 class="text-success">{{avgGrade}}</h3><span class="subtitle">από 10</span></div>
       </div>
       <div class="bg-light-transparent p-4 mt-3">
         <h2 class="text-color2">Συγκεντρωμένα ECTs</h2>
         <hr>
-        <div class="text-center ects">176 / 240</div>
+        <div class="text-center ects"><h3>{{totalEcts}}</h3><span class="subtitle">απο 240</span></div>
       </div>
     </div>
   </div>

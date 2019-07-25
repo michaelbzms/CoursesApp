@@ -5,6 +5,16 @@
   margin-bottom: 20px;
 }
 
+.coursesDiv {
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
 .grade, .ects {
   font-size: 125%;
+}
+
+.subtitle {
+  font-size: 80%;
+  color: dimgrey;
 }
