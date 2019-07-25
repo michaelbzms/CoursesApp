@@ -48,7 +48,7 @@ public class StudentResource extends ServerResource {
                 this.setStatus(Status.CLIENT_ERROR_NOT_FOUND);
                 return null;
             } else if (!fb.SUCCESS) return JsonMapRepresentation.getJSONforError(fb.MESSAGE);   // aka new email already taken
-            return JsonMapRepresentation.SUCCESS_JSON;
+            return JsonMapRepresentation.getJSONforSuccess();
         } catch (NumberFormatException e) {
             return JsonMapRepresentation.getJSONforError("Non-integer given to parameter that must be an integer number");
         } catch (DataAccessException e) {
@@ -68,7 +68,7 @@ public class StudentResource extends ServerResource {
                 this.setStatus(Status.CLIENT_ERROR_NOT_FOUND);
                 return null;
             }
-            return JsonMapRepresentation.SUCCESS_JSON;
+            return JsonMapRepresentation.getJSONforSuccess();
         } catch (DataAccessException e) {
             e.printStackTrace();
             return JsonMapRepresentation.getJSONforError("data base error");

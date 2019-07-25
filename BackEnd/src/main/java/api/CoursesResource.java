@@ -63,7 +63,7 @@ public class CoursesResource extends ServerResource {
                 return JsonMapRepresentation.getJSONforError("Missing or empty necessary parameter(s)");
             }
             coursesDAO.submitCourse(new Course(null, title, Integer.parseInt(ectsStr), Integer.parseInt(semesterStr), path, null, type, specificpath));
-            return JsonMapRepresentation.SUCCESS_JSON;
+            return JsonMapRepresentation.getJSONforSuccess();
         } catch (NumberFormatException e) {
             return JsonMapRepresentation.getJSONforError("Non-integer given to parameter that must be an integer number");
         } catch (DataAccessException e) {

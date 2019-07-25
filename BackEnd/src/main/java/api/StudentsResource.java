@@ -47,7 +47,7 @@ public class StudentsResource extends ServerResource {
             String hashedPassword = Hashing.getHashSHA256(password);    // hash password for security
             Feedback fb = studentsDAO.registerStudent(new Student(null, email, false, firstname, lastname), hashedPassword);
             if (!fb.SUCCESS) return JsonMapRepresentation.getJSONforError(fb.MESSAGE);   // aka email already taken
-            return JsonMapRepresentation.SUCCESS_JSON;
+            return JsonMapRepresentation.getJSONforSuccess();
         } catch (NumberFormatException e) {
             return JsonMapRepresentation.getJSONforError("Non-integer given to parameter that must be an integer number");
         } catch (DataAccessException e) {

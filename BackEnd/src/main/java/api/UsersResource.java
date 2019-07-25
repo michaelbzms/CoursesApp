@@ -38,7 +38,7 @@ public class UsersResource extends ServerResource {
                 this.setStatus(Status.CLIENT_ERROR_NOT_FOUND);
                 return null;
             } else if (!fb.SUCCESS) return JsonMapRepresentation.getJSONforError(fb.MESSAGE);
-            return JsonMapRepresentation.SUCCESS_JSON;
+            return JsonMapRepresentation.getJSONforSuccess();
         } catch (DataAccessException e) {
             e.printStackTrace();
             return JsonMapRepresentation.getJSONforError("data base error");

@@ -85,7 +85,7 @@ public class CourseResource extends ServerResource {
             }
             // register grade (might be null -> reset grade)
             coursesDAO.setGradeForCourse(u.getId(), courseId, grade);
-            return JsonMapRepresentation.SUCCESS_JSON;
+            return JsonMapRepresentation.getJSONforSuccess();
         } catch (NumberFormatException e) {
             return JsonMapRepresentation.getJSONforError("Non-number given to parameter that must be a number");
         } catch (DataAccessException e) {
@@ -112,7 +112,7 @@ public class CourseResource extends ServerResource {
                 this.setStatus(Status.CLIENT_ERROR_NOT_FOUND);
                 return null;
             }
-            return JsonMapRepresentation.SUCCESS_JSON;
+            return JsonMapRepresentation.getJSONforSuccess();
         } catch (NumberFormatException e) {
             return JsonMapRepresentation.getJSONforError("Non-integer given to parameter that must be an integer number");
         } catch (DataAccessException e) {
@@ -132,7 +132,7 @@ public class CourseResource extends ServerResource {
                 this.setStatus(Status.CLIENT_ERROR_NOT_FOUND);
                 return null;
             }
-            return JsonMapRepresentation.SUCCESS_JSON;
+            return JsonMapRepresentation.getJSONforSuccess();
         } catch (DataAccessException e) {
             e.printStackTrace();
             return JsonMapRepresentation.getJSONforError("data base error");
