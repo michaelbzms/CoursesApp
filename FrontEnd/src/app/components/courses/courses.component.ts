@@ -15,6 +15,11 @@ export class CoursesComponent implements OnInit {
   avgGrade: number;
   totalEcts: number;
 
+  static roundUp(num, precision) {
+    precision = Math.pow(10, precision);
+    return Math.ceil(num * precision) / precision;
+  }
+
   constructor() { }
 
   ngOnInit() {
@@ -60,6 +65,23 @@ export class CoursesComponent implements OnInit {
     });
     this.totalEcts = total_ects;
     this.avgGrade = (total_ects > 0) ? sum_coef_grades / total_ects : 0.0;
+    this.avgGrade = CoursesComponent.roundUp(this.avgGrade, 2);
+  }
+
+  getClassNameForAVG(): string {
+    if (this.avgGrade < 5.0) {
+      return 'bad_grade';
+    } else if (this.avgGrade < 6.0) {
+      return 'bad_grade';
+    } else if (this.avgGrade < 7.0) {
+      return 'okay_grade';
+    } else if (this.avgGrade < 8.0) {
+      return 'good_grade';
+    } else if (this.avgGrade < 9.0) {
+      return 'very_good_grade';
+    } else {
+      return 'perfect_grade';
+    }
   }
 
 }

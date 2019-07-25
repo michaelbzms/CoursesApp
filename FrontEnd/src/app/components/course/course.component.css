@@ -10,3 +10,7 @@
 .grade-input {
   max-width: 75px;
 }
+
+.failing_grade {
+  color: red;
+}

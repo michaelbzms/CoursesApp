@@ -17,7 +17,12 @@
       <div class="bg-light-transparent p-4">
         <h2 class="text-color2">Μέσος Όρος</h2>
         <hr>
-        <div class="text-center grade"><h3 class="text-success">{{avgGrade}}</h3><span class="subtitle">από 10</span></div>
+        <div class="text-center grade">
+          <h3 [className]="getClassNameForAVG()">
+            {{avgGrade}}
+          </h3>
+          <span class="subtitle">από 10</span>
+        </div>
       </div>
       <div class="bg-light-transparent p-4 mt-3">
         <h2 class="text-color2">Συγκεντρωμένα ECTs</h2>

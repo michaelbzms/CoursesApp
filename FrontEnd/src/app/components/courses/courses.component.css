@@ -18,3 +18,27 @@
   font-size: 80%;
   color: dimgrey;
 }
+
+.perfect_grade {
+  color: #5cb85c;
+}
+
+.very_good_grade {
+  color: #77b858;
+}
+
+.good_grade {
+  color: #8bb857;
+}
+
+.okay_grade {
+  color: #a1b852;
+}
+
+.bad_grade {
+  color: #b89d54;
+}
+
+.failing_grade {
+  color: #ff7355;
+}
