@@ -37,7 +37,6 @@ export class CoursesComponent implements OnInit {
       headers: (this.jwt !== null) ? { jwt: this.jwt } : {},
       data: {}
     }).done(results => {
-      console.log(results);
       if (results.hasOwnProperty('error')) {
         alert(results.message);
       } else {
@@ -45,7 +44,7 @@ export class CoursesComponent implements OnInit {
         this.calculateAVGandECTS();
       }
     }).fail((jqXHR, textStatus, errorThrown) => {
-      alert(textStatus + ':' + errorThrown);
+      alert('>Error: ' + textStatus + ':' + errorThrown);
     });
   }
 

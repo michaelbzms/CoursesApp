@@ -61,7 +61,8 @@ public class CourseResource extends ServerResource {
         try {
             int courseId = getCourseId();
             Form form = new Form(entity);
-            Double grade = Double.parseDouble(form.getFirstValue("grade"));
+            String gradeStr = form.getFirstValue("grade");
+            Double grade = (gradeStr != null) ? Double.parseDouble(gradeStr) : null;
             if (grade != null && (grade < 0.0 || grade > 10.0)){
                 return JsonMapRepresentation.getJSONforError("Invalid grade (must be between 0 and 10)");
             }
