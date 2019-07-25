@@ -51,18 +51,7 @@ export class ProfileComponent implements OnInit {
       method: 'PUT',
       dataType: 'json',
       headers: { jwt: this.jwt },
-      data,
-      statusCode: {
-        403: () => {
-          alert('Error 403');
-        },
-        404: () => {
-          alert('Error 404');
-        }
-      },
-      error: () => {
-        alert('ERROR AJAX');
-      }
+      data
     }).done(results => {
       console.log(results);
       if (results.hasOwnProperty('error')) {
@@ -79,6 +68,8 @@ export class ProfileComponent implements OnInit {
         this.sessionChanged.emit();
         alert('Επιτυχής ενημέρωση στοιχείων λογαριασμού.');
       }
+    }).fail((jqXHR, textStatus, errorThrown) => {
+      alert(textStatus + ':' + errorThrown);
     });
   }
 
@@ -114,14 +105,6 @@ export class ProfileComponent implements OnInit {
       data: {
         oldpassword: form.find('input[name="oldpassword"]').val(),
         newpassword
-      },
-      statusCode: {
-        403: () => {
-          alert('Error 403');
-        },
-        404: () => {
-          alert('Error 404');
-        }
       }
     }).done(results => {
       console.log(results);
@@ -131,6 +114,8 @@ export class ProfileComponent implements OnInit {
         $('#changePasswordForm').find('input').val('');
         alert('Επιτυχής αλλαγή κωδικού.');
       }
+    }).fail((jqXHR, textStatus, errorThrown) => {
+      alert(textStatus + ':' + errorThrown);
     });
   }
 
@@ -144,15 +129,7 @@ export class ProfileComponent implements OnInit {
       method: 'DELETE',
       dataType: 'json',
       headers: { jwt: this.jwt },
-      data: {},
-      statusCode: {
-        403: () => {
-          alert('Error 403');
-        },
-        404: () => {
-          alert('Error 404');
-        }
-      }
+      data: {}
     }).done(results => {
       console.log(results);
       if (results.hasOwnProperty('error')) {
@@ -163,6 +140,8 @@ export class ProfileComponent implements OnInit {
         alert('Επιτυχής διαγραφή λογαριασμού.');
         window.location.replace('/');  // in this case only redirect the old fashioned way
       }
+    }).fail((jqXHR, textStatus, errorThrown) => {
+      alert(textStatus + ':' + errorThrown);
     });
   }
 

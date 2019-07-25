@@ -1,0 +1,10 @@
+.courses-container {
+  width: 80vw;
+  margin-left: 10vw;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.grade, .ects {
+  font-size: 125%;
+}

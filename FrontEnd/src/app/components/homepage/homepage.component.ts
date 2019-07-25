@@ -52,11 +52,6 @@ export class HomepageComponent implements OnInit {
         password: password1,
         firstname: form.find('input[name="firstname"]').val(),
         lastname: form.find('input[name="lastname"]').val()
-      },
-      statusCode: {
-        404: () => {
-          alert('Error 404');
-        }
       }
     }).done(results => {
       console.log(results);
@@ -66,6 +61,8 @@ export class HomepageComponent implements OnInit {
         $('#registerForm').find('input').val('');
         alert('Επιτυχής εγγραφή!');
       }
+    }).fail((jqXHR, textStatus, errorThrown) => {
+      alert(textStatus + ':' + errorThrown);
     });
 
   }

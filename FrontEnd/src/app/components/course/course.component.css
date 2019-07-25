@@ -1,0 +1,12 @@
+.course {
+  margin: 10px 0px 10px 0px;
+  padding: 15px;
+  background-color: whitesmoke;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.grade-input {
+  max-width: 75px;
+}

@@ -58,11 +58,6 @@ export class NavbarComponent implements OnInit {
       data: {
         email: $('#emailLogin').val(),
         password: $('#passwordLogin').val()
-      },
-      statusCode: {
-        404: () => {
-          alert('Error 404');
-        }
       }
     }).done(results => {
       console.log(results);
@@ -75,6 +70,8 @@ export class NavbarComponent implements OnInit {
       } else {
         alert('Error: ' + ((results.hasOwnProperty('message')) ? results.message : 'Unknown'));
       }
+    }).fail((jqXHR, textStatus, errorThrown) => {
+      alert(textStatus + ':' + errorThrown);
     });
   }
 

@@ -7,6 +7,7 @@ import { CoursesComponent } from './components/courses/courses.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { FormsModule } from '@angular/forms';
+import { CourseComponent } from './components/course/course.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { FormsModule } from '@angular/forms';
     NavbarComponent,
     CoursesComponent,
     ProfileComponent,
-    HomepageComponent
+    HomepageComponent,
+    CourseComponent
   ],
   imports: [
     BrowserModule,
