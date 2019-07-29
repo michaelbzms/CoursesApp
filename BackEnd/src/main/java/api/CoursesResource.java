@@ -55,14 +55,15 @@ public class CoursesResource extends ServerResource {
             String semesterStr = form.getFirstValue("semester");
             String path = form.getFirstValue("path");
             String type = form.getFirstValue("type");
-            String specificpath = form.getFirstValue("specificpath");
+            // TODO: add E1, ..., E6 options
+
             if (title == null || "".equals(title) ||
                 ectsStr == null || "".equals(ectsStr) ||
                 semesterStr == null || "".equals(semesterStr) ||
                 path == null || "".equals(path)) {
                 return JsonMapRepresentation.getJSONforError("Missing or empty necessary parameter(s)");
             }
-            coursesDAO.submitCourse(new Course(null, title, Integer.parseInt(ectsStr), Integer.parseInt(semesterStr), path, null, type, specificpath));
+            coursesDAO.submitCourse(new Course(null, title, Integer.parseInt(ectsStr), Integer.parseInt(semesterStr), path, null, type));
             return JsonMapRepresentation.getJSONforSuccess();
         } catch (NumberFormatException e) {
             return JsonMapRepresentation.getJSONforError("Non-integer given to parameter that must be an integer number");

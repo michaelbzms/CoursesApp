@@ -15,10 +15,17 @@ public class CourseRowMapper implements RowMapper<Course> {
                 rs.getString("title"),
                 rs.getInt("ects"),
                 rs.getInt("semester"),
-                rs.getString("path"),
+                rs.getString("category"),
                 null,
                 rs.getString("type"),
-                rs.getString("specificpath")
+                new boolean[]{
+                        rs.getBoolean("E1"),
+                        rs.getBoolean("E2"),
+                        rs.getBoolean("E3"),
+                        rs.getBoolean("E4"),
+                        rs.getBoolean("E5"),
+                        rs.getBoolean("E6")
+                }
         );
     }
 

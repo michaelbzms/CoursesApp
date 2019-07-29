@@ -6,29 +6,30 @@ public class Course {
     private String title;
     private int ects;
     private int semester;
-    private String path;
-    private String type = null;
-    private String specificpath = null;
-    private Double grade;           // to be associated with student-user in session
+    private String category;
+    private String type;
+    private Double grade;          // to be associated with student-user in session
+    private boolean[] E;
 
-    public Course(Integer id, String title, int ects, int semester, String path, Double grade){
+    public Course(Integer id, String title, int ects, int semester, String category, Double grade, String type){
         this.id = id;
         this.title = title;
         this.ects = ects;
         this.semester = semester;
-        this.path = path;
-        this.grade = grade;
-    }
-
-    public Course(Integer id, String title, int ects, int semester, String path, Double grade, String type, String specificpath){
-        this.id = id;
-        this.title = title;
-        this.ects = ects;
-        this.semester = semester;
-        this.path = path;
+        this.category = category;
         this.grade = grade;
         this.type = type;
-        this.specificpath = specificpath;
+    }
+
+    public Course(Integer id, String title, int ects, int semester, String category, Double grade, String type, boolean[] E){
+        this.id = id;
+        this.title = title;
+        this.ects = ects;
+        this.semester = semester;
+        this.category = category;
+        this.grade = grade;
+        this.type = type;
+        this.E = E;
     }
 
     public Integer getId() { return id; }
@@ -47,9 +48,9 @@ public class Course {
 
     public void setSemester(int semester) { this.semester = semester; }
 
-    public String getPath() { return path; }
+    public String getCategory() { return category; }
 
-    public void setPath(String path) { this.path = path; }
+    public void setCategory(String category) { this.category = category; }
 
     public Double getGrade() { return grade; }
 
@@ -59,8 +60,12 @@ public class Course {
 
     public void setType(String type) { this.type = type; }
 
-    public String getSpecificpath() { return specificpath; }
+    public final boolean[] getE() {
+        return E;
+    }
 
-    public void setSpecificpath(String specificpath) { this.specificpath = specificpath; }
+    public void setE(boolean[] e) {
+        E = e;
+    }
 
 }

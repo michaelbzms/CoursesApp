@@ -261,9 +261,10 @@ public class DataAccess {
     }
 
     public void submitCourse(Course course) throws DataAccessException {
-        String sql = "INSERT INTO courses (idCourses, title, ects, semester, path, type, specificpath) " +
-                     "VALUES (default, ?, ?, ?, ?, ?, ?);";
-        jdbcTemplate.update(sql, course.getTitle(), course.getEcts(), course.getSemester(), course.getPath(), course.getType(), course.getSpecificpath());
+        // TODO: add E1, ..., E6 options
+        String sql = "INSERT INTO courses (idCourses, title, ects, semester, category, type) " +
+                     "VALUES (default, ?, ?, ?, ?, ?);";
+        jdbcTemplate.update(sql, course.getTitle(), course.getEcts(), course.getSemester(), course.getCategory(), course.getType());
     }
 
     public Feedback editCourse(Course newCourse) throws DataAccessException {
@@ -273,11 +274,11 @@ public class DataAccess {
             String title = (newCourse.getTitle() != null) ? newCourse.getTitle() : oldCourse.getTitle();
             int ects = (newCourse.getEcts() != -1) ? newCourse.getEcts() : oldCourse.getEcts();
             int semester  = (newCourse.getSemester() != -1) ? newCourse.getSemester() : oldCourse.getSemester();
-            String path = (newCourse.getPath() != null) ? newCourse.getPath() : oldCourse.getPath();
+            String category = (newCourse.getCategory() != null) ? newCourse.getCategory() : oldCourse.getCategory();
             String type = (newCourse.getType() != null) ? newCourse.getType() : oldCourse.getType();
-            String specificpath = (newCourse.getSpecificpath() != null) ? newCourse.getSpecificpath() : oldCourse.getSpecificpath();
-            jdbcTemplate.update("UPDATE courses SET title = ?, ects = ?, semester = ?, path = ?, type = ?, specificpath = ? WHERE idCourses = ?",
-                                     title, ects, semester, path, type, specificpath, newCourse.getId());
+            // TODO: add E1, ..., E6 options
+            jdbcTemplate.update("UPDATE courses SET title = ?, ects = ?, semester = ?, category = ?, type = ? WHERE idCourses = ?",
+                                     title, ects, semester, category, type, newCourse.getId());
             return true;
         });
         if (success != null && !success) return new Feedback(false, "Course that does not exist");
