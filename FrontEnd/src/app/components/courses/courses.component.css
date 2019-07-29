@@ -1,6 +1,6 @@
 .courses-container {
-  width: 80vw;
-  margin-left: 10vw;
+  width: 94vw;
+  margin-left: 3vw;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -41,4 +41,8 @@
 
 .failing_grade {
   color: #ff7355;
+}
+
+h5 {
+  text-decoration: underline;
 }

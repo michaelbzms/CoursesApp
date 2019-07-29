@@ -21,14 +21,21 @@ export class CourseComponent implements OnInit {
     this.user = NavbarComponent.getUser();
   }
 
-  getPath(path: string) {
-    switch (path) {
+  getCategory() {
+    // @ts-ignore
+    switch (this.course.category) {
       case 'core':
         return 'Κορμός';
       case 'A':
         return 'Κατεύθυνση Α';
       case 'B':
         return 'Κατεύθυνση Β';
+      case 'general_education':
+        return 'Γενικής Παιδείας';
+      case 'free':
+        return 'Ελεύθερο';
+      case 'optional_lab':
+        return 'Προαιρετικό Εργαστήριο';
       default:
         return 'Αγνωστο';
     }

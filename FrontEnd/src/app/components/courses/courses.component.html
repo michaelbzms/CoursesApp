@@ -1,18 +1,67 @@
 <div class="courses-container">
   <div class="row">
-    <div class="col-8">
+    <div class="col-2">
+      <div class="bg-light-transparent p-4">
+        <h2 class="text-color2">Φίλτρα</h2>
+        <hr>
+<!--    <h5 class="text-color3">Eξάμηνο:</h5>-->
+        <form class="form-group mb-0">
+          <select class="form-control" id="chooseSemester">
+            <option>Όλα τα εξάμηνα</option>
+            <option>1o εξάμηνο</option>
+            <option>2o εξάμηνο</option>
+            <option>3o εξάμηνο</option>
+            <option>4o εξάμηνο</option>
+            <option>5o εξάμηνο</option>
+            <option>6o εξάμηνο</option>
+            <option>7o εξάμηνο</option>
+            <option>8o εξάμηνο</option>
+          </select>
+        </form>
+        <hr>
+<!--    <h5 class="text-color3">Ειδίκευση:</h5>-->
+        <select class="form-control" id="chooseSpecification">
+          <option>Όλες οι ειδικεύσεις</option>
+          <option>Ε1</option>
+          <option>Ε2</option>
+          <option>Ε3</option>
+          <option>Ε4</option>
+          <option>Ε5</option>
+          <option>Ε6</option>
+        </select>
+        <hr>
+        <h5 class="text-color3">Κατηγορία</h5>
+        <form class="form-group mb-0">
+          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="core">Κορμού</label></div>
+          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="optional_lab">Προαιρετικά Εργαστήρια</label></div>
+          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="A">Κατεύθυνση Α</label></div>
+          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="B">Κατεύθυνση Β</label></div>
+          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="general_education">Γενικής Παιδείας</label></div>
+          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="free">Ελεύθερα</label></div>
+        </form>
+        <hr>
+        <h5 class="text-color3">Τύπος</h5>
+        <form class="form-group mb-0">
+          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="core">Υποχρεωτικά</label></div>
+          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="optional_lab">Κατ'επιλογήν υποχρεωτικλα</label></div>
+          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="A">Βασικά Ειδίκευσης</label></div>
+          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="B">Προαιρετικά</label></div>
+        </form>
+      </div>
+    </div>
+    <div class="col-7">
       <!-- List of courses -->
       <div class="bg-light-transparent p-4">
         <h2 class="text-color2">Μαθήματα</h2>
         <hr>
-        <div class="coursesDiv">
-          <div *ngFor="let c of courses">
+        <div class="coursesDiv pr-2">
+          <div *ngFor="let c of courses | coursesFilter: null">
             <app-course [course]="c" [jwt]="jwt" [user]="user" (gradesChanged)="calculateAVGandECTS()"></app-course>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-4">
+    <div class="col-3">
       <!-- Grade Average and ECTs total -->
       <div class="bg-light-transparent p-4">
         <h2 class="text-color2">Μέσος Όρος</h2>

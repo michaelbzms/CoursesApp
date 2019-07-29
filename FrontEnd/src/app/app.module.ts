@@ -8,6 +8,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { FormsModule } from '@angular/forms';
 import { CourseComponent } from './components/course/course.component';
+import { CoursesFilterPipe } from './components/courses/CoursesFilter';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { CourseComponent } from './components/course/course.component';
     CoursesComponent,
     ProfileComponent,
     HomepageComponent,
-    CourseComponent
+    CourseComponent,
+    CoursesFilterPipe
   ],
   imports: [
     BrowserModule,
