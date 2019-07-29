@@ -83,4 +83,8 @@ export class CoursesComponent implements OnInit {
     }
   }
 
+  getCriteria() {
+    return { semester: Number($('#chooseSemester').val()), specification: Number($('#chooseSpecification').val()) };
+  }
+
 }

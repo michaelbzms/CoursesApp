@@ -7,27 +7,27 @@
 <!--    <h5 class="text-color3">Eξάμηνο:</h5>-->
         <form class="form-group mb-0">
           <select class="form-control" id="chooseSemester">
-            <option>Όλα τα εξάμηνα</option>
-            <option>1o εξάμηνο</option>
-            <option>2o εξάμηνο</option>
-            <option>3o εξάμηνο</option>
-            <option>4o εξάμηνο</option>
-            <option>5o εξάμηνο</option>
-            <option>6o εξάμηνο</option>
-            <option>7o εξάμηνο</option>
-            <option>8o εξάμηνο</option>
+            <option value="0" selected>Όλα τα εξάμηνα</option>
+            <option value="1">1o εξάμηνο</option>
+            <option value="2">2o εξάμηνο</option>
+            <option value="3">3o εξάμηνο</option>
+            <option value="4">4o εξάμηνο</option>
+            <option value="5">5o εξάμηνο</option>
+            <option value="6">6o εξάμηνο</option>
+            <option value="7">7o εξάμηνο</option>
+            <option value="8">8o εξάμηνο</option>
           </select>
         </form>
         <hr>
 <!--    <h5 class="text-color3">Ειδίκευση:</h5>-->
         <select class="form-control" id="chooseSpecification">
-          <option>Όλες οι ειδικεύσεις</option>
-          <option>Ε1</option>
-          <option>Ε2</option>
-          <option>Ε3</option>
-          <option>Ε4</option>
-          <option>Ε5</option>
-          <option>Ε6</option>
+          <option value="0" selected>Όλες οι ειδικεύσεις</option>
+          <option value="1">Ε1</option>
+          <option value="2">Ε2</option>
+          <option value="3">Ε3</option>
+          <option value="4">Ε4</option>
+          <option value="5">Ε5</option>
+          <option value="6">Ε6</option>
         </select>
         <hr>
         <h5 class="text-color3">Κατηγορία</h5>
@@ -55,7 +55,7 @@
         <h2 class="text-color2">Μαθήματα</h2>
         <hr>
         <div class="coursesDiv pr-2">
-          <div *ngFor="let c of courses | coursesFilter: null">
+          <div *ngFor="let c of courses | coursesFilter: getCriteria()">
             <app-course [course]="c" [jwt]="jwt" [user]="user" (gradesChanged)="calculateAVGandECTS()"></app-course>
           </div>
         </div>
