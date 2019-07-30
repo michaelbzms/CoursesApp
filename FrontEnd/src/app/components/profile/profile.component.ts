@@ -28,7 +28,6 @@ export class ProfileComponent implements OnInit {
   }
 
   updateStudent() {
-    console.log('Updating...');
     const form = $('#updateForm');
     const email = form.find('input[name="email"]').val();
     const firstname = form.find('input[name="firstname"]').val();
@@ -53,7 +52,6 @@ export class ProfileComponent implements OnInit {
       headers: { jwt: this.jwt },
       data
     }).done(results => {
-      console.log(results);
       if (results.hasOwnProperty('error')) {
         alert(results.message);
       } else {
@@ -74,7 +72,6 @@ export class ProfileComponent implements OnInit {
   }
 
   resetUpdateForm() {
-    console.log('Resetting update form...');
     const form = $('#updateForm');
     // @ts-ignore
     form.find('input[name="email"]').val(this.user.email);
@@ -85,7 +82,6 @@ export class ProfileComponent implements OnInit {
   }
 
   changePassword() {
-    console.log('Changing password...');
     const form = $('#changePasswordForm');
     const newpassword = form.find('input[name="newpassword"]').val();
     // check input
@@ -107,7 +103,6 @@ export class ProfileComponent implements OnInit {
         newpassword
       }
     }).done(results => {
-      console.log(results);
       if (results.hasOwnProperty('error')) {
         alert(results.message);
       } else {
@@ -131,7 +126,6 @@ export class ProfileComponent implements OnInit {
       headers: { jwt: this.jwt },
       data: {}
     }).done(results => {
-      console.log(results);
       if (results.hasOwnProperty('error')) {
         alert(results.message);
       } else {

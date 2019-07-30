@@ -19,7 +19,6 @@ export class NavbarComponent implements OnInit {
   }
 
   public static getUser(): object {
-    console.log('user = ' + localStorage.getItem('user'));
     return JSON.parse(localStorage.getItem('user'));
   }
 
@@ -49,7 +48,6 @@ export class NavbarComponent implements OnInit {
   }
 
   login() {
-    console.log('Loggin in...');
     $.ajax({
       url: environment.apiUrl + '/login',
       method: 'POST',
@@ -60,7 +58,6 @@ export class NavbarComponent implements OnInit {
         password: $('#passwordLogin').val()
       }
     }).done(results => {
-      console.log(results);
       if (results.hasOwnProperty('jwt') && results.hasOwnProperty('user')) {
         NavbarComponent.setSession(results.jwt, results.user);
         this.jwt = results.jwt;
@@ -86,7 +83,6 @@ export class NavbarComponent implements OnInit {
   }
 
   select_page(page: string) {
-    console.log('Selected ' + page + ' page!');
     $('.nav-link').removeClass('isSelected');
     $('#' + page + '_page').addClass('isSelected');
     this.selectedPage.emit(page);

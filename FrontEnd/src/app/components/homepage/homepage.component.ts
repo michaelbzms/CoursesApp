@@ -27,7 +27,6 @@ export class HomepageComponent implements OnInit {
   }
 
   registerStudent() {
-    console.log('Registering...');
     const form = $('#registerForm');
     const email = form.find('input[name="email"]').val();
     const password1 = form.find('input[name="password1"]').val();
@@ -54,7 +53,6 @@ export class HomepageComponent implements OnInit {
         lastname: form.find('input[name="lastname"]').val()
       }
     }).done(results => {
-      console.log(results);
       if (results.hasOwnProperty('error')) {
         alert(results.message);
       } else {
