@@ -3,22 +3,25 @@ import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
   name: 'coursesFilter',
-  pure: false
 })
 export class CoursesFilterPipe implements PipeTransform {
 
-  transform(courses: object[], criteria: object): any {
+  transform(courses: any, semester: number, specification: number): any {
     console.log('Running filter!');
+    console.log(courses);
+    console.log(semester);
+    console.log(specification);
     return courses.filter(c => {
       // Semester constraint
-      // @ts-ignore
-      if (criteria.hasOwnProperty('semester') && !isNaN(criteria.semester) && semesterValue !== 0 && c.semester !== semesterValue) {
+      // tslint:disable-next-line:triple-equals
+      if (semester != 0 && c.semester != semester) {
+        console.log('bad semester:' + c.semester);
         return false;
       }
       // Specification constraint
-      // @ts-ignore
-      // tslint:disable-next-line:max-line-length
-      if (criteria.hasOwnProperty('specification') && !isNaN(criteria.specification) && criteria.specification !== 0 && c.E[criteria.specification] === false) {
+      // tslint:disable-next-line:triple-equals
+      if (specification != 0 && c.E[specification - 1] == false) {
+        console.log('bad specification');
         return false;
       }
       // Category constraints

@@ -15,6 +15,10 @@ export class CoursesComponent implements OnInit {
   avgGrade: number;
   totalEcts: number;
 
+  // filter inputs:
+  semesterFilter = 0;
+  specificationFilter = 0;
+
   static roundUp(num, precision) {
     precision = Math.pow(10, precision);
     return Math.ceil(num * precision) / precision;

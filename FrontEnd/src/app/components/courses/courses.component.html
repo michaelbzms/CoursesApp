@@ -6,7 +6,7 @@
         <hr>
 <!--    <h5 class="text-color3">Eξάμηνο:</h5>-->
         <form class="form-group mb-0">
-          <select class="form-control" id="chooseSemester">
+          <select [(ngModel)]="semesterFilter" name="semester" class="form-control" id="chooseSemester">
             <option value="0" selected>Όλα τα εξάμηνα</option>
             <option value="1">1o εξάμηνο</option>
             <option value="2">2o εξάμηνο</option>
@@ -20,7 +20,7 @@
         </form>
         <hr>
 <!--    <h5 class="text-color3">Ειδίκευση:</h5>-->
-        <select class="form-control" id="chooseSpecification">
+        <select [(ngModel)]="specificationFilter" name="specification" class="form-control" id="chooseSpecification">
           <option value="0" selected>Όλες οι ειδικεύσεις</option>
           <option value="1">Ε1</option>
           <option value="2">Ε2</option>
@@ -55,7 +55,7 @@
         <h2 class="text-color2">Μαθήματα</h2>
         <hr>
         <div class="coursesDiv pr-2">
-          <div *ngFor="let c of courses | coursesFilter: getCriteria()">
+          <div *ngFor="let c of (courses | coursesFilter: semesterFilter : specificationFilter)">
             <app-course [course]="c" [jwt]="jwt" [user]="user" (gradesChanged)="calculateAVGandECTS()"></app-course>
           </div>
         </div>
