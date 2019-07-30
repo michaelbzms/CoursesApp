@@ -32,20 +32,20 @@
         <hr>
         <h5 class="text-color3">Κατηγορία</h5>
         <form class="form-group mb-0">
-          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="core">Κορμού</label></div>
-          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="optional_lab">Προαιρετικά Εργαστήρια</label></div>
-          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="A">Κατεύθυνση Α</label></div>
-          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="B">Κατεύθυνση Β</label></div>
-          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="general_education">Γενικής Παιδείας</label></div>
-          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="free">Ελεύθερα</label></div>
+          <div class="form-check"><label><input [(ngModel)]="coreFilter" class="mr-3" type="checkbox" name="category" value="core">Κορμού</label></div>
+          <div class="form-check"><label><input [(ngModel)]="labFilter" class="mr-3" type="checkbox" name="category" value="optional_lab">Προαιρετικά Εργαστήρια</label></div>
+          <div class="form-check"><label><input [(ngModel)]="AFilter" class="mr-3" type="checkbox" name="category" value="A">Κατεύθυνση Α</label></div>
+          <div class="form-check"><label><input [(ngModel)]="BFilter" class="mr-3" type="checkbox" name="category" value="B">Κατεύθυνση Β</label></div>
+          <div class="form-check"><label><input [(ngModel)]="GEFilter" class="mr-3" type="checkbox" name="category" value="general_education">Γενικής Παιδείας</label></div>
+          <div class="form-check"><label><input [(ngModel)]="freeFilter" class="mr-3" type="checkbox" name="category" value="free">Ελεύθερα</label></div>
         </form>
         <hr>
         <h5 class="text-color3">Τύπος</h5>
         <form class="form-group mb-0">
-          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="core">Υποχρεωτικά</label></div>
-          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="optional_lab">Κατ'επιλογήν υποχρεωτικλα</label></div>
-          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="A">Βασικά Ειδίκευσης</label></div>
-          <div class="form-check"><label><input class="mr-3" type="checkbox" name="category" value="B">Προαιρετικά</label></div>
+          <div class="form-check"><label><input [(ngModel)]="obligatory" class="mr-3" type="checkbox" name="category" value="core">Υποχρεωτικά</label></div>
+          <div class="form-check"><label><input [(ngModel)]="obligatoryByChoice" class="mr-3" type="checkbox" name="category" value="optional_lab">Κατ'επιλογήν υποχρεωτικλα</label></div>
+          <div class="form-check"><label><input [(ngModel)]="basic" class="mr-3" type="checkbox" name="category" value="A">Βασικά Ειδίκευσης</label></div>
+          <div class="form-check"><label><input [(ngModel)]="optional" class="mr-3" type="checkbox" name="category" value="B">Προαιρετικά</label></div>
         </form>
       </div>
     </div>
@@ -55,7 +55,8 @@
         <h2 class="text-color2">Μαθήματα</h2>
         <hr>
         <div class="coursesDiv pr-2">
-          <div *ngFor="let c of (courses | coursesFilter: semesterFilter : specificationFilter)">
+          <div *ngFor="let c of (courses | coursesFilter: semesterFilter : specificationFilter : coreFilter : labFilter
+                : AFilter : BFilter : GEFilter : freeFilter : obligatory : obligatoryByChoice : basic : optional)">
             <app-course [course]="c" [jwt]="jwt" [user]="user" (gradesChanged)="calculateAVGandECTS()"></app-course>
           </div>
         </div>
@@ -77,6 +78,12 @@
         <h2 class="text-color2">Συγκεντρωμένα ECTs</h2>
         <hr>
         <div class="text-center ects"><h3>{{totalEcts}}</h3><span class="subtitle">απο 240</span></div>
+      </div>
+      <div *ngIf="jwt === null">
+        <div class="alert-danger p-4 rounded mt-3">
+          <h4>⚠ Προσοχή!</h4>
+          Δεν είστε συνδεδεμένος. Αν αλλάξετε σελίδα οι αλλαγές σας θα χαθούν!
+        </div>
       </div>
     </div>
   </div>

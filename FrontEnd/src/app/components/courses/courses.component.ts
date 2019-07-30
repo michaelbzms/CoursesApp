@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
 import {NavbarComponent} from '../navbar/navbar.component';
 import {environment} from '../../../environments/environment';
 import * as $ from 'jquery';
@@ -18,6 +18,16 @@ export class CoursesComponent implements OnInit {
   // filter inputs:
   semesterFilter = 0;
   specificationFilter = 0;
+  coreFilter = false;
+  labFilter = false;
+  AFilter = false;
+  BFilter = false;
+  GEFilter = false;
+  freeFilter = false;
+  obligatory = false;
+  obligatoryByChoice = false;
+  basic = false;
+  optional = false;
 
   static roundUp(num, precision) {
     precision = Math.pow(10, precision);
@@ -30,6 +40,13 @@ export class CoursesComponent implements OnInit {
     this.jwt = NavbarComponent.getJWT();
     this.user = NavbarComponent.getUser();
     this.getCourses();
+  }
+
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.jwt !== null) {   // if logged in
+      this.getCourses();
+    }
   }
 
   getCourses() {
@@ -85,10 +102,6 @@ export class CoursesComponent implements OnInit {
     } else {
       return 'perfect_grade';
     }
-  }
-
-  getCriteria() {
-    return { semester: Number($('#chooseSemester').val()), specification: Number($('#chooseSpecification').val()) };
   }
 
 }

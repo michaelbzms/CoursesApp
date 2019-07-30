@@ -6,11 +6,11 @@ import {Pipe, PipeTransform} from '@angular/core';
 })
 export class CoursesFilterPipe implements PipeTransform {
 
-  transform(courses: any, semester: number, specification: number): any {
+  transform(courses: any, semester: number, specification: number, core: boolean, lab: boolean,
+            A: boolean, B: boolean, GE: boolean, free: boolean, obligatory: boolean, obligatoryByChoice: boolean,
+            basic: boolean, optional: boolean): any {
     console.log('Running filter!');
     console.log(courses);
-    console.log(semester);
-    console.log(specification);
     return courses.filter(c => {
       // Semester constraint
       // tslint:disable-next-line:triple-equals
@@ -25,9 +25,21 @@ export class CoursesFilterPipe implements PipeTransform {
         return false;
       }
       // Category constraints
-      // TODO
+      if (core !== false || lab !== false || A !== false || B !== false || GE !== false || free !== false) {
+        if (core === false && c.category === 'core' ) { return false; }
+        if (lab === false && c.category === 'optional_lab' ) { return false; }
+        if (A === false && c.category === 'A' ) { return false; }
+        if (B === false && c.category === 'B' ) { return false; }
+        if (GE === false && c.category === 'general_education' ) { return false; }
+        if (free === false && c.category === 'free' ) { return false; }
+      }
       // Type constraints
-      // TODO
+      if (obligatory !== false || obligatoryByChoice !== false || basic !== false || optional !== false) {
+        if (obligatory === false && c.type === 'obligatory' ) { return false; }
+        if (obligatoryByChoice === false && c.type === 'obligatory-by-choice' ) { return false; }
+        if (basic === false && c.type === 'basic' ) { return false; }
+        if (optional === false && c.type === 'optional' ) { return false; }
+      }
       return true;
     });
 
