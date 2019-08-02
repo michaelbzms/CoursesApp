@@ -9,6 +9,7 @@ import { HomepageComponent } from './components/homepage/homepage.component';
 import { FormsModule } from '@angular/forms';
 import { CourseComponent } from './components/course/course.component';
 import { CoursesFilterPipe } from './components/courses/CoursesFilter';
+import { NavbarService } from './services/navbar.service';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import { CoursesFilterPipe } from './components/courses/CoursesFilter';
     BrowserModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [NavbarService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

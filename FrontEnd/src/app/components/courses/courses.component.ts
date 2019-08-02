@@ -1,7 +1,6 @@
 import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
 import {NavbarComponent} from '../navbar/navbar.component';
-import {environment} from '../../../environments/environment';
-import * as $ from 'jquery';
+import {CoursesService} from '../../services/courses.service';
 
 @Component({
   selector: 'app-courses',
@@ -11,7 +10,7 @@ import * as $ from 'jquery';
 export class CoursesComponent implements OnInit {
   @Input() jwt: string;
   @Input() user: object;
-  courses: object[];
+  courses: any[];
   avgGrade: number;
   totalEcts: number;
 
@@ -34,7 +33,7 @@ export class CoursesComponent implements OnInit {
     return Math.ceil(num * precision) / precision;
   }
 
-  constructor() { }
+  constructor(private service: CoursesService) { }
 
   ngOnInit() {
     this.jwt = NavbarComponent.getJWT();
@@ -50,14 +49,8 @@ export class CoursesComponent implements OnInit {
   }
 
   getCourses() {
-    $.ajax({
-      // @ts-ignore
-      url: environment.apiUrl + '/courses',
-      method: 'GET',
-      dataType: 'json',
-      headers: (this.jwt !== null) ? { jwt: this.jwt } : {},
-      data: {}
-    }).done(results => {
+    this.service.getCourses(this.jwt)
+    .done(results => {
       if (results.hasOwnProperty('error')) {
         alert(results.message);
       } else {
@@ -65,7 +58,7 @@ export class CoursesComponent implements OnInit {
         this.calculateAVGandECTS();
       }
     }).fail((jqXHR, textStatus, errorThrown) => {
-      alert('>Error: ' + textStatus + ':' + errorThrown);
+      alert('>Error: ' + jqXHR.status + ':' + textStatus + ' ' + errorThrown);
     });
   }
 
@@ -75,11 +68,8 @@ export class CoursesComponent implements OnInit {
     // tslint:disable-next-line:variable-name
     let sum_coef_grades = 0.0;
     this.courses.forEach((course) => {
-      // @ts-ignore
       if (course.hasOwnProperty('grade') && course.grade >= 5) {
-        // @ts-ignore
         total_ects += course.ects;
-        // @ts-ignore
         sum_coef_grades += course.ects * course.grade;
       }
     });

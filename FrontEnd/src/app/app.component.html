@@ -1,16 +1,9 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="main-body">
-  <app-navbar (loggedInOrOut)="loggedInEvent($event)" (selectedPage)="getCurrentPage($event)"
-              [user]="user"></app-navbar>
-  <div *ngIf="currentPage === 'courses'; else notCourses">
-  <app-courses [jwt]="jwt" [user]="user"></app-courses>
-</div>
-<ng-template #notCourses>
-  <div *ngIf="currentPage === 'profile'; else notCoursesNorProfile">
-    <app-profile (sessionChanged)="sessionChangedEvent()" [jwt]="jwt" [user]="user"></app-profile>
+  <app-navbar (loggedInOrOut)="loggedInEvent($event)" (selectedPage)="getCurrentPage($event)" [user]="user"></app-navbar>
+  <div [ngSwitch]="currentPage">
+    <app-courses *ngSwitchCase="'courses'" [jwt]="jwt" [user]="user"></app-courses>
+    <app-profile *ngSwitchCase="'profile'" (sessionChanged)="sessionChangedEvent()" [jwt]="jwt" [user]="user"></app-profile>
+    <app-homepage *ngSwitchDefault [jwt]="jwt" [user]="user"></app-homepage>
   </div>
-  <ng-template #notCoursesNorProfile>
-    <app-homepage [jwt]="jwt" [user]="user"></app-homepage>
-  </ng-template>
-</ng-template>
 </div>

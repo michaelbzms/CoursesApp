@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {NavbarComponent} from '../navbar/navbar.component';
 import * as $ from 'jquery';
+import {HomepageService} from '../../services/homepage.service';
 
 @Component({
   selector: 'app-homepage',
@@ -12,7 +13,7 @@ export class HomepageComponent implements OnInit {
   @Input() jwt: string;
   @Input() user: object;
 
-  constructor() { }
+  constructor(private service: HomepageService) { }
 
   static validateEmail(email) {
     let re: RegExp;
@@ -41,24 +42,14 @@ export class HomepageComponent implements OnInit {
       alert('Πολύ μικρός κωδικός. Πρέπει να είναι τουλάχιστον 6 χαρακτήρες.');
       return;
     }
-    $.ajax({
-      url: environment.apiUrl + '/students',
-      method: 'POST',
-      dataType: 'json',
-      headers: {},
-      data: {
-        email,
-        password: password1,
-        firstname: form.find('input[name="firstname"]').val(),
-        lastname: form.find('input[name="lastname"]').val()
-      }
-    }).done(results => {
-      if (results.hasOwnProperty('error')) {
-        alert(results.message);
-      } else {
-        $('#registerForm').find('input').val('');
-        alert('Επιτυχής εγγραφή!');
-      }
+    this.service.registerStudent(email, password1, form.find('input[name="firstname"]').val(), form.find('input[name="lastname"]').val())
+      .done(results => {
+        if (results.hasOwnProperty('error')) {
+          alert(results.message);
+        } else {
+          $('#registerForm').find('input').val('');
+          alert('Επιτυχής εγγραφή!');
+        }
     }).fail((jqXHR, textStatus, errorThrown) => {
       alert(textStatus + ':' + errorThrown);
     });

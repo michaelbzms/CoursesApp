@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { environment } from '../../../environments/environment';
+import {NavbarService} from '../../services/navbar.service';
 import * as $ from 'jquery';
 
 @Component({
@@ -40,7 +40,7 @@ export class NavbarComponent implements OnInit {
     localStorage.removeItem('user');
   }
 
-  constructor() {}
+  constructor(private service: NavbarService) {}
 
   ngOnInit() {
     this.jwt = NavbarComponent.getJWT();
@@ -48,27 +48,19 @@ export class NavbarComponent implements OnInit {
   }
 
   login() {
-    $.ajax({
-      url: environment.apiUrl + '/login',
-      method: 'POST',
-      dataType: 'json',
-      headers: {},
-      data: {
-        email: $('#emailLogin').val(),
-        password: $('#passwordLogin').val()
-      }
-    }).done(results => {
-      if (results.hasOwnProperty('jwt') && results.hasOwnProperty('user')) {
-        NavbarComponent.setSession(results.jwt, results.user);
-        this.jwt = results.jwt;
-        this.user = results.user;
-        this.loggedInOrOut.emit(true);
-        this.select_page('courses');  // redirect
-      } else {
-        alert('Error: ' + ((results.hasOwnProperty('message')) ? results.message : 'Unknown'));
-      }
+    this.service.login($('#emailLogin').val(), $('#passwordLogin').val())
+      .done(results => {
+        if (results.hasOwnProperty('jwt') && results.hasOwnProperty('user')) {
+          NavbarComponent.setSession(results.jwt, results.user);
+          this.jwt = results.jwt;
+          this.user = results.user;
+          this.loggedInOrOut.emit(true);
+          this.select_page('courses');  // redirect
+        } else {
+          alert('Error: ' + ((results.hasOwnProperty('message')) ? results.message : 'Unknown'));
+        }
     }).fail((jqXHR, textStatus, errorThrown) => {
-      alert(textStatus + ':' + errorThrown);
+        alert(textStatus + ':' + errorThrown);
     });
   }
 

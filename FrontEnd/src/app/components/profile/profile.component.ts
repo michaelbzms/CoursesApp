@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NavbarComponent} from '../navbar/navbar.component';
-import {environment} from '../../../environments/environment';
 import * as $ from 'jquery';
+import {ProfileService} from '../../services/profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -10,7 +10,7 @@ import * as $ from 'jquery';
 })
 export class ProfileComponent implements OnInit {
   @Input() jwt: string;
-  @Input() user: object;
+  @Input() user: any;
   @Output() sessionChanged = new EventEmitter();
 
   static validateEmail(email) {
@@ -20,7 +20,7 @@ export class ProfileComponent implements OnInit {
     return re.test(String(email).toLowerCase());
   }
 
-  constructor() { }
+  constructor(private service: ProfileService) { }
 
   ngOnInit() {
     this.jwt = NavbarComponent.getJWT();
@@ -38,34 +38,24 @@ export class ProfileComponent implements OnInit {
       return;
     }
     let data = null;
-    // @ts-ignore
     if (email === this.user.email) {   // if email is the same then do not send it as a new one because backend checks if it is taken
       data = { firstname, lastname };
     } else {
       data = { email, firstname, lastname };
     }
-    $.ajax({
-      // @ts-ignore
-      url: environment.apiUrl + '/students/' + this.user.id,
-      method: 'PUT',
-      dataType: 'json',
-      headers: { jwt: this.jwt },
-      data
-    }).done(results => {
-      if (results.hasOwnProperty('error')) {
-        alert(results.message);
-      } else {
-        // @ts-ignore
-        this.user.email = email;
-        // @ts-ignore
-        this.user.firstName = firstname;
-        // @ts-ignore
-        this.user.lastName = lastname;
-        NavbarComponent.unsetUser();
-        NavbarComponent.setUser(this.user);
-        this.sessionChanged.emit();
-        alert('Επιτυχής ενημέρωση στοιχείων λογαριασμού.');
-      }
+    this.service.updateStudent(this.jwt, this.user.id, data)
+      .done(results => {
+        if (results.hasOwnProperty('error')) {
+          alert(results.message);
+        } else {
+          this.user.email = email;
+          this.user.firstName = firstname;
+          this.user.lastName = lastname;
+          NavbarComponent.unsetUser();
+          NavbarComponent.setUser(this.user);
+          this.sessionChanged.emit();
+          alert('Επιτυχής ενημέρωση στοιχείων λογαριασμού.');
+        }
     }).fail((jqXHR, textStatus, errorThrown) => {
       alert(textStatus + ':' + errorThrown);
     });
@@ -73,11 +63,8 @@ export class ProfileComponent implements OnInit {
 
   resetUpdateForm() {
     const form = $('#updateForm');
-    // @ts-ignore
     form.find('input[name="email"]').val(this.user.email);
-    // @ts-ignore
     form.find('input[name="firstname"]').val(this.user.firstName);
-    // @ts-ignore
     form.find('input[name="lastname"]').val(this.user.lastName);
   }
 
@@ -92,23 +79,14 @@ export class ProfileComponent implements OnInit {
       alert('Πολύ μικρός κωδικός. Πρέπει να είναι τουλάχιστον 6 χαρακτήρες.');
       return;
     }
-    $.ajax({
-      // @ts-ignore
-      url: environment.apiUrl + '/users/' + this.user.id,
-      method: 'PUT',
-      dataType: 'json',
-      headers: { jwt: this.jwt },
-      data: {
-        oldpassword: form.find('input[name="oldpassword"]').val(),
-        newpassword
-      }
-    }).done(results => {
-      if (results.hasOwnProperty('error')) {
-        alert(results.message);
-      } else {
-        $('#changePasswordForm').find('input').val('');
-        alert('Επιτυχής αλλαγή κωδικού.');
-      }
+    this.service.updatePassword(this.jwt, this.user.id, form.find('input[name="oldpassword"]').val(), newpassword)
+      .done(results => {
+        if (results.hasOwnProperty('error')) {
+          alert(results.message);
+        } else {
+          $('#changePasswordForm').find('input').val('');
+          alert('Επιτυχής αλλαγή κωδικού.');
+        }
     }).fail((jqXHR, textStatus, errorThrown) => {
       alert(textStatus + ':' + errorThrown);
     });
@@ -118,22 +96,16 @@ export class ProfileComponent implements OnInit {
     if (!confirm('Είστε σίγουροι ότι θέλετε να διαγράψετε τον λογαριασμό σας μαζί με όλες τις πληροφορίες του;')) {
       return;
     }
-    $.ajax({
-      // @ts-ignore
-      url: environment.apiUrl + '/students/' + this.user.id,
-      method: 'DELETE',
-      dataType: 'json',
-      headers: { jwt: this.jwt },
-      data: {}
-    }).done(results => {
-      if (results.hasOwnProperty('error')) {
-        alert(results.message);
-      } else {
-        NavbarComponent.unsetSession();  // auto-logout
-        this.sessionChanged.emit();
-        alert('Επιτυχής διαγραφή λογαριασμού.');
-        window.location.replace('/');  // in this case only redirect the old fashioned way
-      }
+    this.service.deleteStudent(this.jwt, this.user.id)
+      .done(results => {
+        if (results.hasOwnProperty('error')) {
+          alert(results.message);
+        } else {
+          NavbarComponent.unsetSession();  // auto-logout
+          this.sessionChanged.emit();
+          alert('Επιτυχής διαγραφή λογαριασμού.');
+          window.location.replace('/');  // in this case only redirect the old fashioned way
+        }
     }).fail((jqXHR, textStatus, errorThrown) => {
       alert(textStatus + ':' + errorThrown);
     });
