@@ -116,8 +116,46 @@ export class CoursesComponent implements OnInit {
         {id: 24, title: 'Πτυχιακή / Πρακτική Ι', ects: 8, semester: 7, category: 'core', type: 'obligatory',
           E1: false, E2: false, E3: false, E4: false, E5: false, E6: false },
         {id: 25, title: 'Πτυχιακή / Πρακτική ΙΙ', ects: 8, semester: 8, category: 'core', type: 'obligatory',
-          E1: false, E2: false, E3: false, E4: false, E5: false, E6: false }
-        /* ... */
+          E1: false, E2: false, E3: false, E4: false, E5: false, E6: false },
+
+        {id: 26, title: 'Θωρία Υπολογισμού', ects: 6, semester: 5, category: 'A', type: 'obligatory',
+          E1: false, E2: true, E3: false, E4: false, E5: false, E6: false },
+        {id: 27, title: 'Αριθμητική Ανάλυση', ects: 6, semester: 5, category: 'A', type: 'obligatory',
+          E1: true, E2: false, E3: false, E4: false, E5: false, E6: false },
+        {id: 28, title: 'Υλοποίηση Συστημάτων Βάσεων Δεδομένων', ects: 6, semester: 5, category: 'A', type: 'obligatory',
+          E1: false, E2: true, E3: true, E4: false, E5: false, E6: false },
+        {id: 29, title: 'Μεταγλωττιστές', ects: 6, semester: 5, category: 'A', type: 'obligatory-by-choice',
+          E1: false, E2: false, E3: true, E4: false, E5: false, E6: false },
+
+        {id: 30, title: 'Αρχές Γλωσσών Προγραμματισμού', ects: 6, semester: 5, category: 'A', type: 'basic',
+          E1: true, E2: true, E3: false, E4: false, E5: false, E6: false },
+        {id: 31, title: 'Τεχνητή Νοημοσύνη', ects: 6, semester: 5, category: 'A', type: 'basic',
+          E1: false, E2: true, E3: true, E4: false, E5: false, E6: false },
+        {id: 32, title: 'Τεχνικές Εξόρυξης Δεδομένων', ects: 6, semester: 5, category: 'A', type: 'basic',
+          E1: false, E2: true, E3: false, E4: false, E5: false, E6: false },
+        {id: 33, title: 'Επικοινωνία Ανθρώπου Μηχανής', ects: 6, semester: 7, category: 'A', type: 'basic',
+          E1: false, E2: true, E3: true, E4: false, E5: false, E6: false },
+
+        {id: 34, title: 'Δομή και Θεσμοί της Ευρωπαικής Ένωσης', ects: 2, semester: 7, category: 'general_education',
+          type: 'obligatory', E1: false, E2: false, E3: false, E4: false, E5: false, E6: false },
+        {id: 35, title: 'Διοίκηση Έργων', ects: 2, semester: 8, category: 'general_education',
+          type: 'obligatory', E1: false, E2: false, E3: false, E4: false, E5: false, E6: false },
+
+        {id: 36, title: 'Ανάλυση και Σχεδίαση Συστημάτων Λογισμικού', ects: 6, semester: 6, category: 'A', type: 'basic',
+          E1: false, E2: false, E3: true, E4: false, E5: false, E6: false },
+        {id: 37, title: 'Τεχνολογίες Εφαρμογών Διαδικτύου', ects: 6, semester: 8, category: 'A', type: 'basic',
+          E1: false, E2: false, E3: true, E4: false, E5: false, E6: false },
+        {id: 38, title: 'Παράλληλα Συστήματα', ects: 6, semester: 5, category: 'A', type: 'basic',
+          E1: false, E2: false, E3: true, E4: true, E5: false, E6: false },
+        {id: 49, title: 'Προστασία και Ασφάλεια Υπολογιστικών Συστημάτων', ects: 6, semester: 8, category: 'A', type: 'basic',
+          E1: false, E2: false, E3: true, E4: false, E5: false, E6: false },
+        {id: 50, title: 'Τεχνολογία Λογισμικού', ects: 6, semester: 8, category: 'A', type: 'basic',
+          E1: false, E2: false, E3: true, E4: false, E5: false, E6: false },
+
+        {id: 51, title: 'Θεωρία Παιγνίων', ects: 7, semester: 5, category: 'free', type: 'optional',
+          E1: false, E2: false, E3: true, E4: false, E5: false, E6: false },
+        {id: 52, title: 'Γραφικά Ι', ects: 6, semester: 5, category: 'A', type: 'basic',
+          E1: true, E2: false, E3: true, E4: false, E5: false, E6: false }
       ];
       this.calculateAVGandECTS();
       return;
@@ -154,7 +192,7 @@ export class CoursesComponent implements OnInit {
 
   getClassNameForAVG(): string {
     if (this.avgGrade < 5.0) {
-      return 'bad_grade';
+      return 'failing_grade';
     } else if (this.avgGrade < 6.0) {
       return 'bad_grade';
     } else if (this.avgGrade < 7.0) {

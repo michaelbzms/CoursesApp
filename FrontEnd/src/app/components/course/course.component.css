@@ -11,6 +11,32 @@
   max-width: 75px;
 }
 
+.perfect_grade {
+  color: #2b9b1a;
+  font-weight: 500;
+}
+
+.very_good_grade {
+  color: #4c9b0b;
+  font-weight: 500;
+}
+
+.good_grade {
+  color: #5f9b0c;
+  font-weight: 500;
+}
+
+.okay_grade {
+  color: #7c9b0f;
+  font-weight: 500;
+}
+
+.bad_grade {
+  color: #9b650a;
+  font-weight: 500;
+}
+
 .failing_grade {
   color: red;
+  font-weight: 500;
 }

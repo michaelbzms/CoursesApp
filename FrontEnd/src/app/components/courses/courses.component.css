@@ -46,3 +46,7 @@
 h5 {
   text-decoration: underline;
 }
+
+.form-check input, .form-check label, select {
+  cursor: pointer;
+}

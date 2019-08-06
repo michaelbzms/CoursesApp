@@ -22,7 +22,6 @@ export class CourseComponent implements OnInit {
   }
 
   getCategory() {
-    // @ts-ignore
     switch (this.course.category) {
       case 'core':
         return 'Κορμός';
@@ -79,6 +78,24 @@ export class CourseComponent implements OnInit {
 
   blur() {
     $('#course_' + this.course.id).blur();
+  }
+
+  getClassForGrade() {
+    if (!this.course.hasOwnProperty('grade')) {
+      return '';
+    } else if (this.course.grade < 5.0) {
+      return 'failing_grade';
+    } else if (this.course.grade < 6.0) {
+      return 'bad_grade';
+    } else if (this.course.grade < 7.0) {
+      return 'okay_grade';
+    } else if (this.course.grade < 8.0) {
+      return 'good_grade';
+    } else if (this.course.grade < 9.0) {
+      return 'very_good_grade';
+    } else {
+      return 'perfect_grade';
+    }
   }
 
 }

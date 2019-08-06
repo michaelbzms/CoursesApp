@@ -5,9 +5,9 @@
     <div class="col-3 pt-2">{{course.ects}} ECTs</div>
     <div class="col-3 pt-2">{{this.getCategory()}}</div>
     <div class="col-3">
-      <input class="d-inline-block float-right form-control grade-input" type="text" onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')"
+      <input class="d-inline-block float-right form-control grade-input text-center" type="text" onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')"
              id="course_{{course.id}}" [value]="(course.hasOwnProperty('grade')) ? course.grade : ''" (focusout)="changeGrade()" (keyup.enter)="blur()"
-             [ngClass]="{'failing_grade': course.hasOwnProperty('grade') && course.grade < 5.0}">
+             [ngClass]="getClassForGrade()">
     </div>
   </div>
 </div>
