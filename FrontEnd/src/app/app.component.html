@@ -1,9 +1,5 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="main-body">
   <app-navbar (loggedInOrOut)="loggedInEvent($event)" (selectedPage)="getCurrentPage($event)" [user]="user"></app-navbar>
-  <div [ngSwitch]="currentPage">
-    <app-courses *ngSwitchCase="'courses'" [jwt]="jwt" [user]="user"></app-courses>
-    <app-profile *ngSwitchCase="'profile'" (sessionChanged)="sessionChangedEvent()" [jwt]="jwt" [user]="user"></app-profile>
-    <app-homepage *ngSwitchDefault [jwt]="jwt" [user]="user"></app-homepage>
-  </div>
+  <router-outlet></router-outlet>
 </div>

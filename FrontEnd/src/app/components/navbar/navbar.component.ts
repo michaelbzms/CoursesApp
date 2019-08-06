@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NavbarService} from '../../services/navbar.service';
 import * as $ from 'jquery';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-navbar',
@@ -48,6 +49,13 @@ export class NavbarComponent implements OnInit {
   }
 
   login() {
+    if (environment.useDummyData) {
+      $('#emailLogin').val('');
+      $('#passwordLogin').val('');
+      $('#loginBtn').blur();
+      alert('Cannot log in in dummy mode!');
+      return;
+    }
     this.service.login($('#emailLogin').val(), $('#passwordLogin').val())
       .done(results => {
         if (results.hasOwnProperty('jwt') && results.hasOwnProperty('user')) {
@@ -60,7 +68,7 @@ export class NavbarComponent implements OnInit {
           alert('Error: ' + ((results.hasOwnProperty('message')) ? results.message : 'Unknown'));
         }
     }).fail((jqXHR, textStatus, errorThrown) => {
-        alert(textStatus + ':' + errorThrown);
+        alert('Could not reach server');
     });
   }
 

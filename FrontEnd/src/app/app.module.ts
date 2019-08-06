@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { CourseComponent } from './components/course/course.component';
 import { CoursesFilterPipe } from './components/courses/CoursesFilter';
 import { NavbarService } from './services/navbar.service';
+import { RouterModule } from '@angular/router';
+import { NotFoundComponentComponent } from './components/not-found-component/not-found-component.component';
 
 @NgModule({
   declarations: [
@@ -19,11 +21,18 @@ import { NavbarService } from './services/navbar.service';
     ProfileComponent,
     HomepageComponent,
     CourseComponent,
-    CoursesFilterPipe
+    CoursesFilterPipe,
+    NotFoundComponentComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    RouterModule.forRoot([
+      { path: '', component: HomepageComponent },
+      { path: 'courses', component: CoursesComponent },
+      { path: 'profile', component: ProfileComponent },
+      { path: '**', component: NotFoundComponentComponent }
+    ])
   ],
   providers: [NavbarService],
   bootstrap: [AppComponent]
