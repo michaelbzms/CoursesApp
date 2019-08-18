@@ -14,7 +14,7 @@ export class CoursesComponent implements OnInit {
   static globalCourses: any[];
   @Input() jwt: string;
   @Input() user: object;
-  courses: any[];
+  courses: any[] = null;
   avgGrade: number;
   totalEcts: number;
 
