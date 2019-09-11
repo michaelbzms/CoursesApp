@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {environment} from '../../../environments/environment';
 import {NavbarComponent} from '../navbar/navbar.component';
-import * as $ from 'jquery';
 import {HomepageService} from '../../services/homepage.service';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Customvalidators} from '../../utils/customvalidators';
 
 @Component({
   selector: 'app-homepage',
@@ -11,49 +11,67 @@ import {HomepageService} from '../../services/homepage.service';
 })
 export class HomepageComponent implements OnInit {
   @Input() jwt: string;
-  @Input() user: object;
+  @Input() user: any;
+  registerForm: FormGroup = null;
 
   constructor(private service: HomepageService) { }
-
-  static validateEmail(email) {
-    let re: RegExp;
-    // tslint:disable-next-line:max-line-length
-    re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  }
 
   ngOnInit() {
     this.jwt = NavbarComponent.getJWT();
     this.user = NavbarComponent.getUser();
+
+    this.registerForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      newpassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      repassword: new FormControl('', [Validators.required]),
+      firstname: new FormControl('', [Validators.required]),
+      lastname: new FormControl('', [Validators.required])
+    }, [Customvalidators.matchingPasswordsValidator]);
   }
 
   registerStudent() {
-    const form = $('#registerForm');
-    const email = form.find('input[name="email"]').val();
-    const password1 = form.find('input[name="password1"]').val();
+    const email = this.email.value;
+    const password1 = this.newpassword.value;
     // check input
-    if (!HomepageComponent.validateEmail(email)) {
-      alert('Λάθος email.');
-      return;
-    } else if (password1 !== form.find('input[name="password2"]').val()) {
-      alert('Διαφορετικοί κωδικοί.');
-      return;
-    } else if (password1.length < 6) {
-      alert('Πολύ μικρός κωδικός. Πρέπει να είναι τουλάχιστον 6 χαρακτήρες.');
+    if (!this.registerForm.valid) {
+      alert('Invalid Register Form');
       return;
     }
-    this.service.registerStudent(email, password1, form.find('input[name="firstname"]').val(), form.find('input[name="lastname"]').val())
+    this.service.registerStudent(email, password1, this.firstname.value, this.lastname.value)
       .done(results => {
         if (results.hasOwnProperty('error')) {
           alert(results.message);
         } else {
-          $('#registerForm').find('input').val('');
+          this.email.setValue('');
+          this.newpassword.setValue('');
+          this.repassword.setValue('');
+          this.firstname.setValue('');
+          this.lastname.setValue('');
           alert('Επιτυχής εγγραφή!');
         }
     }).fail((jqXHR, textStatus, errorThrown) => {
       alert(textStatus + ':' + errorThrown);
     });
+  }
 
+  get email() {
+    return this.registerForm.get('email');
+  }
+
+  get newpassword() {
+    return this.registerForm.get('newpassword');
+  }
+
+  get repassword() {
+    return this.registerForm.get('repassword');
+  }
+
+  get firstname() {
+    return this.registerForm.get('firstname');
+  }
+
+  get lastname() {
+    return this.registerForm.get('lastname');
   }
 
 }

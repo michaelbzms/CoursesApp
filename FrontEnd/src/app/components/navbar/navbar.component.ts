@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NavbarService} from '../../services/navbar.service';
-import * as $ from 'jquery';
 import {environment} from '../../../environments/environment';
 
 @Component({
@@ -11,7 +10,6 @@ import {environment} from '../../../environments/environment';
 export class NavbarComponent implements OnInit {
   jwt: string;
   @Input() user: object;
-
   @Output() loggedInOrOut = new EventEmitter();
   @Output() selectedPage = new EventEmitter();
 
@@ -50,13 +48,20 @@ export class NavbarComponent implements OnInit {
 
   login() {
     if (environment.useDummyData) {
-      $('#emailLogin').val('');
-      $('#passwordLogin').val('');
-      $('#loginBtn').blur();
-      alert('Cannot log in in dummy mode!');
+      (document.getElementById('emailLogin') as HTMLInputElement).value = '';
+      (document.getElementById('passwordLogin') as HTMLInputElement).value = '';
+      document.getElementById('passwordLogin').blur();
+      const toast = document.getElementById('loginNotAllowedToast');
+      if (!toast.classList.contains('show')) {
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000);  // must be 3000
+      }
       return;
     }
-    this.service.login($('#emailLogin').val(), $('#passwordLogin').val())
+    this.service.login((document.getElementById('emailLogin') as HTMLInputElement).value,
+                       (document.getElementById('passwordLogin') as HTMLInputElement).value)
       .done(results => {
         if (results.hasOwnProperty('jwt') && results.hasOwnProperty('user')) {
           NavbarComponent.setSession(results.jwt, results.user);
@@ -77,14 +82,20 @@ export class NavbarComponent implements OnInit {
     this.jwt = null;
     this.user = null;
     this.loggedInOrOut.emit(false);
-    if ($('#profile_page').hasClass('isSelected')) {
+    if (document.getElementById('profile_page').classList.contains('isSelected')) {
       this.select_page('homepage');  // redirect
     }
   }
 
   select_page(page: string) {
-    $('.nav-link').removeClass('isSelected');
-    $('#' + page + '_page').addClass('isSelected');
+    // tslint:disable-next-line:prefer-for-of
+    const links = document.getElementsByClassName('nav-link');
+    for (let i = 0; i < links.length; i++) {
+      links.item(i).classList.remove('isSelected');
+    }
+    if (page !== 'homepage') {
+      document.getElementById(page + '_page').classList.add('isSelected');
+    }
     this.selectedPage.emit(page);
   }
 

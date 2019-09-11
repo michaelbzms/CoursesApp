@@ -5,35 +5,51 @@
       <h2 class="text-color2">{{user.firstName}} {{user.lastName}}</h2>
       <hr>
       <h3 class="text-color2">Αλλαγή προσωπικών στοιχείων</h3>
-      <form (submit)="updateStudent()" id="updateForm" class="py-2">
+      <form [formGroup]="updateForm" (submit)="updateStudent()" id="updateForm" class="py-2">
         <label class="mb-0" for="emailInput">Email</label>
-        <input id="emailInput" class="form-control" type="email" name="email" [value]="user.email" required>
+        <input [ngClass]="!email.valid ? 'invalid_field' : ''" formControlName="email"
+        id="emailInput" class="form-control" type="email" name="email" [value]="user.email">
+        <small *ngIf="!email.valid && email.hasError('email')" class="d-block rounded text-danger">Λάθος μορφή email</small>
+        <small *ngIf="!email.valid && email.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
 
         <label class="mt-2 mb-0" for="firstNameInput">Όνομα</label>
-        <input id="firstNameInput" class="form-control"  type="text" name="firstname" [value]="user.firstName" required>
+        <input  formControlName="firstname"
+               id="firstNameInput" class="form-control" type="text" name="firstname" [value]="user.firstName">
+        <small *ngIf="!firstname.valid && firstname.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
 
         <label class="mt-2 mb-0" for="lastNameInput">Επίθετο</label>
-        <input id="lastNameInput" class="form-control"  type="text" name="lastname" [value]="user.lastName" required>
+        <input [ngClass]="!lastname.valid ? 'invalid_field' : ''" formControlName="lastname"
+               id="lastNameInput" class="form-control" type="text" name="lastname" [value]="user.lastName">
+        <small *ngIf="!lastname.valid && lastname.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
 
         <div class="mt-3">
           <button class="btn btn-success d-inline-block mr-2" type="submit" onclick="this.blur();">Αποθήκευση</button>
-          <button (click)="resetUpdateForm()" class="btn btn-outline-secondary d-inline-block" type="button" onclick="this.blur();">Ακύρωση</button>
+          <button (click)="resetUpdateForm()" class="btn btn-outline-secondary d-inline-block" type="button"
+                  onclick="this.blur();">Ακύρωση</button>
         </div>
       </form>
       <hr>
       <h3 class="text-color2">Αλλαγή κωδικού πρόσβασης</h3>
-      <form (submit)="changePassword()" id="changePasswordForm" class="py-2">
+      <form [formGroup]="changePasswordForm" (submit)="changePassword()" id="changePasswordForm" class="py-2">
         <label class="mb-0" for="oldpassword">Παλιός κωδικός</label>
-        <input id="oldpassword" class="form-control"  type="password" name="oldpassword" required>
+        <input formControlName="oldpassword" id="oldpassword" class="form-control" type="password" name="oldpassword">
 
         <label class="mt-2 mb-0 " for="newpassword">Νέος κωδικός</label>
         <div class="d-inline-block float-right mt-1 tooltip-right" data-tooltip="Ο κωδικός σας θα πρέπει να είναι τουλάχιστον 6 χαρακτήρες.">
           <img style="height: 20px; width: 20px" src="/assets/help_icon.png">
         </div>
-        <input id="newpassword" class="form-control"  type="password" name="newpassword" required>
+        <input [ngClass]="newpassword.hasError('minlength') ? 'invalid_field' : ''" formControlName="newpassword"
+               id="newpassword" class="form-control" type="password" name="newpassword">
+        <small *ngIf="newpassword.hasError('minlength')" class="d-block rounded text-danger">
+          Για λόγους ασφαλείας χρειάζονται τουλάχστον 6 χαρακτήρες
+        </small>
 
         <label class="mt-2 mb-0" for="repassword">Επανάληψη νέου κωδικού</label>
-        <input id="repassword" class="form-control"  type="password" name="repassword" required>
+        <input [ngClass]="changePasswordForm.hasError('mismatchingpasswords') ? 'invalid_field' : ''" formControlName="repassword"
+               id="repassword" class="form-control" type="password" name="repassword">
+        <small *ngIf="changePasswordForm.hasError('mismatchingpasswords')" class="d-block rounded text-danger">
+          Ο κωδικός αυτός δεν ταιριάζει με τον προηγούμενο
+        </small>
 
         <div class="mt-3">
           <button class="btn btn-success d-inline-block mr-2" type="submit" onclick="this.blur();">Αποθήκευση</button>

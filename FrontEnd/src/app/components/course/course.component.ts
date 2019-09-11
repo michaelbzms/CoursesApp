@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NavbarComponent} from '../navbar/navbar.component';
-import * as $ from 'jquery';
 import {CourseService} from '../../services/course.service';
 
 @Component({
@@ -41,14 +40,16 @@ export class CourseComponent implements OnInit {
   }
 
   changeGrade() {
-    const gradeElem = $('#course_' + this.course.id);
-    const grade = gradeElem.val();
-    if (grade < 0.0 || grade > 10.0) {
-      gradeElem.val(this.course.hasOwnProperty('grade') ? this.course.grade : '');
+    const gradeElem = document.getElementById('course_' + this.course.id) as HTMLInputElement;
+    const gradeStr = gradeElem.value;
+    const grade = parseFloat(gradeElem.value);
+    console.log(grade);
+    if (isNaN(grade) || grade < 0.0 || grade > 10.0) {
+      gradeElem.value = this.course.hasOwnProperty('grade') ? this.course.grade : '';
       alert('Οι βαθμοί πρέπει να είναι μεταξύ 0 και 10.');
       return;
     }
-    if ((grade === null || grade.replace(/\s/g, '') === '') && this.course.hasOwnProperty('grade')) {  // if it had now it hasn't a grade
+    if ((grade === null || gradeStr.replace(/\s/g, '') === '') && this.course.hasOwnProperty('grade')) {  // if it had now it hasn't a grade
       delete this.course.grade;
       if (this.jwt !== null) {    // if on session update backend
         this.service.updateGrade(this.jwt, this.course.id)
@@ -60,7 +61,7 @@ export class CourseComponent implements OnInit {
           alert('>Error: ' + textStatus + ':' + errorThrown);
         });
       }
-    } else if (grade !== null && grade.replace(/\s/g, '') !== '') {   // if the grade is not null
+    } else if (grade !== null && gradeStr.replace(/\s/g, '') !== '') {   // if the grade is not null
       this.course.grade = grade;
       if (this.jwt !== null) {    // if on session update backend
         this.service.updateGrade(this.jwt, this.course.id, grade)
@@ -77,7 +78,7 @@ export class CourseComponent implements OnInit {
   }
 
   blur() {
-    $('#course_' + this.course.id).blur();
+    document.getElementById('course_' + this.course.id).blur();
   }
 
   getClassForGrade() {

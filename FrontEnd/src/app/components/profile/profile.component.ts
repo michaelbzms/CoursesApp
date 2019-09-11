@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NavbarComponent} from '../navbar/navbar.component';
-import * as $ from 'jquery';
 import {ProfileService} from '../../services/profile.service';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Customvalidators} from '../../utils/customvalidators';
 
 @Component({
   selector: 'app-profile',
@@ -12,29 +13,35 @@ export class ProfileComponent implements OnInit {
   @Input() jwt: string;
   @Input() user: any;
   @Output() sessionChanged = new EventEmitter();
-
-  static validateEmail(email) {
-    let re: RegExp;
-    // tslint:disable-next-line:max-line-length
-    re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  }
+  updateForm: FormGroup = null;           // Reactive form
+  changePasswordForm: FormGroup = null;   // ^^
 
   constructor(private service: ProfileService) { }
 
   ngOnInit() {
     this.jwt = NavbarComponent.getJWT();
     this.user = NavbarComponent.getUser();
+
+    this.updateForm = new FormGroup({
+      email: new FormControl(this.user ? this.user.email : '', [Validators.required, Validators.email]),
+      firstname: new FormControl(this.user ? this.user.firstName : '', [Validators.required]),
+      lastname: new FormControl(this.user ? this.user.lastName : '', [Validators.required])
+    });
+
+    this.changePasswordForm = new FormGroup({
+      oldpassword: new FormControl('', [Validators.required]),
+      newpassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      repassword: new FormControl('', [Validators.required])
+    }, [Customvalidators.matchingPasswordsValidator] );
   }
 
   updateStudent() {
-    const form = $('#updateForm');
-    const email = form.find('input[name="email"]').val();
-    const firstname = form.find('input[name="firstname"]').val();
-    const lastname = form.find('input[name="lastname"]').val();
+    const email = this.email.value;
+    const firstname = this.firstname.value;
+    const lastname = this.lastname.value;
     // check input
-    if (!ProfileComponent.validateEmail(email)) {
-      alert('Λάθος email.');
+    if (!this.updateForm.valid) {
+      alert('Invalid Update Form!');
       return;
     }
     let data = null;
@@ -62,29 +69,25 @@ export class ProfileComponent implements OnInit {
   }
 
   resetUpdateForm() {
-    const form = $('#updateForm');
-    form.find('input[name="email"]').val(this.user.email);
-    form.find('input[name="firstname"]').val(this.user.firstName);
-    form.find('input[name="lastname"]').val(this.user.lastName);
+    this.email.setValue(this.user.email);
+    this.firstname.setValue(this.user.firstName);
+    this.lastname.setValue(this.user.lastName);
   }
 
   changePassword() {
-    const form = $('#changePasswordForm');
-    const newpassword = form.find('input[name="newpassword"]').val();
     // check input
-    if (newpassword !== form.find('input[name="repassword"]').val()) {
-      alert('Διαφορετικοί κωδικοί.');
-      return;
-    } else if (newpassword.length < 6) {
-      alert('Πολύ μικρός κωδικός. Πρέπει να είναι τουλάχιστον 6 χαρακτήρες.');
+    if (!this.changePasswordForm.valid) {
+      alert('Invalid ChangePassword Form!');
       return;
     }
-    this.service.updatePassword(this.jwt, this.user.id, form.find('input[name="oldpassword"]').val(), newpassword)
+    this.service.updatePassword(this.jwt, this.user.id, this.oldpassword.value, this.newpassword.value)
       .done(results => {
         if (results.hasOwnProperty('error')) {
           alert(results.message);
         } else {
-          $('#changePasswordForm').find('input').val('');
+          this.oldpassword.setValue('');
+          this.newpassword.setValue('');
+          this.repassword.setValue('');
           alert('Επιτυχής αλλαγή κωδικού.');
         }
     }).fail((jqXHR, textStatus, errorThrown) => {
@@ -109,6 +112,30 @@ export class ProfileComponent implements OnInit {
     }).fail((jqXHR, textStatus, errorThrown) => {
       alert(textStatus + ':' + errorThrown);
     });
+  }
+
+  get email() {
+    return this.updateForm.get('email');
+  }
+
+  get firstname() {
+    return this.updateForm.get('firstname');
+  }
+
+  get lastname() {
+    return this.updateForm.get('lastname');
+  }
+
+  get newpassword() {
+    return this.changePasswordForm.get('newpassword');
+  }
+
+  get oldpassword() {
+    return this.changePasswordForm.get('oldpassword');
+  }
+
+  get repassword() {
+    return this.changePasswordForm.get('repassword');
   }
 
 }

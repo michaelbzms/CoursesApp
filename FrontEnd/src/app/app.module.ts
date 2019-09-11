@@ -6,7 +6,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { CoursesComponent } from './components/courses/courses.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { CourseComponent } from './components/course/course.component';
 import { CoursesFilterPipe } from './components/courses/CoursesFilter';
 import { NavbarService } from './services/navbar.service';
@@ -28,11 +28,12 @@ import { NotFoundComponentComponent } from './components/not-found-component/not
     BrowserModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomepageComponent },
-      { path: 'courses', component: CoursesComponent },
-      { path: 'profile', component: ProfileComponent },
-      { path: '**', component: NotFoundComponentComponent }
-    ])
+      {path: '', component: HomepageComponent},
+      {path: 'courses', component: CoursesComponent},
+      {path: 'profile', component: ProfileComponent},
+      {path: '**', component: NotFoundComponentComponent}
+    ]),
+    ReactiveFormsModule
   ],
   providers: [NavbarService],
   bootstrap: [AppComponent]

@@ -14,26 +14,41 @@
   </p>
 </div>
 <div *ngIf="jwt === null; else loggedInHP" class="container p-4 text-left">
-  <form id="registerForm" (submit)="registerStudent()" class="registerForm bg-light-transparent">
+  <form [formGroup]="registerForm" id="registerForm" (submit)="registerStudent()" class="registerForm bg-light-transparent">
     <h2 class="text-center">Εγγραφή Φοιτητή</h2>
 
     <label class="mt-2 mb-0" for="emailInput">Email</label>
-    <input id="emailInput" class="form-control" type="email" name="email" required>
+    <input [ngClass]="email.touched && !email.valid ? 'invalid_field' : ''" formControlName="email"
+           id="emailInput" class="form-control" type="email" name="email" required>
+    <small *ngIf="email.touched && !email.valid && email.hasError('email')" class="d-block rounded text-danger">Λάθος μορφή email</small>
+    <small *ngIf="email.touched && !email.valid && email.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
 
     <label class="mt-2 mb-0 " for="password1">Κωδικός</label>
     <div class="d-inline-block float-right mt-1 tooltip-right" data-tooltip="Ο κωδικός σας θα πρέπει να είναι τουλάχιστον 6 χαρακτήρες.">
       <img style="height: 20px; width: 20px" src="/assets/help_icon.png">
     </div>
-    <input id="password1" class="form-control"  type="password" name="password1" required>
+    <input [ngClass]="newpassword.hasError('minlength') ? 'invalid_field' : ''" formControlName="newpassword"
+           id="password1" class="form-control"  type="password" name="password1" required>
+    <small *ngIf="newpassword.hasError('minlength')" class="d-block rounded text-danger">
+      Για λόγους ασφαλείας χρειάζονται τουλάχστον 6 χαρακτήρες
+    </small>
 
     <label class="mt-2 mb-0" for="password2">Επανάληψη κωδικού</label>
-    <input id="password2" class="form-control"  type="password" name="password2" required>
+    <input [ngClass]="registerForm.hasError('mismatchingpasswords') ? 'invalid_field' : ''" formControlName="repassword"
+           id="password2" class="form-control"  type="password" name="password2" required>
+    <small *ngIf="registerForm.hasError('mismatchingpasswords')" class="d-block rounded text-danger">
+      Ο κωδικός αυτός δεν ταιριάζει με τον προηγούμενο
+    </small>
 
     <label class="mt-2 mb-0" for="firstNameInput">Όνομα</label>
-    <input id="firstNameInput" class="form-control"  type="text" name="firstname" required>
+    <input [ngClass]="firstname.touched && !firstname.valid ? 'invalid_field' : ''" formControlName="firstname"
+           id="firstNameInput" class="form-control"  type="text" name="firstname" required>
+    <small *ngIf="firstname.touched && !firstname.valid && firstname.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
 
     <label class="mt-2 mb-0" for="lastNameInput">Επίθετο</label>
-    <input id="lastNameInput" class="form-control"  type="text" name="lastname" required>
+    <input [ngClass]="lastname.touched &&  !lastname.valid ? 'invalid_field' : ''" formControlName="lastname"
+           id="lastNameInput" class="form-control"  type="text" name="lastname" required>
+    <small *ngIf="lastname.touched &&  !lastname.valid && lastname.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
 
     <div class="text-center mt-3">
       <button class="btn btn-success" type="submit">Εγγραφή</button>
