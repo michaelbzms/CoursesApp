@@ -191,7 +191,9 @@ export class CoursesComponent implements OnInit {
   }
 
   getClassNameForAVG(): string {
-    if (this.avgGrade < 5.0) {
+    if (this.avgGrade === 0.0) {
+      return '';
+    } else if (this.avgGrade < 5.0) {
       return 'failing_grade';
     } else if (this.avgGrade < 6.0) {
       return 'bad_grade';

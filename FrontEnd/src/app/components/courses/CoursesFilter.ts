@@ -1,3 +1,4 @@
+/* tslint:disable:triple-equals */
 import {Pipe, PipeTransform} from '@angular/core';
 
 
@@ -11,13 +12,13 @@ export class CoursesFilterPipe implements PipeTransform {
             basic: boolean, optional: boolean): any {
     return courses.filter(c => {
       // Semester constraint
-      // tslint:disable-next-line:triple-equals
       if (semester != 0 && c.semester != semester) {
         return false;
       }
       // Specification constraint
-      // tslint:disable-next-line:triple-equals
-      if (specification != 0 && c.E[specification - 1] == false) {
+      if ((specification == 1 && !c.E1) || (specification == 2 && !c.E2) ||
+          (specification == 3 && !c.E3) || (specification == 4 && !c.E4) ||
+          (specification == 5 && !c.E5) || (specification == 6 && !c.E6)) {
         return false;
       }
       // Category constraints

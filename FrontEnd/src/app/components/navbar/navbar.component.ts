@@ -50,7 +50,7 @@ export class NavbarComponent implements OnInit {
     if (environment.useDummyData) {
       (document.getElementById('emailLogin') as HTMLInputElement).value = '';
       (document.getElementById('passwordLogin') as HTMLInputElement).value = '';
-      document.getElementById('passwordLogin').blur();
+      document.getElementById('loginBtn').blur();
       const toast = document.getElementById('loginNotAllowedToast');
       if (!toast.classList.contains('show')) {
         toast.classList.add('show');
