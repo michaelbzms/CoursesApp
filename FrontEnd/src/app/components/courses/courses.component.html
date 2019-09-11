@@ -55,6 +55,9 @@
         <h2 class="text-color2">Μαθήματα</h2>
         <hr>
         <div class="coursesDiv pr-2">
+          <div class="text-center" *ngIf="courses === null">
+            <div class="lds-dual-ring"></div>
+          </div>
           <div *ngFor="let c of (courses | coursesFilter: semesterFilter : specificationFilter : coreFilter : labFilter
                 : AFilter : BFilter : GEFilter : freeFilter : obligatory : obligatoryByChoice : basic : optional)">
             <app-course [course]="c" [jwt]="jwt" [user]="user" (gradesChanged)="calculateAVGandECTS()"></app-course>
