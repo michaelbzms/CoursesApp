@@ -11,6 +11,7 @@ public class Configuration {
     // set this to false for easier API testing without needing to login
     public static boolean CHECK_AUTHORISATION;
     public static boolean ALLOW_CORS;    // should allow CORS only for development purposes!
+    public static boolean MOCK_DB;       // mock the existence of a db in memory
 
     private static final Configuration self = new Configuration();
 
@@ -33,16 +34,19 @@ public class Configuration {
 
         CHECK_AUTHORISATION = !("false".equals(getProperty("check_authorisation")));   // true if not specified
         ALLOW_CORS = "true".equals(getProperty("allow_CORS"));                         // false if not specified
+        MOCK_DB = "true".equals(getProperty("mock_db"));                               // false if not specified
 
-        try {
-            dataAccess.setup(
-                    getProperty("db.driver"),
-                    getProperty("db.url"),
-                    getProperty("db.user"),
-                    getProperty("db.pass")
-            );
-        } catch (Exception e) {
-            throw new ConfigurationException(e.getMessage(), e);
+        if (!MOCK_DB) {
+            try {
+                dataAccess.setup(
+                        getProperty("db.driver"),
+                        getProperty("db.url"),
+                        getProperty("db.user"),
+                        getProperty("db.pass")
+                );
+            } catch (Exception e) {
+                throw new ConfigurationException(e.getMessage(), e);
+            }
         }
     }
 
@@ -63,15 +67,15 @@ public class Configuration {
     }
 
     public CoursesDAO getCoursesDAO() {
-        return new CoursesDAOImplementation(dataAccess);
+        return (MOCK_DB) ? new CoursesDAOMockImpl() : new CoursesDAOImplementation(dataAccess);
     }
 
     public StudentsDAO getStudentsDAO() {
-        return new StudentsDAOImplementation(dataAccess);
+        return (MOCK_DB) ? new StudentsDAOMockImpl() : new StudentsDAOImplementation(dataAccess);
     }
 
     public UsersDAO getUsersDAO() {
-        return new UsersDAOImplementation(dataAccess);
+        return (MOCK_DB) ? new UsersDAOMockImpl() : new UsersDAOImplementation(dataAccess);
     }
 
     public long getLoginTTL() {

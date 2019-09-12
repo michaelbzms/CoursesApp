@@ -5,7 +5,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
+//import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -25,7 +25,8 @@ public class JWT {
 
     public static String createJWT(User u, long ttlMillis){
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
+//        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
+        byte[] apiKeySecretBytes = SECRET_KEY.getBytes();
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
         long nowMillis = System.currentTimeMillis();
         JwtBuilder b = Jwts.builder()
@@ -55,7 +56,8 @@ public class JWT {
     private static Claims decodeJWT(String jwt) throws Exception {
         //This line will throw an exception if it is not a signed JWT (as expected)
         Claims claims = Jwts.parser()
-                .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+//                .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+                .setSigningKey(SECRET_KEY.getBytes())
                 .setAllowedClockSkewSeconds(1000000)
                 .parseClaimsJws(jwt).getBody();
         return claims;
