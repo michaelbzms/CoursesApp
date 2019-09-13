@@ -38,20 +38,20 @@ export class HomepageComponent implements OnInit {
       return;
     }
     this.service.registerStudent(email, password1, this.firstname.value, this.lastname.value)
-      .done(results => {
-        if (results.hasOwnProperty('error')) {
-          alert(results.message);
-        } else {
-          this.email.setValue('');
-          this.newpassword.setValue('');
-          this.repassword.setValue('');
-          this.firstname.setValue('');
-          this.lastname.setValue('');
-          alert('Επιτυχής εγγραφή!');
-        }
-    }).fail((jqXHR, textStatus, errorThrown) => {
-      alert(textStatus + ':' + errorThrown);
-    });
+        .subscribe(results => {
+          if (results.hasOwnProperty('error')) {
+            alert('Backend Error: ' + results.message);
+          } else {
+            this.email.setValue('');
+            this.newpassword.setValue('');
+            this.repassword.setValue('');
+            this.firstname.setValue('');
+            this.lastname.setValue('');
+            alert('Επιτυχής εγγραφή!');
+          }
+        }, error => {
+          alert('HTTP Error: ' + error);
+        });
   }
 
   get email() {

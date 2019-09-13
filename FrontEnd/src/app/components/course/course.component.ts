@@ -43,7 +43,6 @@ export class CourseComponent implements OnInit {
     const gradeElem = document.getElementById('course_' + this.course.id) as HTMLInputElement;
     const gradeStr = gradeElem.value;
     const grade = parseFloat(gradeElem.value);
-    console.log(grade);
     if (isNaN(grade) || grade < 0.0 || grade > 10.0) {
       gradeElem.value = this.course.hasOwnProperty('grade') ? this.course.grade : '';
       alert('Οι βαθμοί πρέπει να είναι μεταξύ 0 και 10.');
@@ -53,25 +52,25 @@ export class CourseComponent implements OnInit {
       delete this.course.grade;
       if (this.jwt !== null) {    // if on session update backend
         this.service.updateGrade(this.jwt, this.course.id)
-          .done(results => {
-            if (results.hasOwnProperty('error')) {
-              alert(results.message);
-            }
-        }).fail((jqXHR, textStatus, errorThrown) => {
-          alert('>Error: ' + textStatus + ':' + errorThrown);
-        });
+            .subscribe(results => {
+              if (results.hasOwnProperty('error')) {
+                alert('Backend Error: ' + results.message);
+              }
+            }, error => {
+              alert('HTTP Error:' + error);
+            });
       }
     } else if (grade !== null && gradeStr.replace(/\s/g, '') !== '') {   // if the grade is not null
       this.course.grade = grade;
       if (this.jwt !== null) {    // if on session update backend
         this.service.updateGrade(this.jwt, this.course.id, grade)
-          .done(results => {
-            if (results.hasOwnProperty('error')) {
-              alert(results.message);
-            }
-        }).fail((jqXHR, textStatus, errorThrown) => {
-            alert('>Error: ' + textStatus + ':' + errorThrown);
-        });
+            .subscribe(results => {
+              if (results.hasOwnProperty('error')) {
+                alert('Backend Error: ' + results.message);
+              }
+            }, error => {
+              alert('HTTP Error:' + error);
+            });
       }
     }
     this.gradesChanged.emit();

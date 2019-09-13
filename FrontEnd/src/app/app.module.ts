@@ -6,12 +6,13 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { CoursesComponent } from './components/courses/courses.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CourseComponent } from './components/course/course.component';
 import { CoursesFilterPipe } from './components/courses/CoursesFilter';
 import { NavbarService } from './services/navbar.service';
 import { RouterModule } from '@angular/router';
 import { NotFoundComponentComponent } from './components/not-found-component/not-found-component.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { NotFoundComponentComponent } from './components/not-found-component/not
       {path: 'profile', component: ProfileComponent},
       {path: '**', component: NotFoundComponentComponent}
     ]),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [NavbarService],
   bootstrap: [AppComponent]

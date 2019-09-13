@@ -11,7 +11,7 @@ import {environment} from '../../../environments/environment';
 export class CoursesComponent implements OnInit {
 
   constructor(private service: CoursesService) { }
-  static globalCourses: any[];
+  static globalCourses: any[] = null;
   @Input() jwt: string;
   @Input() user: object;
   courses: any[] = null;
@@ -40,7 +40,7 @@ export class CoursesComponent implements OnInit {
   ngOnInit() {
     this.jwt = NavbarComponent.getJWT();
     this.user = NavbarComponent.getUser();
-    if (CoursesComponent.globalCourses == null) {
+    if (CoursesComponent.globalCourses === null) {
       console.log('Loading courses...');
       this.getCourses();
       CoursesComponent.globalCourses = this.courses;
@@ -62,7 +62,7 @@ export class CoursesComponent implements OnInit {
     if (environment.useDummyData) {
       this.courses = [
         {id: 1, title: 'Εισαγωγή στον Προγραμματισμό', ects: 7, semester: 1, category: 'core', type: 'obligatory',
-         E1: false, E2: false, E3: false, E4: false, E5: false, E6: false },
+          E1: false, E2: false, E3: false, E4: false, E5: false, E6: false },
         {id: 2, title: 'Διακριτά Μαθηματικά', ects: 7, semester: 1, category: 'core', type: 'obligatory',
           E1: false, E2: false, E3: false, E4: false, E5: false, E6: false },
         {id: 3, title: 'Λογική Σχεδίαση', ects: 6, semester: 1, category: 'core', type: 'obligatory',
@@ -162,16 +162,16 @@ export class CoursesComponent implements OnInit {
     }
     ///////////////////////
     this.service.getCourses(this.jwt)
-    .done(results => {
-      if (results.hasOwnProperty('error')) {
-        alert(results.message);
-      } else {
-        this.courses = results.courses;
-        this.calculateAVGandECTS();
-      }
-    }).fail((jqXHR, textStatus, errorThrown) => {
-      alert('>Error: ' + jqXHR.status + ':' + textStatus + ' ' + errorThrown);
-    });
+        .subscribe(results => {
+          if (results.hasOwnProperty('error')) {
+            alert('Backend Error: ' + results.message);
+          } else {
+            this.courses = results.courses;
+            this.calculateAVGandECTS();
+          }
+        }, error => {
+          alert('HTTP Error: ' + error);
+        });
   }
 
   calculateAVGandECTS() {

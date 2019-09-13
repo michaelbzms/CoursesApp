@@ -51,9 +51,9 @@ export class ProfileComponent implements OnInit {
       data = { email, firstname, lastname };
     }
     this.service.updateStudent(this.jwt, this.user.id, data)
-      .done(results => {
+      .subscribe(results => {
         if (results.hasOwnProperty('error')) {
-          alert(results.message);
+          alert('Backend Error: ' + results.message);
         } else {
           this.user.email = email;
           this.user.firstName = firstname;
@@ -63,8 +63,8 @@ export class ProfileComponent implements OnInit {
           this.sessionChanged.emit();
           alert('Επιτυχής ενημέρωση στοιχείων λογαριασμού.');
         }
-    }).fail((jqXHR, textStatus, errorThrown) => {
-      alert(textStatus + ':' + errorThrown);
+    }, error => {
+      alert('HTTP Error: ' + error);
     });
   }
 
@@ -81,17 +81,17 @@ export class ProfileComponent implements OnInit {
       return;
     }
     this.service.updatePassword(this.jwt, this.user.id, this.oldpassword.value, this.newpassword.value)
-      .done(results => {
+      .subscribe(results => {
         if (results.hasOwnProperty('error')) {
-          alert(results.message);
+          alert('Backend Error: ' + results.message);
         } else {
           this.oldpassword.setValue('');
           this.newpassword.setValue('');
           this.repassword.setValue('');
           alert('Επιτυχής αλλαγή κωδικού.');
         }
-    }).fail((jqXHR, textStatus, errorThrown) => {
-      alert(textStatus + ':' + errorThrown);
+    }, error => {
+      alert('HTTP Error: ' + error);
     });
   }
 
@@ -100,17 +100,17 @@ export class ProfileComponent implements OnInit {
       return;
     }
     this.service.deleteStudent(this.jwt, this.user.id)
-      .done(results => {
+      .subscribe(results => {
         if (results.hasOwnProperty('error')) {
-          alert(results.message);
+          alert('Backend Error: ' + results.message);
         } else {
           NavbarComponent.unsetSession();  // auto-logout
           this.sessionChanged.emit();
           alert('Επιτυχής διαγραφή λογαριασμού.');
           window.location.replace('/');  // in this case only redirect the old fashioned way
         }
-    }).fail((jqXHR, textStatus, errorThrown) => {
-      alert(textStatus + ':' + errorThrown);
+    }, error => {
+      alert('HTTP Error: ' + error);
     });
   }
 

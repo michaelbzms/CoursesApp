@@ -10,6 +10,7 @@ export class CoursesFilterPipe implements PipeTransform {
   transform(courses: any, semester: number, specification: number, core: boolean, lab: boolean,
             A: boolean, B: boolean, GE: boolean, free: boolean, obligatory: boolean, obligatoryByChoice: boolean,
             basic: boolean, optional: boolean): any {
+    if (courses === null) { return; }
     return courses.filter(c => {
       // Semester constraint
       if (semester != 0 && c.semester != semester) {

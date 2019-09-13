@@ -60,21 +60,24 @@ export class NavbarComponent implements OnInit {
       }
       return;
     }
+
+    // console.log('email: ' + (document.getElementById('emailLogin') as HTMLInputElement).value);
     this.service.login((document.getElementById('emailLogin') as HTMLInputElement).value,
                        (document.getElementById('passwordLogin') as HTMLInputElement).value)
-      .done(results => {
-        if (results.hasOwnProperty('jwt') && results.hasOwnProperty('user')) {
-          NavbarComponent.setSession(results.jwt, results.user);
-          this.jwt = results.jwt;
-          this.user = results.user;
-          this.loggedInOrOut.emit(true);
-          this.select_page('courses');  // redirect
-        } else {
-          alert('Error: ' + ((results.hasOwnProperty('message')) ? results.message : 'Unknown'));
-        }
-    }).fail((jqXHR, textStatus, errorThrown) => {
-        alert('Could not reach server');
-    });
+        .subscribe(results => {
+          console.log(results);
+          if (results.hasOwnProperty('jwt') && results.hasOwnProperty('user')) {
+            NavbarComponent.setSession(results.jwt, results.user);
+            this.jwt = results.jwt;
+            this.user = results.user;
+            this.loggedInOrOut.emit(true);
+            this.select_page('courses');  // redirect
+          } else {
+            alert('Error: ' + ((results.hasOwnProperty('message')) ? results.message : 'Unknown'));
+          }
+        }, error => {
+            alert('HTTP Error: ' + error);
+        });
   }
 
   logout() {
@@ -88,7 +91,6 @@ export class NavbarComponent implements OnInit {
   }
 
   select_page(page: string) {
-    // tslint:disable-next-line:prefer-for-of
     const links = document.getElementsByClassName('nav-link');
     for (let i = 0; i < links.length; i++) {
       links.item(i).classList.remove('isSelected');

@@ -51,7 +51,7 @@ public class CoursesDAOMockImpl implements CoursesDAO {
     @Override
     public void setGradeForCourse(int studentId, int courseId, Double grade) {
         if (courseId > 0 && courseId <= courses.length) {
-            courses[courseId].setGrade(grade);
+            courses[courseId - 1].setGrade(grade);
         }
     }
 

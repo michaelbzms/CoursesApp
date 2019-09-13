@@ -1,27 +1,22 @@
 import { Injectable } from '@angular/core';
-import * as $ from 'jquery';
-import {environment} from '../../environments/environment';
+import { environment } from '../../environments/environment';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HomepageService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  registerStudent(email: string, firstName: string, lastName: string, password: string) {
-    return $.ajax({
-      url: environment.apiUrl + '/students',
-      method: 'POST',
-      dataType: 'json',
-      headers: {},
-      data: {
-        email,
-        password,
-        firstname: firstName,
-        lastname: lastName
-      }
-    });
+  registerStudent(email: string, firstName: string, lastName: string, password: string): Observable<any> {
+    const httpParams = new HttpParams()
+      .append('email', email)
+      .append('password', password)
+      .append('firstname', firstName)
+      .append('lastname', lastName);
+    return this.http.post(environment.apiUrl + '/students', httpParams);
   }
 
 }
