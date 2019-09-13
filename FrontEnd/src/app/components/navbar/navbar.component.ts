@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NavbarService} from '../../services/navbar.service';
 import {environment} from '../../../environments/environment';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-navbar',
@@ -9,9 +10,11 @@ import {environment} from '../../../environments/environment';
 })
 export class NavbarComponent implements OnInit {
   jwt: string;
-  @Input() user: object;
+  @Input() user: any;
   @Output() loggedInOrOut = new EventEmitter();
   @Output() selectedPage = new EventEmitter();
+  loginForm: FormGroup = null;    // Reactive Form
+  invalidLoginForm = false;
 
   public static getJWT(): string {
     return localStorage.getItem('jwt');
@@ -44,9 +47,27 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.jwt = NavbarComponent.getJWT();
     this.user = NavbarComponent.getUser();
+    this.loginForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required])
+    });
+  }
+
+  get email() {
+    return this.loginForm.get('email');
+  }
+
+  get password() {
+    return this.loginForm.get('password');
   }
 
   login() {
+    if (!this.loginForm.valid) {
+      this.invalidLoginForm = true;
+      return;
+    } else {
+      this.invalidLoginForm = false;
+    }
     if (environment.useDummyData) {
       (document.getElementById('emailLogin') as HTMLInputElement).value = '';
       (document.getElementById('passwordLogin') as HTMLInputElement).value = '';
@@ -60,10 +81,9 @@ export class NavbarComponent implements OnInit {
       }
       return;
     }
-
-    // console.log('email: ' + (document.getElementById('emailLogin') as HTMLInputElement).value);
-    this.service.login((document.getElementById('emailLogin') as HTMLInputElement).value,
-                       (document.getElementById('passwordLogin') as HTMLInputElement).value)
+    // this.service.login((document.getElementById('emailLogin') as HTMLInputElement).value,
+    //                    (document.getElementById('passwordLogin') as HTMLInputElement).value)
+    this.service.login(this.email.value, this.password.value)
         .subscribe(results => {
           console.log(results);
           if (results.hasOwnProperty('jwt') && results.hasOwnProperty('user')) {

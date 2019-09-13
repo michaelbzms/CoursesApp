@@ -20,11 +20,16 @@
       </ng-template>
     </ul>
     <div *ngIf="jwt === null; else loggedInBlock2">
-      <form id="loginForm" (submit)="login()" class="form-inline my-2 my-lg-0">
-        <input id="emailLogin" class="form-control mr-sm-2" type="email" placeholder="Εισάγετε το email σας" aria-label="Login" required>
-        <input id="passwordLogin" class="form-control mr-sm-2" type="password" placeholder="Εισάγετε τον κωδικό σας" aria-label="Login" required>
-        <button id="loginBtn" class="btn btn-outline-success my-2 my-sm-0" type="submit">Σύνδεση</button>
+      <form [formGroup]="loginForm" id="loginForm" (submit)="login()" class="form-inline my-2 my-lg-0">
+        <input [ngClass]="invalidLoginForm && !email.valid ? 'invalid_field' : ''" formControlName="email"
+               id="emailLogin" class="form-control mr-sm-2" type="email" placeholder="Εισάγετε το email σας" aria-label="Login" required>
+        <input [ngClass]="invalidLoginForm && !password.valid ? 'invalid_field' : ''" formControlName="password"
+               id="passwordLogin" class="form-control mr-sm-2" type="password" placeholder="Εισάγετε τον κωδικό σας" aria-label="Login" required>
+        <button id="loginBtn" class="btn btn-outline-success my-2 my-sm-0" type="submit" #loginBtn>Σύνδεση</button>
       </form>
+      <div *ngIf="invalidLoginForm" class="d-block">
+        <small *ngIf="!email.valid && email.hasError('email')" class="d-inline-block rounded text-danger">Λάθος μορφή email.&nbsp;</small>
+      </div>
     </div>
     <ng-template #loggedInBlock2>
       <div *ngIf="user.isAdmin; else studentId">
