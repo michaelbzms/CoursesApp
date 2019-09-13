@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NavbarComponent} from '../navbar/navbar.component';
 import {CourseService} from '../../services/course.service';
+import {Toasts} from '../../utils/Toasts';
 
 @Component({
   selector: 'app-course',
@@ -45,7 +46,7 @@ export class CourseComponent implements OnInit {
     const grade = parseFloat(gradeElem.value);
     if (isNaN(grade) || grade < 0.0 || grade > 10.0) {
       gradeElem.value = this.course.hasOwnProperty('grade') ? this.course.grade : '';
-      alert('Οι βαθμοί πρέπει να είναι μεταξύ 0 και 10.');
+      Toasts.toast('Οι βαθμοί πρέπει να είναι μεταξύ 0 και 10');
       return;
     }
     if ((grade === null || gradeStr.replace(/\s/g, '') === '') && this.course.hasOwnProperty('grade')) {  // if it had now it hasn't a grade

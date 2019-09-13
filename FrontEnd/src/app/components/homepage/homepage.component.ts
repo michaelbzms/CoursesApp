@@ -3,6 +3,7 @@ import {NavbarComponent} from '../navbar/navbar.component';
 import {HomepageService} from '../../services/homepage.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Customvalidators} from '../../utils/customvalidators';
+import {Toasts} from '../../utils/Toasts';
 
 @Component({
   selector: 'app-homepage',
@@ -47,7 +48,7 @@ export class HomepageComponent implements OnInit {
             this.repassword.setValue('');
             this.firstname.setValue('');
             this.lastname.setValue('');
-            alert('Επιτυχής εγγραφή!');
+            Toasts.toast('Επιτυχής εγγραφή');
           }
         }, error => {
           alert('HTTP Error: ' + error);

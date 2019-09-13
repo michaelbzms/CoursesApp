@@ -3,6 +3,7 @@ import {NavbarComponent} from '../navbar/navbar.component';
 import {ProfileService} from '../../services/profile.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Customvalidators} from '../../utils/customvalidators';
+import {Toasts} from '../../utils/Toasts';
 
 @Component({
   selector: 'app-profile',
@@ -61,7 +62,7 @@ export class ProfileComponent implements OnInit {
           NavbarComponent.unsetUser();
           NavbarComponent.setUser(this.user);
           this.sessionChanged.emit();
-          alert('Επιτυχής ενημέρωση στοιχείων λογαριασμού.');
+          Toasts.toast('Επιτυχής ενημέρωση στοιχείων λογαριασμού.');
         }
     }, error => {
       alert('HTTP Error: ' + error);
@@ -88,7 +89,7 @@ export class ProfileComponent implements OnInit {
           this.oldpassword.setValue('');
           this.newpassword.setValue('');
           this.repassword.setValue('');
-          alert('Επιτυχής αλλαγή κωδικού.');
+          Toasts.toast('Επιτυχής αλλαγή κωδικού');
         }
     }, error => {
       alert('HTTP Error: ' + error);

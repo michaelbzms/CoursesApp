@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NavbarService} from '../../services/navbar.service';
 import {environment} from '../../../environments/environment';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Toasts} from '../../utils/Toasts';
 
 @Component({
   selector: 'app-navbar',
@@ -62,24 +63,18 @@ export class NavbarComponent implements OnInit {
   }
 
   login() {
+    if (environment.useDummyData) {
+      this.email.setValue('');
+      this.password.setValue('');
+      document.getElementById('loginBtn').blur();
+      Toasts.toast('Δεν μπορείται να συνδεθείτε σε offline mode');
+      return;
+    }
     if (!this.loginForm.valid) {
       this.invalidLoginForm = true;
       return;
     } else {
       this.invalidLoginForm = false;
-    }
-    if (environment.useDummyData) {
-      (document.getElementById('emailLogin') as HTMLInputElement).value = '';
-      (document.getElementById('passwordLogin') as HTMLInputElement).value = '';
-      document.getElementById('loginBtn').blur();
-      const toast = document.getElementById('loginNotAllowedToast');
-      if (!toast.classList.contains('show')) {
-        toast.classList.add('show');
-        setTimeout(() => {
-          toast.classList.remove('show');
-        }, 3000);  // must be 3000
-      }
-      return;
     }
     // this.service.login((document.getElementById('emailLogin') as HTMLInputElement).value,
     //                    (document.getElementById('passwordLogin') as HTMLInputElement).value)

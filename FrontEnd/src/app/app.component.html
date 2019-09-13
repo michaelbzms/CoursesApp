@@ -2,4 +2,5 @@
 <div class="main-body">
   <app-navbar (loggedInOrOut)="loggedInEvent($event)" (selectedPage)="getCurrentPage($event)" [user]="user"></app-navbar>
   <router-outlet></router-outlet>
+  <div id="toasts_div" class="snackbar"></div>
 </div>
