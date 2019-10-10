@@ -67,7 +67,7 @@ export class NavbarComponent implements OnInit {
       this.email.setValue('');
       this.password.setValue('');
       document.getElementById('loginBtn').blur();
-      Toasts.toast('Δεν μπορείται να συνδεθείτε σε offline mode');
+      Toasts.toast('Δεν μπορείτε να συνδεθείτε σε offline mode');
       return;
     }
     if (!this.loginForm.valid) {
