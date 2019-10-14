@@ -8,7 +8,7 @@ import java.util.List;
 @Table(name = "courses")
 public class CourseEntity {
 
-    @Id @Column(name = "idCourses", nullable = false)
+    @Id @Column(name = "idCourses", nullable = false) @GeneratedValue
     private int id;      // Might be null for objects with unknown database user id
     @Column(nullable = false) private String title;
     @Column(nullable = false) private int ects;

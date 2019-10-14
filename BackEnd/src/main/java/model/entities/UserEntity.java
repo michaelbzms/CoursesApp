@@ -6,10 +6,12 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
+@SequenceGenerator(name="seq", initialValue=1)
 public class UserEntity {
 
-    @Id @GeneratedValue @Column(name = "idUsers", nullable = false)
-    private int id;        // Might be null for objects with unknown database user id
+    @Id @Column(name = "idUsers", nullable = false, updatable = false)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
+    private int id;
     @Column(length = 128, nullable = false)
     private String email;
     @Column(nullable = false)
@@ -18,9 +20,16 @@ public class UserEntity {
     public UserEntity() { }
 
     public UserEntity(User u) {
-        this.id = u.getId();
         this.email = u.getEmail();
         this.isAdmin = u.isAdmin();
+        u.setId(this.id);
+    }
+
+    public UserEntity(User u, boolean generateId) {
+        if (!generateId) this.id = (u.getId() != null) ? u.getId() : -1;
+        this.email = u.getEmail();
+        this.isAdmin = u.isAdmin();
+        u.setId(this.id);
     }
 
     public int getId() { return id; }

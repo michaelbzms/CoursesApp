@@ -8,16 +8,20 @@ import java.util.List;
 
 @Entity
 @Table(name = "students")
+@NamedQueries({
+    @NamedQuery(name="selectall",
+            query="SELECT s FROM StudentEntity s")
+})
 public class StudentEntity {
 
-    @Id @Column(name = "idStudents", nullable = false)
+    @Id @Column(name = "idStudents", nullable = false, updatable = false)
     private int id;
     @Column(name = "firstname", nullable = false)
     private String firstName;
     @Column(name = "lastname", nullable = false)
     private String lastName;
 
-    @OneToOne() @JoinColumn(name = "idStudents", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) @JoinColumn(name = "idStudents", nullable = false)
     private UserEntity userEntity;
 
     @OneToMany(mappedBy = "studentEntity", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -25,9 +29,10 @@ public class StudentEntity {
 
     public StudentEntity() {}
 
-    public StudentEntity(Student s, boolean generateId){
-        if (!generateId) this.id = s.getId();
-        this.userEntity = new UserEntity(s);
+    public StudentEntity(Student s){
+        if (s.getId() == null) { System.out.println("(!) -> Warning: null id in entity"); s.setId(0); }
+        this.id = s.getId();
+        this.userEntity = new UserEntity(s, false);
         this.firstName = s.getFirstName();
         this.lastName = s.getLastName();
     }

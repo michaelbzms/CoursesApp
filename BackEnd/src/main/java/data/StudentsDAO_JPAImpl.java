@@ -4,11 +4,11 @@ import Util.Feedback;
 import data.jpa.JPAUtil;
 import model.Student;
 import model.entities.StudentEntity;
+import model.entities.UserEntity;
 import org.springframework.dao.DataAccessException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.EntityTransaction;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentsDAO_JPAImpl implements StudentsDAO {
@@ -30,13 +30,29 @@ public class StudentsDAO_JPAImpl implements StudentsDAO {
         return s;
     }
 
+
     @Override
     public List<Student> getALlStudents() throws DataAccessException {
-        return null;
+        List<Student> l = new ArrayList<>();
+        EntityManager em = JPAUtil.getNewEntityManager();
+        if (em == null) { System.err.println("ErRoR: JPA null EntityManager!"); return null; }
+        try {
+            List<StudentEntity> res =(List<StudentEntity>) em.createNamedQuery("selectall").getResultList();
+            for (StudentEntity s : res) {
+                l.add(new Student(s));
+            }
+            return l;
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw e;   // throw it again
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public Feedback registerStudent(Student student, String hashedPassword) throws DataAccessException {
+        // TODO: Debug
         EntityManager em = JPAUtil.getNewEntityManager();
         if (em == null) { System.err.println("ErRoR: JPA null EntityManager!"); return null; }
         EntityTransaction tx = em.getTransaction();
@@ -44,9 +60,13 @@ public class StudentsDAO_JPAImpl implements StudentsDAO {
             tx.begin();
             List res = em.createNativeQuery("SELECT 1 FROM users WHERE email = ?").setParameter(1, student.getEmail()).getResultList();
             if (res.isEmpty()) {
-                StudentEntity se = new StudentEntity(student, true);
+                UserEntity ue = new UserEntity(student);
+                StudentEntity se = new StudentEntity(student);
+                em.persist(ue);
                 em.persist(se);
-                em.createNativeQuery("UPDATE Users SET password = ? WHERE idUsers = ?")
+                em.flush();
+                System.out.println("\nID: " + se.getId());
+                em.createNativeQuery("UPDATE users SET password = ? WHERE idUsers = ?")
                         .setParameter(1, hashedPassword)
                         .setParameter(2, se.getId())
                         .executeUpdate();
