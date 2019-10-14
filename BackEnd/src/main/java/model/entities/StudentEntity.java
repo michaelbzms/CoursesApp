@@ -1,5 +1,7 @@
 package model.entities;
 
+import model.Student;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,15 @@ public class StudentEntity {
 
     @OneToMany(mappedBy = "studentEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudentHasClassesEntity> studentHasClasses = new ArrayList<>();
+
+    public StudentEntity() {}
+
+    public StudentEntity(Student s, boolean generateId){
+        if (!generateId) this.id = s.getId();
+        this.userEntity = new UserEntity(s);
+        this.firstName = s.getFirstName();
+        this.lastName = s.getLastName();
+    }
 
     public int getId() { return id; }
 

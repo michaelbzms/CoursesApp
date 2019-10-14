@@ -1,5 +1,7 @@
 package model;
 
+import model.entities.StudentEntity;
+
 import java.util.LinkedHashMap;
 
 public class Student extends User {
@@ -16,6 +18,12 @@ public class Student extends User {
         super(id, email, isAdmin);
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public Student(StudentEntity se) {
+        super(se.getUserEntity());
+        this.firstName = se.getFirstName();
+        this.lastName = se.getLastName();
     }
 
     public static Student getStudentFromMap(LinkedHashMap map) {

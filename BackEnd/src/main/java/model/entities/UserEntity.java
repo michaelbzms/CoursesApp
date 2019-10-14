@@ -1,5 +1,7 @@
 package model.entities;
 
+import model.User;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +14,14 @@ public class UserEntity {
     private String email;
     @Column(nullable = false)
     private boolean isAdmin;
+
+    public UserEntity() { }
+
+    public UserEntity(User u) {
+        this.id = u.getId();
+        this.email = u.getEmail();
+        this.isAdmin = u.isAdmin();
+    }
 
     public int getId() { return id; }
 

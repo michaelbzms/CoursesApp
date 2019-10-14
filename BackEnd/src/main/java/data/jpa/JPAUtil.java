@@ -2,14 +2,13 @@ package data.jpa;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
+import javax.persistence.Persistence;
 
 public class JPAUtil {
 
-    @PersistenceContext   // The container is in charge of emf
-    private static EntityManagerFactory emf;
+    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("PERSISTENCE");
 
-    public EntityManager getEntityManager() {
+    public static EntityManager getNewEntityManager() {
         if (emf == null) {
             System.err.println("\n(!) Oh noooo: emf is null. Container why?");
             return null;

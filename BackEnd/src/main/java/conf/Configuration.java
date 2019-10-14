@@ -12,6 +12,7 @@ public class Configuration {
     public static boolean CHECK_AUTHORISATION;
     public static boolean ALLOW_CORS;    // should allow CORS only for development purposes!
     public static boolean MOCK_DB;       // mock the existence of a db in memory
+    public static boolean USE_JPA;       // use JPA Implementation over JDBCTemplate
 
     private static final Configuration self = new Configuration();
 
@@ -35,8 +36,9 @@ public class Configuration {
         CHECK_AUTHORISATION = !("false".equals(getProperty("check_authorisation")));   // true if not specified
         ALLOW_CORS = "true".equals(getProperty("allow_CORS"));                         // false if not specified
         MOCK_DB = "true".equals(getProperty("mock_db"));                               // false if not specified
+        USE_JPA = "true".equals(getProperty("useJPA"));                                // false if not specified
 
-        if (!MOCK_DB) {
+        if (!MOCK_DB && !USE_JPA) {
             try {
                 dataAccess.setup(
                         getProperty("db.driver"),
@@ -67,15 +69,21 @@ public class Configuration {
     }
 
     public CoursesDAO getCoursesDAO() {
-        return (MOCK_DB) ? new CoursesDAOMockImpl() : new CoursesDAOImplementation(dataAccess);
+        if (MOCK_DB) return new CoursesDAOMockImpl();
+        else if (USE_JPA) return new CoursesDAO_JPAImpl();
+        else return new CoursesDAOImplementation(dataAccess);
     }
 
     public StudentsDAO getStudentsDAO() {
-        return (MOCK_DB) ? new StudentsDAOMockImpl() : new StudentsDAOImplementation(dataAccess);
+        if (MOCK_DB) return new StudentsDAOMockImpl();
+        else if (USE_JPA) return new StudentsDAO_JPAImpl();
+        else return new StudentsDAOImplementation(dataAccess);
     }
 
     public UsersDAO getUsersDAO() {
-        return (MOCK_DB) ? new UsersDAOMockImpl() : new UsersDAOImplementation(dataAccess);
+        if (MOCK_DB) return new UsersDAOMockImpl();
+        else if (USE_JPA) return new UsersDAO_JPAImpl();
+        else return new UsersDAOImplementation(dataAccess);
     }
 
     public long getLoginTTL() {

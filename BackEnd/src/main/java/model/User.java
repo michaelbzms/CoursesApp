@@ -1,5 +1,7 @@
 package model;
 
+import model.entities.UserEntity;
+
 import java.util.LinkedHashMap;
 
 public class User {
@@ -14,6 +16,11 @@ public class User {
         this.isAdmin = isAdmin;
     }
 
+    public User(UserEntity ue) {
+        this.id = ue.getId();
+        this.email = ue.getEmail();
+        this.isAdmin = ue.isAdmin();
+    }
 
     public static User getUserFromMap(LinkedHashMap map){
         //System.out.println("\n>>>>>>>>DEBUG<<<<<<<<<");

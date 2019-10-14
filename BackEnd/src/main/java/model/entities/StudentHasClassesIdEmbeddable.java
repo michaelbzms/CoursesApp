@@ -22,8 +22,7 @@ public class StudentHasClassesIdEmbeddable implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (o == null || getClass() != o.getClass()) return false;
         StudentHasClassesIdEmbeddable that = (StudentHasClassesIdEmbeddable) o;
         return Objects.equals(this.idStudents, that.idStudents) && Objects.equals(this.idCourses, that.idCourses);
     }
