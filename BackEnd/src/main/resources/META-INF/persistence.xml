@@ -8,6 +8,11 @@
         <description>Hibernate JPA Configuration</description>
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
+        <class>model.entities.UserEntity</class>
+        <class>model.entities.StudentEntity</class>
+        <class>model.entities.StudentHasClassesEntity</class>
+        <class>model.entities.CourseEntity</class>
+
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/coursesappdb"/>

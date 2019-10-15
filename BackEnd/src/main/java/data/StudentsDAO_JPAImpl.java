@@ -87,11 +87,52 @@ public class StudentsDAO_JPAImpl implements StudentsDAO {
 
     @Override
     public Feedback editStudent(Student student) throws DataAccessException {
-        return null;
+        EntityManager em = JPAUtil.getNewEntityManager();
+        if (em == null) { System.err.println("ErRoR: JPA null EntityManager!"); return null; }
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            StudentEntity se = em.getReference(StudentEntity.class, student.getId());
+            UserEntity ue = se.getUserEntity();
+            ue.setEmail(student.getEmail());
+            se.setFirstName(student.getFirstName());
+            se.setLastName(student.getLastName());
+            tx.commit();
+        } catch (EntityNotFoundException e) {
+            tx.commit();
+            return new Feedback(false, "Student does not exist");
+        } catch(Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            throw e;   // throw it again
+        } finally {
+            em.close();
+        }
+        return new Feedback(true);
     }
 
     @Override
     public Feedback deleteStudent(int studentId) throws DataAccessException {
-        return null;
+        EntityManager em = JPAUtil.getNewEntityManager();
+        if (em == null) { System.err.println("ErRoR: JPA null EntityManager!"); return null; }
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            StudentEntity se = em.getReference(StudentEntity.class, studentId);
+            UserEntity ue = se.getUserEntity();
+            em.remove(se);
+            em.remove(ue);
+            tx.commit();
+        } catch (EntityNotFoundException e) {
+            tx.commit();
+            return new Feedback(false, "Student does not exist");
+        } catch(Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            throw e;   // throw it again
+        } finally {
+            em.close();
+        }
+        return new Feedback(true);
     }
 }

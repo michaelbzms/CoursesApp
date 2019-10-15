@@ -9,8 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "students")
 @NamedQueries({
-    @NamedQuery(name="selectall",
-            query="SELECT s FROM StudentEntity s")
+    @NamedQuery(name="selectall", query="SELECT s FROM StudentEntity s")
 })
 public class StudentEntity {
 
@@ -21,10 +20,10 @@ public class StudentEntity {
     @Column(name = "lastname", nullable = false)
     private String lastName;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) @JoinColumn(name = "idStudents", nullable = false)
+    @OneToOne(fetch = FetchType.EAGER) @JoinColumn(name = "idStudents", nullable = false)
     private UserEntity userEntity;
 
-    @OneToMany(mappedBy = "studentEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "studentEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<StudentHasClassesEntity> studentHasClasses = new ArrayList<>();
 
     public StudentEntity() {}

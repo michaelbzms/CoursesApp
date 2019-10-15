@@ -6,11 +6,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
-@SequenceGenerator(name="seq", initialValue=1)
 public class UserEntity {
 
-    @Id @Column(name = "idUsers", nullable = false, updatable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
+    @Id @Column(name = "idUsers", nullable = false, updatable = false) @GeneratedValue
     private int id;
     @Column(length = 128, nullable = false)
     private String email;
