@@ -29,10 +29,9 @@ public class StudentEntity {
 
     public StudentEntity() {}
 
-    public StudentEntity(Student s){
-        if (s.getId() == null) { System.out.println("(!) -> Warning: null id in entity"); s.setId(0); }
-        this.id = s.getId();
-        this.userEntity = new UserEntity(s, false);
+    public StudentEntity(Student s, UserEntity ue){
+        this.id = ue.getId();
+        this.userEntity = ue;
         this.firstName = s.getFirstName();
         this.lastName = s.getLastName();
     }

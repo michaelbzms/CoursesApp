@@ -52,7 +52,6 @@ public class StudentsDAO_JPAImpl implements StudentsDAO {
 
     @Override
     public Feedback registerStudent(Student student, String hashedPassword) throws DataAccessException {
-        // TODO: Debug
         EntityManager em = JPAUtil.getNewEntityManager();
         if (em == null) { System.err.println("ErRoR: JPA null EntityManager!"); return null; }
         EntityTransaction tx = em.getTransaction();
@@ -61,11 +60,11 @@ public class StudentsDAO_JPAImpl implements StudentsDAO {
             List res = em.createNativeQuery("SELECT 1 FROM users WHERE email = ?").setParameter(1, student.getEmail()).getResultList();
             if (res.isEmpty()) {
                 UserEntity ue = new UserEntity(student);
-                StudentEntity se = new StudentEntity(student);
                 em.persist(ue);
+                em.flush();
+                StudentEntity se = new StudentEntity(student, ue);
                 em.persist(se);
                 em.flush();
-                System.out.println("\nID: " + se.getId());
                 em.createNativeQuery("UPDATE users SET password = ? WHERE idUsers = ?")
                         .setParameter(1, hashedPassword)
                         .setParameter(2, se.getId())
