@@ -1,5 +1,7 @@
 package model;
 
+import model.entities.CourseEntity;
+
 public class Course {
 
     private Integer id;             // Might be null for objects with unknown database user id
@@ -31,6 +33,28 @@ public class Course {
         this.type = type;
         this.E = E;
     }
+
+    public Course(CourseEntity ce){
+        this.id = ce.getId();
+        this.title = ce.getTitle();
+        this.ects = ce.getEcts();
+        this.semester = ce.getSemester();
+        this.category = ce.getCategory();
+        this.type = ce.getType();
+        this.E = new boolean[]{ce.isE1(), ce.isE2(), ce.isE3(), ce.isE4(), ce.isE5(), ce.isE6()};
+    }
+
+    public Course(CourseEntity ce, double grade){
+        this.id = ce.getId();
+        this.title = ce.getTitle();
+        this.ects = ce.getEcts();
+        this.semester = ce.getSemester();
+        this.category = ce.getCategory();
+        this.type = ce.getType();
+        this.E = new boolean[]{ce.isE1(), ce.isE2(), ce.isE3(), ce.isE4(), ce.isE5(), ce.isE6()};
+        this.grade = grade;
+    }
+
 
     public Integer getId() { return id; }
 

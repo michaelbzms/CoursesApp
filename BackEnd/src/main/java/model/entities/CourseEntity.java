@@ -6,6 +6,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "courses")
+@NamedQueries({
+    @NamedQuery(name="selectallcourses", query="SELECT c FROM CourseEntity c")
+})
 public class CourseEntity {
 
     @Id @Column(name = "idCourses", nullable = false) @GeneratedValue
@@ -22,9 +25,8 @@ public class CourseEntity {
     @Column(nullable = false) private boolean E5;
     @Column(nullable = false) private boolean E6;
 
-    @OneToMany(mappedBy = "courseEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "courseEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<StudentHasClassesEntity> studentHasClasses = new ArrayList<>();
-
 
     public int getId() { return id; }
 

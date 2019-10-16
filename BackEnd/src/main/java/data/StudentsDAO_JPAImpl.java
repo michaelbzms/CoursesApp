@@ -37,7 +37,7 @@ public class StudentsDAO_JPAImpl implements StudentsDAO {
         EntityManager em = JPAUtil.getNewEntityManager();
         if (em == null) { System.err.println("ErRoR: JPA null EntityManager!"); return null; }
         try {
-            List<StudentEntity> res =(List<StudentEntity>) em.createNamedQuery("selectall").getResultList();
+            List<StudentEntity> res = (List<StudentEntity>) em.createNamedQuery("selectallstudents").getResultList();
             for (StudentEntity s : res) {
                 l.add(new Student(s));
             }
@@ -61,7 +61,6 @@ public class StudentsDAO_JPAImpl implements StudentsDAO {
             if (res.isEmpty()) {
                 UserEntity ue = new UserEntity(student);
                 em.persist(ue);
-                em.flush();
                 StudentEntity se = new StudentEntity(student, ue);
                 em.persist(se);
                 em.flush();

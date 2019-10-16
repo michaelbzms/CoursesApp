@@ -7,9 +7,11 @@ import java.util.Objects;
 
 @Embeddable
 public class StudentHasClassesIdEmbeddable implements Serializable {
-    @Column(nullable = false)
+
+    // TODO: Mapping of these fields uses the default name instead of the one in db -> must fix (but how?)
+    @Column(name = "idStudents")  // <- DOES NOT WORK
     private int idStudents;
-    @Column(nullable = false)
+    @Column(name = "idCourses")   // <- DOES NOT WORK
     private int idCourses;
 
     public StudentHasClassesIdEmbeddable() {}

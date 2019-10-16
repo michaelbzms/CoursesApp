@@ -7,6 +7,10 @@ import javax.persistence.*;
 @Table(name = "students_has_courses")
 public class StudentHasClassesEntity {
     @EmbeddedId
+    @AttributeOverrides({
+        @AttributeOverride(name = "idStudents", column = @Column(name = "idStudents")),
+        @AttributeOverride(name = "idCourses", column = @Column(name = "idCourses"))
+    })
     private StudentHasClassesIdEmbeddable id;
 
     @ManyToOne(fetch = FetchType.LAZY)
