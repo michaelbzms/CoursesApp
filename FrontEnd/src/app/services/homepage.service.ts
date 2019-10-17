@@ -10,7 +10,7 @@ export class HomepageService {
 
   constructor(private http: HttpClient) { }
 
-  registerStudent(email: string, firstName: string, lastName: string, password: string): Observable<any> {
+  registerStudent(email: string, password: string, firstName: string, lastName: string): Observable<any> {
     const httpParams = new HttpParams()
       .append('email', email)
       .append('password', password)
