@@ -24,7 +24,7 @@ public class StudentEntity {
     private UserEntity userEntity;
 
     @OneToMany(mappedBy = "studentEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<StudentHasClassesEntity> studentHasClasses = new ArrayList<>();
+    private List<StudentHasCoursesEntity> studentHasClasses = new ArrayList<>();
 
     public StudentEntity() {}
 
@@ -51,8 +51,8 @@ public class StudentEntity {
 
     public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public List<StudentHasClassesEntity> getStudentHasClasses() { return studentHasClasses; }
+    public List<StudentHasCoursesEntity> getStudentHasClasses() { return studentHasClasses; }
 
-    public void setStudentHasClasses(List<StudentHasClassesEntity> classes) { this.studentHasClasses = classes; }
+    public void setStudentHasClasses(List<StudentHasCoursesEntity> classes) { this.studentHasClasses = classes; }
 
 }

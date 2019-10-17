@@ -4,15 +4,11 @@ import Util.Feedback;
 import data.jpa.JPAUtil;
 import model.Course;
 import model.entities.CourseEntity;
-import model.entities.StudentEntity;
-import model.entities.StudentHasClassesEntity;
-import model.entities.StudentHasClassesIdEmbeddable;
+import model.entities.StudentHasCoursesEntity;
+import model.entities.StudentHasCoursesId;
 import org.springframework.dao.DataAccessException;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.EntityTransaction;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +37,8 @@ public class CoursesDAO_JPAImpl implements CoursesDAO {
         EntityManager em = JPAUtil.getNewEntityManager();
         if (em == null) { System.err.println("ErRoR: JPA null EntityManager!"); return null; }
         try {
-            List res = em.createQuery("SELECT c, shc.grade FROM CourseEntity c, StudentHasClassesEntity shc " +
-                                             "WHERE c.id = ?1 AND  c.id = shc.id.idCourses AND shc.id.idStudents = ?2")
+            List res = em.createQuery("SELECT c, shc.grade FROM CourseEntity c, StudentHasCoursesEntity shc " +
+                                             "WHERE c.id = ?1 AND  c.id = shc.idCourses AND shc.idStudents = ?2")
                     .setParameter(1, courseId)
                     .setParameter(2, studentId)
                     .getResultList();
@@ -191,27 +187,14 @@ public class CoursesDAO_JPAImpl implements CoursesDAO {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            StudentEntity s = em.getReference(StudentEntity.class, studentId);
-            CourseEntity c = em.getReference(CourseEntity.class, courseId);
-            StudentHasClassesEntity shc = new StudentHasClassesEntity(s, c, grade);
-            em.persist(shc);
-            tx.commit();
-        } catch (EntityNotFoundException e){
-            tx.rollback();
-            System.err.println("Student or course do not exist");
-        } catch(EntityExistsException e) {
-            try {
-                StudentHasClassesEntity shc = em.getReference(StudentHasClassesEntity.class, new StudentHasClassesIdEmbeddable(studentId, courseId));
-                shc.setGrade(grade);
-                tx.commit();
-            } catch (EntityNotFoundException ee) {  // should not happen ever
-                tx.rollback();
-                System.err.println("*Thanos meme*\nImpossible!");
-            } catch(Exception ee) {
-                tx.rollback();
-                ee.printStackTrace();
-                throw ee;   // throw it again
+            StudentHasCoursesEntity shc = em.find(StudentHasCoursesEntity.class, new StudentHasCoursesId(studentId, courseId));
+            if (shc == null) {   // if not exists then persist grade
+                shc = new StudentHasCoursesEntity(studentId, courseId, grade);
+                em.persist(shc);
+            } else {             // if exists remove grade
+                em.remove(shc);
             }
+            tx.commit();
         } catch(Exception e) {
             tx.rollback();
             e.printStackTrace();

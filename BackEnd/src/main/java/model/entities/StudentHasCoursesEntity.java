@@ -4,46 +4,57 @@ package model.entities;
 import javax.persistence.*;
 
 @Entity
+@IdClass(StudentHasCoursesId.class)
 @Table(name = "students_has_courses")
-public class StudentHasClassesEntity {
-    @EmbeddedId
-    @AttributeOverrides({
-        @AttributeOverride(name = "idStudents", column = @Column(name = "idStudents")),
-        @AttributeOverride(name = "idCourses", column = @Column(name = "idCourses"))
-    })
-    private StudentHasClassesIdEmbeddable id;
+public class StudentHasCoursesEntity {
+
+    @Id @Column(name = "idStudents", nullable = false)
+    private int idStudents;
+    @Id @Column(name = "idCourses", nullable = false)
+    private int idCourses;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idStudents")
+    @JoinColumn(name = "idStudents", referencedColumnName = "idStudents")
     private StudentEntity studentEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idCourses")
+    @JoinColumn(name = "idCourses", referencedColumnName = "idCourses")
     private CourseEntity courseEntity;
 
     private Double grade;
 
-    public StudentHasClassesEntity() {}
+    public StudentHasCoursesEntity() { }
 
-    public StudentHasClassesEntity(int sid, int cid, Double grade) {
-        this.id = new StudentHasClassesIdEmbeddable(sid, cid);
+    public StudentHasCoursesEntity(int sid, int cid, Double grade) {
+        this.idStudents = sid;
+        this.idCourses = cid;
         this.grade = grade;
     }
 
-    public StudentHasClassesEntity(StudentEntity s, CourseEntity c, Double grade) {
+    public StudentHasCoursesEntity(StudentEntity s, CourseEntity c, Double grade) {
         this.studentEntity = s;
         this.courseEntity = c;
-        this.id = new StudentHasClassesIdEmbeddable(s.getId(), c.getId());
+        this.idStudents = s.getId();
+        this.idCourses = c.getId();
         this.grade = grade;
     }
 
-
-    public StudentHasClassesIdEmbeddable getId() {
-        return id;
+    public int getIdStudents() {
+        return idStudents;
     }
 
-    public void setId(StudentHasClassesIdEmbeddable id) {
-        this.id = id;
+    public void setIdStudents(int idStudents) {
+        this.idStudents = idStudents;
+    }
+
+    public int getIdCourses() {
+        return idCourses;
+    }
+
+    public void setIdCourses(int idCourses) {
+        this.idCourses = idCourses;
     }
 
     public StudentEntity getStudentEntity() {

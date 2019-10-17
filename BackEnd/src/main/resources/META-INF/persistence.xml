@@ -11,8 +11,8 @@
         <class>model.entities.UserEntity</class>
         <class>model.entities.StudentEntity</class>
         <class>model.entities.CourseEntity</class>
-        <class>model.entities.StudentHasClassesEntity</class>
-        <class>model.entities.StudentHasClassesIdEmbeddable</class>
+        <class>model.entities.StudentHasCoursesEntity</class>
+        <class>model.entities.StudentHasCoursesId</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>

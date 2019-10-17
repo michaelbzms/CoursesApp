@@ -1,22 +1,17 @@
 package model.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Embeddable
-public class StudentHasClassesIdEmbeddable implements Serializable {
 
-    // TODO: Mapping of these fields uses the default name instead of the one in db -> must fix (but how?)
-    @Column(name = "idStudents")  // <- DOES NOT WORK
+public class StudentHasCoursesId implements Serializable {
+
     private int idStudents;
-    @Column(name = "idCourses")   // <- DOES NOT WORK
     private int idCourses;
 
-    public StudentHasClassesIdEmbeddable() {}
+    public StudentHasCoursesId() {}
 
-    public StudentHasClassesIdEmbeddable(int idStudents, int idCourses) {
+    public StudentHasCoursesId(int idStudents, int idCourses) {
         this.idStudents = idStudents;
         this.idCourses = idCourses;
     }
@@ -25,7 +20,7 @@ public class StudentHasClassesIdEmbeddable implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StudentHasClassesIdEmbeddable that = (StudentHasClassesIdEmbeddable) o;
+        StudentHasCoursesId that = (StudentHasCoursesId) o;
         return Objects.equals(this.idStudents, that.idStudents) && Objects.equals(this.idCourses, that.idCourses);
     }
 
