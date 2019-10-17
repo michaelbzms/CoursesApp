@@ -25,10 +25,16 @@ public class StudentHasClassesEntity {
 
     public StudentHasClassesEntity() {}
 
-    public StudentHasClassesEntity(StudentEntity s, CourseEntity c) {
+    public StudentHasClassesEntity(int sid, int cid, Double grade) {
+        this.id = new StudentHasClassesIdEmbeddable(sid, cid);
+        this.grade = grade;
+    }
+
+    public StudentHasClassesEntity(StudentEntity s, CourseEntity c, Double grade) {
         this.studentEntity = s;
         this.courseEntity = c;
         this.id = new StudentHasClassesIdEmbeddable(s.getId(), c.getId());
+        this.grade = grade;
     }
 
 

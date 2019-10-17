@@ -1,5 +1,7 @@
 package model.entities;
 
+import model.Course;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
 })
 public class CourseEntity {
 
-    @Id @Column(name = "idCourses", nullable = false) @GeneratedValue
+    @Id @Column(name = "idCourses", nullable = false) @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;      // Might be null for objects with unknown database user id
     @Column(nullable = false) private String title;
     @Column(nullable = false) private int ects;
@@ -27,6 +29,33 @@ public class CourseEntity {
 
     @OneToMany(mappedBy = "courseEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<StudentHasClassesEntity> studentHasClasses = new ArrayList<>();
+
+    public CourseEntity() { }
+
+    public CourseEntity(Course c) {
+        if (c.getId() != null) this.id = c.getId();
+        this.title = c.getTitle();
+        this.ects = c.getEcts();
+        this.semester = c.getSemester();
+        this.category = c.getCategory();
+        this.type = c.getType();
+        boolean[] E = c.getE();
+        if (E != null) {
+            this.E1 = E[0];
+            this.E2 = E[1];
+            this.E3 = E[2];
+            this.E4 = E[3];
+            this.E5 = E[4];
+            this.E6 = E[5];
+        } else {
+            this.E1 = false;
+            this.E2 = false;
+            this.E3 = false;
+            this.E4 = false;
+            this.E5 = false;
+            this.E6 = false;
+        }
+    }
 
     public int getId() { return id; }
 

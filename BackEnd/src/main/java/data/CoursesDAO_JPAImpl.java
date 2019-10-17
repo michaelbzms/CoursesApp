@@ -4,10 +4,15 @@ import Util.Feedback;
 import data.jpa.JPAUtil;
 import model.Course;
 import model.entities.CourseEntity;
+import model.entities.StudentEntity;
+import model.entities.StudentHasClassesEntity;
+import model.entities.StudentHasClassesIdEmbeddable;
 import org.springframework.dao.DataAccessException;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.EntityTransaction;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,21 +116,108 @@ public class CoursesDAO_JPAImpl implements CoursesDAO {
 
     @Override
     public void submitCourse(Course course) throws DataAccessException {
-
+        EntityManager em = JPAUtil.getNewEntityManager();
+        if (em == null) { System.err.println("ErRoR: JPA null EntityManager!"); return; }
+        EntityTransaction tx = em.getTransaction();
+        try {
+            CourseEntity c = new CourseEntity(course);
+            tx.begin();
+            em.persist(c);
+            tx.commit();
+        } catch(Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            throw e;   // throw it again
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public Feedback editCourse(Course course) throws DataAccessException {
-        return null;
+        EntityManager em = JPAUtil.getNewEntityManager();
+        if (em == null) { System.err.println("ErRoR: JPA null EntityManager!"); return new Feedback(false, "JPA error"); }
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            CourseEntity c = em.getReference(CourseEntity.class, course.getId());
+            c.setTitle(course.getTitle());
+            c.setEcts(course.getEcts());
+            c.setSemester(course.getSemester());
+            c.setCategory(course.getCategory());
+            c.setType(course.getType());
+            // TODO: also E...
+            tx.commit();
+        } catch(EntityNotFoundException e) {
+            tx.rollback();
+            return new Feedback(false, "Course does not exist");
+        } catch(Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            throw e;   // throw it again
+        } finally {
+            em.close();
+        }
+        return new Feedback(true);
     }
 
     @Override
     public Feedback deleteCourse(int courseId) throws DataAccessException {
-        return null;
+        EntityManager em = JPAUtil.getNewEntityManager();
+        if (em == null) { System.err.println("ErRoR: JPA null EntityManager!"); return new Feedback(false, "JPA error"); }
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            CourseEntity c = em.getReference(CourseEntity.class, courseId);
+            em.remove(c);
+            tx.commit();
+        } catch(EntityNotFoundException e) {
+            tx.rollback();
+            return new Feedback(false, "Course does not exist");
+        } catch(Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            throw e;   // throw it again
+        } finally {
+            em.close();
+        }
+        return new Feedback(true);
     }
 
     @Override
     public void setGradeForCourse(int studentId, int courseId, Double grade) throws DataAccessException {
-
+        EntityManager em = JPAUtil.getNewEntityManager();
+        if (em == null) { System.err.println("ErRoR: JPA null EntityManager!"); return; }
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            StudentEntity s = em.getReference(StudentEntity.class, studentId);
+            CourseEntity c = em.getReference(CourseEntity.class, courseId);
+            StudentHasClassesEntity shc = new StudentHasClassesEntity(s, c, grade);
+            em.persist(shc);
+            tx.commit();
+        } catch (EntityNotFoundException e){
+            tx.rollback();
+            System.err.println("Student or course do not exist");
+        } catch(EntityExistsException e) {
+            try {
+                StudentHasClassesEntity shc = em.getReference(StudentHasClassesEntity.class, new StudentHasClassesIdEmbeddable(studentId, courseId));
+                shc.setGrade(grade);
+                tx.commit();
+            } catch (EntityNotFoundException ee) {  // should not happen ever
+                tx.rollback();
+                System.err.println("*Thanos meme*\nImpossible!");
+            } catch(Exception ee) {
+                tx.rollback();
+                ee.printStackTrace();
+                throw ee;   // throw it again
+            }
+        } catch(Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            throw e;   // throw it again
+        } finally {
+            em.close();
+        }
     }
 }
