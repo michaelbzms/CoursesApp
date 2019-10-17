@@ -44,7 +44,7 @@ export class CourseComponent implements OnInit {
     const gradeElem = document.getElementById('course_' + this.course.id) as HTMLInputElement;
     const gradeStr = gradeElem.value;
     const grade = parseFloat(gradeElem.value);
-    if (isNaN(grade) || grade < 0.0 || grade > 10.0) {
+    if (gradeStr !== null && gradeStr !== '' && (isNaN(grade) || grade < 0.0 || grade > 10.0)) {
       gradeElem.value = this.course.hasOwnProperty('grade') ? this.course.grade : '';
       Toasts.toast('Οι βαθμοί πρέπει να είναι μεταξύ 0 και 10');
       return;

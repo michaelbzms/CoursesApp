@@ -13,8 +13,8 @@ export class CourseService {
   updateGrade(jwt: string, courseId: number, grade?: number): Observable<any> {
     const headers = new HttpHeaders({ jwt });
     const options = { headers };
-    const httpParams = new HttpParams();
-    if (grade) { httpParams.append('grade', String(grade)); }
+    let httpParams = new HttpParams();
+    if (grade) { httpParams = httpParams.append('grade', String(grade)); }
     return this.http.post(environment.apiUrl + '/courses/' + courseId, httpParams, options);
   }
 

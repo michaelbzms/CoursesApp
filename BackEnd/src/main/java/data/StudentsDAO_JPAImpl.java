@@ -93,9 +93,9 @@ public class StudentsDAO_JPAImpl implements StudentsDAO {
             tx.begin();
             StudentEntity se = em.getReference(StudentEntity.class, student.getId());
             UserEntity ue = se.getUserEntity();
-            ue.setEmail(student.getEmail());
-            se.setFirstName(student.getFirstName());
-            se.setLastName(student.getLastName());
+            if (student.getEmail() != null) ue.setEmail(student.getEmail());
+            if (student.getFirstName() != null) se.setFirstName(student.getFirstName());
+            if (student.getLastName() != null) se.setLastName(student.getLastName());
             tx.commit();
         } catch (EntityNotFoundException e) {
             tx.commit();

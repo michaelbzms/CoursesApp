@@ -13,10 +13,10 @@ export class ProfileService {
   updateStudent(jwt: string, userId: number, updateData: {firstname, lastname, email?}): Observable<any> {
     const headers = new HttpHeaders({jwt});
     const options = {headers};
-    const httpParams = new HttpParams()
+    let httpParams = new HttpParams()
       .append('firstname', updateData.firstname)
       .append('lastname', updateData.lastname);
-    if (updateData.email) { httpParams.append('email', updateData.email); }
+    if (updateData.email) { httpParams = httpParams.append('email', updateData.email); }
     return this.http.put(environment.apiUrl + '/students/' + userId, httpParams, options);
   }
 

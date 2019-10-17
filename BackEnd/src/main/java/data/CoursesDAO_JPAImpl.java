@@ -97,7 +97,7 @@ public class CoursesDAO_JPAImpl implements CoursesDAO {
             List res = em.createNativeQuery(sql).setParameter(1, studentId).setParameter(2, studentId).getResultList();
             for (Object[] o : (List<Object[]>) res) {  // each column is a field of o
                 l.add(new Course(
-                        (Integer) o[0], (String) o[1], (int) o[2], (int) o[3], (String) o[4], ((double) o[12] != -1.0) ? (Double) o[12] : null, (String) o[5],
+                        (Integer) o[0], (String) o[1], (int) o[2], (int) o[3], (String) o[4], (o[12] != null && (double) o[12] != -1.0) ? (Double) o[12] : null, (String) o[5],
                         new boolean[]{(Byte) o[6] != 0, (Byte) o[7] != 0, (Byte) o[8] != 0, (Byte) o[9] != 0, (Byte) o[10] != 0, (Byte) o[11] != 0})
                 );
             }
@@ -188,12 +188,12 @@ public class CoursesDAO_JPAImpl implements CoursesDAO {
         try {
             tx.begin();
             StudentHasCoursesEntity shc = em.find(StudentHasCoursesEntity.class, new StudentHasCoursesId(studentId, courseId));
-            if (shc == null) {   // if not exists then persist grade
+            if (shc == null && grade != null) {   // if not exists then persist grade
                 shc = new StudentHasCoursesEntity(studentId, courseId, grade);
                 em.persist(shc);
-            } else {             // if exists remove grade
+            } else if (shc != null) {             // if exists remove grade
                 em.remove(shc);
-            }
+            } // else no need to do anything
             tx.commit();
         } catch(Exception e) {
             tx.rollback();

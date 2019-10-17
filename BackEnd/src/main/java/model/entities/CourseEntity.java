@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "courses")
 @NamedQueries({
-    @NamedQuery(name="selectallcourses", query="SELECT c FROM CourseEntity c")
+    @NamedQuery(name="selectallcourses", query="SELECT c FROM CourseEntity c ORDER BY c.semester")
 })
 public class CourseEntity {
 

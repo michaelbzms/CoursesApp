@@ -16,4 +16,8 @@ public class JPAUtil {
         return emf.createEntityManager();
     }
 
+    public void shutdown() {
+        emf.close();
+    }
+
 }
