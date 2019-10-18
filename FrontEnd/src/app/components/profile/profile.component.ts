@@ -11,11 +11,11 @@ import {Toasts} from '../../utils/Toasts';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  @Input() jwt: string;
-  @Input() user: any;
-  @Output() sessionChanged = new EventEmitter();
-  updateForm: FormGroup = null;           // Reactive form
-  changePasswordForm: FormGroup = null;   // ^^
+  @Input() private jwt: string;
+  @Input() private user: any;
+  @Output() private sessionChanged = new EventEmitter();
+  private updateForm: FormGroup = null;           // Reactive form
+  private changePasswordForm: FormGroup = null;   // ^^
 
   constructor(private service: ProfileService) { }
 

@@ -1,91 +1,96 @@
-<div class="courses-container">
-  <div class="row">
-    <div class="col-2">
-      <div class="bg-light-transparent p-4">
-        <h2 class="text-color2">Φίλτρα</h2>
-        <hr>
-        <form class="form-group mb-0">
-          <select [(ngModel)]="semesterFilter" name="semester" class="form-control" id="chooseSemester">
-            <option value="0" selected>Όλα τα εξάμηνα</option>
-            <option value="1">1o εξάμηνο</option>
-            <option value="2">2o εξάμηνο</option>
-            <option value="3">3o εξάμηνο</option>
-            <option value="4">4o εξάμηνο</option>
-            <option value="5">5o εξάμηνο</option>
-            <option value="6">6o εξάμηνο</option>
-            <option value="7">7o εξάμηνο</option>
-            <option value="8">8o εξάμηνο</option>
+<div *ngIf="this.user !== null && this.user['isAdmin']; else visitorOrStudent">
+  <h3 class="text-center mt-4">Forbidden for admins</h3>
+</div>
+<ng-template #visitorOrStudent>
+  <div class="courses-container">
+    <div class="row">
+      <div class="col-2">
+        <div class="bg-light-transparent p-4">
+          <h2 class="text-color2">Φίλτρα</h2>
+          <hr>
+          <form class="form-group mb-0">
+            <select [(ngModel)]="semesterFilter" name="semester" class="form-control" id="chooseSemester">
+              <option value="0" selected>Όλα τα εξάμηνα</option>
+              <option value="1">1o εξάμηνο</option>
+              <option value="2">2o εξάμηνο</option>
+              <option value="3">3o εξάμηνο</option>
+              <option value="4">4o εξάμηνο</option>
+              <option value="5">5o εξάμηνο</option>
+              <option value="6">6o εξάμηνο</option>
+              <option value="7">7o εξάμηνο</option>
+              <option value="8">8o εξάμηνο</option>
+            </select>
+          </form>
+          <br>
+          <select [(ngModel)]="specificationFilter" name="specification" class="form-control" id="chooseSpecification">
+            <option value="0" selected>Όλες οι ειδικεύσεις</option>
+            <option value="1">Ε1</option>
+            <option value="2">Ε2</option>
+            <option value="3">Ε3</option>
+            <option value="4">Ε4</option>
+            <option value="5">Ε5</option>
+            <option value="6">Ε6</option>
           </select>
-        </form>
-        <br>
-        <select [(ngModel)]="specificationFilter" name="specification" class="form-control" id="chooseSpecification">
-          <option value="0" selected>Όλες οι ειδικεύσεις</option>
-          <option value="1">Ε1</option>
-          <option value="2">Ε2</option>
-          <option value="3">Ε3</option>
-          <option value="4">Ε4</option>
-          <option value="5">Ε5</option>
-          <option value="6">Ε6</option>
-        </select>
-        <br>
-        <h4 class="text-color2">Κατηγορία</h4>
-        <form class="form-group mb-0">
-          <div class="form-check"><label><input [(ngModel)]="coreFilter" class="mr-3" type="checkbox" name="category" value="core">Κορμού</label></div>
-          <div class="form-check"><label><input [(ngModel)]="labFilter" class="mr-3" type="checkbox" name="category" value="optional_lab">Προαιρετικά Εργαστήρια</label></div>
-          <div class="form-check"><label><input [(ngModel)]="AFilter" class="mr-3" type="checkbox" name="category" value="A">Κατεύθυνση Α</label></div>
-          <div class="form-check"><label><input [(ngModel)]="BFilter" class="mr-3" type="checkbox" name="category" value="B">Κατεύθυνση Β</label></div>
-          <div class="form-check"><label><input [(ngModel)]="GEFilter" class="mr-3" type="checkbox" name="category" value="general_education">Γενικής Παιδείας</label></div>
-          <div class="form-check"><label><input [(ngModel)]="freeFilter" class="mr-3" type="checkbox" name="category" value="free">Ελεύθερα</label></div>
-        </form>
-        <br>
-        <h4 class="text-color2">Τύπος</h4>
-        <form class="form-group mb-0">
-          <div class="form-check"><label><input [(ngModel)]="obligatory" class="mr-3" type="checkbox" name="category" value="core">Υποχρεωτικά</label></div>
-          <div class="form-check"><label><input [(ngModel)]="obligatoryByChoice" class="mr-3" type="checkbox" name="category" value="optional_lab">Κατ'επιλογήν υποχρεωτικλα</label></div>
-          <div class="form-check"><label><input [(ngModel)]="basic" class="mr-3" type="checkbox" name="category" value="A">Βασικά Ειδίκευσης</label></div>
-          <div class="form-check"><label><input [(ngModel)]="optional" class="mr-3" type="checkbox" name="category" value="B">Προαιρετικά</label></div>
-        </form>
+          <br>
+          <h4 class="text-color2">Κατηγορία</h4>
+          <form class="form-group mb-0">
+            <div class="form-check"><label><input [(ngModel)]="coreFilter" class="mr-3" type="checkbox" name="category" value="core">Κορμού</label></div>
+            <div class="form-check"><label><input [(ngModel)]="labFilter" class="mr-3" type="checkbox" name="category" value="optional_lab">Προαιρετικά Εργαστήρια</label></div>
+            <div class="form-check"><label><input [(ngModel)]="AFilter" class="mr-3" type="checkbox" name="category" value="A">Κατεύθυνση Α</label></div>
+            <div class="form-check"><label><input [(ngModel)]="BFilter" class="mr-3" type="checkbox" name="category" value="B">Κατεύθυνση Β</label></div>
+            <div class="form-check"><label><input [(ngModel)]="GEFilter" class="mr-3" type="checkbox" name="category" value="general_education">Γενικής Παιδείας</label></div>
+            <div class="form-check"><label><input [(ngModel)]="freeFilter" class="mr-3" type="checkbox" name="category" value="free">Ελεύθερα</label></div>
+          </form>
+          <br>
+          <h4 class="text-color2">Τύπος</h4>
+          <form class="form-group mb-0">
+            <div class="form-check"><label><input [(ngModel)]="obligatory" class="mr-3" type="checkbox" name="category" value="core">Υποχρεωτικά</label></div>
+            <div class="form-check"><label><input [(ngModel)]="obligatoryByChoice" class="mr-3" type="checkbox" name="category" value="optional_lab">Κατ'επιλογήν υποχρεωτικλα</label></div>
+            <div class="form-check"><label><input [(ngModel)]="basic" class="mr-3" type="checkbox" name="category" value="A">Βασικά Ειδίκευσης</label></div>
+            <div class="form-check"><label><input [(ngModel)]="optional" class="mr-3" type="checkbox" name="category" value="B">Προαιρετικά</label></div>
+          </form>
+        </div>
       </div>
-    </div>
-    <div class="col-7">
-      <!-- List of courses -->
-      <div class="bg-light-transparent p-4">
-        <h2 class="text-color2">Μαθήματα</h2>
-        <hr>
-        <div class="coursesDiv pr-2">
-          <div class="text-center" *ngIf="courses === null">
-            <div class="lds-dual-ring"></div>
-          </div>
-          <div *ngFor="let c of (courses | coursesFilter: semesterFilter : specificationFilter : coreFilter : labFilter
-                : AFilter : BFilter : GEFilter : freeFilter : obligatory : obligatoryByChoice : basic : optional)">
-            <app-course [course]="c" [jwt]="jwt" [user]="user" (gradesChanged)="calculateAVGandECTS()"></app-course>
+      <div class="col-7">
+        <!-- List of courses -->
+        <div class="bg-light-transparent p-4">
+          <h2 class="text-color2">Μαθήματα</h2>
+          <hr>
+          <div class="coursesDiv pr-2">
+            <div class="text-center" *ngIf="courses === null">
+              <div class="lds-dual-ring"></div>
+            </div>
+            <div *ngFor="let c of (courses | coursesFilter: semesterFilter : specificationFilter : coreFilter : labFilter
+                  : AFilter : BFilter : GEFilter : freeFilter : obligatory : obligatoryByChoice : basic : optional)">
+              <app-course [course]="c" [jwt]="jwt" [user]="user" (gradesChanged)="calculateAVGandECTS()"></app-course>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-3">
-      <!-- Grade Average and ECTs total -->
-      <div class="bg-light-transparent p-4">
-        <h2 class="text-color2">Μέσος Όρος</h2>
-        <hr>
-        <div class="text-center grade">
-          <h3 [className]="getClassNameForAVG()">
-            {{avgGrade}}
-          </h3>
-          <span class="subtitle">από 10</span>
+      <div class="col-3">
+        <!-- Grade Average and ECTs total -->
+        <div class="bg-light-transparent p-4">
+          <h2 class="text-color2">Μέσος Όρος</h2>
+          <hr>
+          <div class="text-center grade">
+            <h3 [className]="getClassNameForAVG()">
+              {{avgGrade}}
+            </h3>
+            <span class="subtitle">από 10</span>
+          </div>
         </div>
-      </div>
-      <div class="bg-light-transparent p-4 mt-3">
-        <h2 class="text-color2">Συγκεντρωμένα ECTs</h2>
-        <hr>
-        <div class="text-center ects"><h3>{{totalEcts}}</h3><span class="subtitle">απο 240</span></div>
-      </div>
-      <div *ngIf="jwt === null">
-        <div class="alert-danger p-4 rounded mt-3 text-center">
-          <h4>⚠ Προσοχή!</h4>
-          Δεν είστε συνδεδεμένος. Oι αλλαγές σας δεν αποθηκεύονται!
+        <div class="bg-light-transparent p-4 mt-3">
+          <h2 class="text-color2">Συγκεντρωμένα ECTs</h2>
+          <hr>
+          <div class="text-center ects"><h3>{{totalEcts}}</h3><span class="subtitle">απο 240</span></div>
+        </div>
+        <div *ngIf="jwt === null">
+          <div class="alert-danger p-4 rounded mt-3 text-center">
+            <h4>⚠ Προσοχή!</h4>
+            Δεν είστε συνδεδεμένος. Oι αλλαγές σας δεν αποθηκεύονται!
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</ng-template>

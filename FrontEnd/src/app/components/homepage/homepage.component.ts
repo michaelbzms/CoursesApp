@@ -11,11 +11,11 @@ import {Toasts} from '../../utils/Toasts';
   styleUrls: ['./homepage.component.css']
 })
 export class HomepageComponent implements OnInit, OnDestroy {
-  @Input() jwt: string;
-  @Input() user: any;
-  registerForm: FormGroup = null;
+  @Input() private jwt: string;
+  @Input() private user: any;
+  private registerForm: FormGroup = null;
 
-  logInOrOutSubscription;
+  private logInOrOutSubscription;
 
   constructor(private service: HomepageService) { }
 

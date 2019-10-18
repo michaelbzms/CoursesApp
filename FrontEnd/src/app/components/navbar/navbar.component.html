@@ -6,7 +6,12 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item mr-2">
-        <a routerLink="/courses" id="courses_page" class="nav-link link-color1" (click)="select_page('courses')">Μαθήματα</a>
+        <div *ngIf="this.user !== null && this.user['isAdmin']; else coursesPage">
+          <a routerLink="/coursesmanagement" id="coursesmanagement_page" class="nav-link link-color1" (click)="select_page('coursesmanagement')">Διαχείριση Μαθημάτων</a>
+        </div>
+        <ng-template #coursesPage>
+          <a routerLink="/courses" id="courses_page" class="nav-link link-color1" (click)="select_page('courses')">Μαθήματα</a>
+        </ng-template>
       </li>
       <div *ngIf="jwt === null; else loggedInBlock">
         <li class="nav-item tooltip-bottom" data-tooltip="Συνδεθείτε για να έχετε πρόσβαση στον λογαριασμό σας." style="cursor: default !important;">
@@ -33,10 +38,10 @@
     </div>
     <ng-template #loggedInBlock2>
       <div *ngIf="user.isAdmin; else studentId">
-        <h3 class="text-color3">{{this.user.email}}</h3>
+        <h3 class="text-color3 mb-0">{{this.user.email}}</h3>
       </div>
       <ng-template #studentId>
-        <h3 class="text-color2">{{this.user.firstName}} {{this.user.lastName}}</h3>
+        <h3 class="text-color2 mb-0">{{this.user.firstName}} {{this.user.lastName}}</h3>
       </ng-template>
       <button (click)="logout()" class="btn btn-outline-secondary ml-3">Αποσύνδεση</button>
     </ng-template>

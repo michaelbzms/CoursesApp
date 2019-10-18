@@ -1,0 +1,60 @@
+<div *ngIf="this.user !== null && this.user['isAdmin']; else visitorOrStudent">
+  <div class="course_mg_container">
+    <div class="row">
+      <div class="col-8">
+        <div class="bg-light-transparent p-4">
+          <h2 class="text-color2">Διαχείριση Μαθημάτων</h2>
+          <hr>
+          <div class="course_mg_list" >
+            <div *ngFor="let c of courses">
+              <app-coursemanagement [jwt]="this.jwt" [user]="this.user" [course]="c"></app-coursemanagement>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="bg-light-transparent p-4">
+          <h2 class="text-color2">Νέο Μαθήμα</h2>
+          <hr>
+          <form [formGroup]="newCourseForm">
+            <div class="row mb-2">
+              <div class="col-3"><label class="mb-0" for="title">Τίτλος</label></div>
+              <div class="col-9"><input formControlName="title" id="title" class="form-control" type="text" [value]="title.value"></div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-3"><label class="mb-0" for="semester">Εξάμηνο</label></div>
+              <div class="col-9"><input formControlName="semester" id="semester" class="form-control" type="number" [value]="semester.value"
+                                        onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')"></div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-3"><label class="mb-0" for="ects">ECTs</label></div>
+              <div class="col-9"><input formControlName="ects" id="ects" class="form-control" type="number" [value]="ects.value"
+                                        onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')"></div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-3"><label class="mb-0" for="category">Κατηγορία</label></div>
+              <div class="col-9"><select formControlName="category" id="category" class="form-control">
+                <option></option>
+              </select></div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-3"><label class="mb-0" for="type">Τύπος</label></div>
+              <div class="col-9"><select formControlName="type" id="type" class="form-control" type="text">
+                <option></option>
+              </select></div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-3"></div>
+              <div class="col-9">
+                <button class="btn btn-success" type="submit">Προθήκη</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #visitorOrStudent>
+  <h3 class="text-center mt-4">Forbidden for students or visitors</h3>
+</ng-template>

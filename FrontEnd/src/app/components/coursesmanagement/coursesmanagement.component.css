@@ -1,0 +1,15 @@
+.course_mg_container {
+  width: 94vw;
+  margin-left: 3vw;
+  margin-top: 20px;
+}
+
+.course_mg_list {
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+label {
+  font-size: 125%;
+  padding-top: 4px;
+}

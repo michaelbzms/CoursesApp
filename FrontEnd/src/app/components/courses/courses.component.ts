@@ -11,28 +11,28 @@ import {environment} from '../../../environments/environment';
 export class CoursesComponent implements OnInit, OnDestroy {
 
   static globalCourses: any[] = null;
-  @Input() jwt: string;
-  @Input() user: object;
-  courses: any[] = null;
-  avgGrade: number;
-  totalEcts: number;
+  @Input() private jwt: string;
+  @Input() private user: any;
+  private courses: any[] = null;
+  private avgGrade: number;
+  private totalEcts: number;
   navigationSubscription;
   // filter inputs:
-  semesterFilter = 0;
+  private semesterFilter = 0;
 
-  specificationFilter = 0;
-  coreFilter = false;
-  labFilter = false;
-  AFilter = false;
-  BFilter = false;
-  GEFilter = false;
-  freeFilter = false;
-  obligatory = false;
-  obligatoryByChoice = false;
-  basic = false;
-  optional = false;
+  private specificationFilter = 0;
+  private coreFilter = false;
+  private labFilter = false;
+  private AFilter = false;
+  private BFilter = false;
+  private GEFilter = false;
+  private freeFilter = false;
+  private obligatory = false;
+  private obligatoryByChoice = false;
+  private basic = false;
+  private optional = false;
 
-  logInOrOutSubscription;
+  private logInOrOutSubscription;
 
   static roundUp(num, precision) {
     precision = Math.pow(10, precision);

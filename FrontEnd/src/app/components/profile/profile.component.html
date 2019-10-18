@@ -58,8 +58,32 @@
     </div>
     <!-- Admin -->
     <ng-template #AdminPage>
-      <h2>Greetings admin {{user.email}}!</h2>
-      <p>This page has not been implemented yet.</p>
+      <h2 class="text-color3">{{user.email}}</h2>
+      <hr>
+      <h3 class="text-color3">Αλλαγή κωδικού πρόσβασης</h3>
+      <form [formGroup]="changePasswordForm" (submit)="changePassword()" id="changePasswordForm" class="py-2">
+        <label class="mb-0" for="oldpassword">Παλιός κωδικός</label>
+        <input formControlName="oldpassword" id="oldpassword" class="form-control" type="password" name="oldpassword">
+
+        <label class="mt-2 mb-0 " for="newpassword">Νέος κωδικός</label>
+        <input [ngClass]="newpassword.hasError('minlength') ? 'invalid_field' : ''" formControlName="newpassword"
+               id="newpassword" class="form-control" type="password" name="newpassword">
+        <small *ngIf="newpassword.hasError('minlength')" class="d-block rounded text-danger">
+          Για λόγους ασφαλείας χρειάζονται τουλάχστον 6 χαρακτήρες
+        </small>
+
+        <label class="mt-2 mb-0" for="repassword">Επανάληψη νέου κωδικού</label>
+        <input [ngClass]="changePasswordForm.hasError('mismatchingpasswords') ? 'invalid_field' : ''" formControlName="repassword"
+               id="repassword" class="form-control" type="password" name="repassword">
+        <small *ngIf="changePasswordForm.hasError('mismatchingpasswords')" class="d-block rounded text-danger">
+          Ο κωδικός αυτός δεν ταιριάζει με τον προηγούμενο
+        </small>
+
+        <div class="mt-3">
+          <button class="btn btn-success d-inline-block mr-2" type="submit" onclick="this.blur();">Αποθήκευση</button>
+          <button class="btn btn-outline-secondary d-inline-block" type="reset" onclick="this.blur();">Ακύρωση</button>
+        </div>
+      </form>
     </ng-template>
   </div>
 </div>

@@ -9,10 +9,10 @@ import {Toasts} from '../../utils/Toasts';
   styleUrls: ['./course.component.css']
 })
 export class CourseComponent implements OnInit {
-  @Input() jwt: string;
-  @Input() user: object;
-  @Input() course: any;
-  @Output() gradesChanged = new EventEmitter();
+  @Input() private jwt: string;
+  @Input() private user: object;
+  @Input() private course: any;
+  @Output() private gradesChanged = new EventEmitter();
 
   constructor(private service: CourseService) { }
 

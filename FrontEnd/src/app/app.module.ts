@@ -13,6 +13,8 @@ import { NavbarService } from './services/navbar.service';
 import { RouterModule } from '@angular/router';
 import { NotFoundComponentComponent } from './components/not-found-component/not-found-component.component';
 import { HttpClientModule } from '@angular/common/http';
+import { CoursesmanagementComponent } from './components/coursesmanagement/coursesmanagement.component';
+import { CoursemanagementComponent } from './components/coursemanagement/coursemanagement.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { HttpClientModule } from '@angular/common/http';
     HomepageComponent,
     CourseComponent,
     CoursesFilterPipe,
-    NotFoundComponentComponent
+    NotFoundComponentComponent,
+    CoursemanagementComponent,
+    CoursesmanagementComponent
   ],
   imports: [
     BrowserModule,
@@ -31,6 +35,7 @@ import { HttpClientModule } from '@angular/common/http';
     RouterModule.forRoot([
       {path: '', component: HomepageComponent},
       {path: 'courses', component: CoursesComponent},
+      {path: 'coursesmanagement', component: CoursesmanagementComponent},
       {path: 'profile', component: ProfileComponent},
       {path: '**', component: NotFoundComponentComponent},
     ], {onSameUrlNavigation: 'reload'}),

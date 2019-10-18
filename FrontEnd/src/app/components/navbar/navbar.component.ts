@@ -14,14 +14,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   static logInOrOutEvent = new Subject();
   static userChanged = new Subject();
 
-  jwt: string;
-  @Input() user: any;
-  @Output() loggedInOrOut = new EventEmitter();
-  @Output() selectedPage = new EventEmitter();
-  loginForm: FormGroup = null;    // Reactive Form
-  invalidLoginForm = false;
+  private jwt: string;
+  @Input() private user: any;
+  @Output() private loggedInOrOut = new EventEmitter();
+  @Output() private selectedPage = new EventEmitter();
+  private loginForm: FormGroup = null;    // Reactive Form
+  private invalidLoginForm = false;
 
-  userChangedSubscription;
+  private userChangedSubscription;
 
   public static getJWT(): string {
     return localStorage.getItem('jwt');
