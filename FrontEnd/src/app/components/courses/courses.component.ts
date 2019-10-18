@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {NavbarComponent} from '../navbar/navbar.component';
 import {CoursesService} from '../../services/courses.service';
 import {environment} from '../../../environments/environment';
@@ -8,18 +8,18 @@ import {environment} from '../../../environments/environment';
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.css']
 })
-export class CoursesComponent implements OnInit {
+export class CoursesComponent implements OnInit, OnDestroy {
 
-  constructor(private service: CoursesService) { }
   static globalCourses: any[] = null;
   @Input() jwt: string;
   @Input() user: object;
   courses: any[] = null;
   avgGrade: number;
   totalEcts: number;
-
+  navigationSubscription;
   // filter inputs:
   semesterFilter = 0;
+
   specificationFilter = 0;
   coreFilter = false;
   labFilter = false;
@@ -32,30 +32,41 @@ export class CoursesComponent implements OnInit {
   basic = false;
   optional = false;
 
+  logInOrOutSubscription;
+
   static roundUp(num, precision) {
     precision = Math.pow(10, precision);
     return Math.ceil(num * precision) / precision;
   }
 
+  constructor(private service: CoursesService) { }
+
   ngOnInit() {
     this.jwt = NavbarComponent.getJWT();
     this.user = NavbarComponent.getUser();
-    if (CoursesComponent.globalCourses === null) {
-      console.log('Loading courses...');
-      this.getCourses();
-      CoursesComponent.globalCourses = this.courses;
+    const reset = localStorage.getItem('reset_courses');
+    if (CoursesComponent.globalCourses === null || reset !== null) {
+      console.log('Loading courses from backend...');
+      this.getCourses();   // (!) async
+      if (reset !== null) { localStorage.removeItem('reset_courses'); }
     } else {
       console.log('Restoring courses from static...');
       this.courses = CoursesComponent.globalCourses;
       this.calculateAVGandECTS();
     }
+    this.logInOrOutSubscription = NavbarComponent.logInOrOutEvent.subscribe((val) => {
+      this.jwt = NavbarComponent.getJWT();
+      this.user = NavbarComponent.getUser();
+      if (val === true) {   // login
+        console.log('Loading courses from backend after login...');
+        this.getCourses();
+        localStorage.removeItem('reset_courses');
+      }
+    });
   }
 
-  // tslint:disable-next-line:use-life-cycle-interface
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.jwt !== null) {   // if logged in
-      this.getCourses();
-    }
+  ngOnDestroy() {
+    this.logInOrOutSubscription.unsubscribe();
   }
 
   getCourses() {
@@ -160,13 +171,13 @@ export class CoursesComponent implements OnInit {
       this.calculateAVGandECTS();
       return;
     }
-    ///////////////////////
     this.service.getCourses(this.jwt)
         .subscribe(results => {
           if (results.hasOwnProperty('error')) {
             alert('Backend Error: ' + results.message);
           } else {
             this.courses = results.courses;
+            CoursesComponent.globalCourses = this.courses;
             this.calculateAVGandECTS();
           }
         }, error => {

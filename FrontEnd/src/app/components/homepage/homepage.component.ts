@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {NavbarComponent} from '../navbar/navbar.component';
 import {HomepageService} from '../../services/homepage.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
@@ -10,10 +10,12 @@ import {Toasts} from '../../utils/Toasts';
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css']
 })
-export class HomepageComponent implements OnInit {
+export class HomepageComponent implements OnInit, OnDestroy {
   @Input() jwt: string;
   @Input() user: any;
   registerForm: FormGroup = null;
+
+  logInOrOutSubscription;
 
   constructor(private service: HomepageService) { }
 
@@ -28,7 +30,17 @@ export class HomepageComponent implements OnInit {
       firstname: new FormControl('', [Validators.required]),
       lastname: new FormControl('', [Validators.required])
     }, [Customvalidators.matchingPasswordsValidator]);
+
+    this.logInOrOutSubscription = NavbarComponent.logInOrOutEvent.subscribe((val) => {
+      this.jwt = NavbarComponent.getJWT();
+      this.user = NavbarComponent.getUser();
+    });
   }
+
+  ngOnDestroy() {
+    this.logInOrOutSubscription.unsubscribe();
+  }
+
 
   registerStudent() {
     const email = this.email.value;

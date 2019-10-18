@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NavbarComponent} from './components/navbar/navbar.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ export class AppComponent implements OnInit {
   user: object;
   currentPage: string;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.jwt = NavbarComponent.getJWT();
@@ -21,11 +22,17 @@ export class AppComponent implements OnInit {
 
   getCurrentPage(page) {
     this.currentPage = page;
+    this.router.navigateByUrl('/' + (page === 'homepage' ? '' : page));
   }
 
-  loggedInEvent(inOrOut: boolean) {
-    this.jwt = NavbarComponent.getJWT();
-    this.user = NavbarComponent.getUser();
+  loggedInOrOutEvent(inOrOut: boolean) {
+    if (inOrOut) {   // login
+      this.jwt = NavbarComponent.getJWT();
+      this.user = NavbarComponent.getUser();
+    } else {         // logout
+      this.jwt = null;
+      this.user = null;
+    }
   }
 
   sessionChangedEvent() {

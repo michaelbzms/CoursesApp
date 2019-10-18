@@ -1,21 +1,27 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {NavbarService} from '../../services/navbar.service';
 import {environment} from '../../../environments/environment';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Toasts} from '../../utils/Toasts';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
+  static logInOrOutEvent = new Subject();
+  static userChanged = new Subject();
+
   jwt: string;
   @Input() user: any;
   @Output() loggedInOrOut = new EventEmitter();
   @Output() selectedPage = new EventEmitter();
   loginForm: FormGroup = null;    // Reactive Form
   invalidLoginForm = false;
+
+  userChangedSubscription;
 
   public static getJWT(): string {
     return localStorage.getItem('jwt');
@@ -52,6 +58,13 @@ export class NavbarComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required])
     });
+    this.userChangedSubscription = NavbarComponent.userChanged.subscribe(() => {
+      this.user = NavbarComponent.getUser();
+    });
+  }
+
+  ngOnDestroy() {
+    this.userChangedSubscription.unsubscribe();
   }
 
   get email() {
@@ -76,8 +89,6 @@ export class NavbarComponent implements OnInit {
     } else {
       this.invalidLoginForm = false;
     }
-    // this.service.login((document.getElementById('emailLogin') as HTMLInputElement).value,
-    //                    (document.getElementById('passwordLogin') as HTMLInputElement).value)
     this.service.login(this.email.value, this.password.value)
         .subscribe(results => {
           console.log(results);
@@ -86,7 +97,14 @@ export class NavbarComponent implements OnInit {
             this.jwt = results.jwt;
             this.user = results.user;
             this.loggedInOrOut.emit(true);
-            this.select_page('courses');  // redirect
+            localStorage.setItem('reset_courses', 'true');
+            NavbarComponent.logInOrOutEvent.next(true);
+            if (!(window.location.pathname === '/courses' || window.location.pathname === '/courses/')) {
+              this.select_page('courses');          // redirect
+            }
+            // clear form
+            this.email.setValue('');
+            this.password.setValue('');
           } else {
             alert('Error: ' + ((results.hasOwnProperty('message')) ? results.message : 'Unknown'));
           }
@@ -100,9 +118,12 @@ export class NavbarComponent implements OnInit {
     this.jwt = null;
     this.user = null;
     this.loggedInOrOut.emit(false);
-    if (document.getElementById('profile_page').classList.contains('isSelected')) {
-      this.select_page('homepage');  // redirect
-    }
+    localStorage.setItem('reset_courses', 'true');   // reset
+    NavbarComponent.logInOrOutEvent.next(false);
+    this.select_page('homepage');    // redirect
+    // clear form
+    this.email.setValue('');
+    this.password.setValue('');
   }
 
   select_page(page: string) {

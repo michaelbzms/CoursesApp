@@ -62,6 +62,7 @@ export class ProfileComponent implements OnInit {
           NavbarComponent.unsetUser();
           NavbarComponent.setUser(this.user);
           this.sessionChanged.emit();
+          NavbarComponent.userChanged.next();
           Toasts.toast('Επιτυχής ενημέρωση στοιχείων λογαριασμού.');
         }
     }, error => {

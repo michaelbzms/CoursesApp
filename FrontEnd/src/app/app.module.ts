@@ -32,8 +32,8 @@ import { HttpClientModule } from '@angular/common/http';
       {path: '', component: HomepageComponent},
       {path: 'courses', component: CoursesComponent},
       {path: 'profile', component: ProfileComponent},
-      {path: '**', component: NotFoundComponentComponent}
-    ]),
+      {path: '**', component: NotFoundComponentComponent},
+    ], {onSameUrlNavigation: 'reload'}),
     ReactiveFormsModule,
     HttpClientModule
   ],

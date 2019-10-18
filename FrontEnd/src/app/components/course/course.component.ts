@@ -51,7 +51,7 @@ export class CourseComponent implements OnInit {
     }
     if ((grade === null || gradeStr.replace(/\s/g, '') === '') && this.course.hasOwnProperty('grade')) {  // if it had now it hasn't a grade
       delete this.course.grade;
-      if (this.jwt !== null) {    // if on session update backend
+      if (this.jwt !== null) {    // if logged in update backend
         this.service.updateGrade(this.jwt, this.course.id)
             .subscribe(results => {
               if (results.hasOwnProperty('error')) {
@@ -63,7 +63,7 @@ export class CourseComponent implements OnInit {
       }
     } else if (grade !== null && gradeStr.replace(/\s/g, '') !== '') {   // if the grade is not null
       this.course.grade = grade;
-      if (this.jwt !== null) {    // if on session update backend
+      if (this.jwt !== null) {    // if logged in update backend
         this.service.updateGrade(this.jwt, this.course.id, grade)
             .subscribe(results => {
               if (results.hasOwnProperty('error')) {
