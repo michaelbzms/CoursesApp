@@ -29,7 +29,7 @@
               <div class="col-9">
                 <input formControlName="semester" id="semester" class="form-control" type="number" [value]="semester.value"
                                         onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')">
-                <small *ngIf="triedSubmittingForm && !semester.valid && title.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
+                <small *ngIf="triedSubmittingForm && !semester.valid && semester.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
               </div>
             </div>
             <div class="row mb-2">
@@ -37,7 +37,7 @@
               <div class="col-9">
                 <input formControlName="ects" id="ects" class="form-control" type="number" [value]="ects.value"
                                         onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')">
-                <small *ngIf="triedSubmittingForm && !ects.valid && title.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
+                <small *ngIf="triedSubmittingForm && !ects.valid && ects.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
               </div>
             </div>
             <div class="row mb-2">
@@ -52,7 +52,7 @@
                   <option value="free">Ελεύθερο</option>
                   <option value="general_education">Γενικής Παιδείας</option>
                 </select>
-                <small *ngIf="triedSubmittingForm && !category.valid && title.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
+                <small *ngIf="triedSubmittingForm && !category.valid && category.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
               </div>
             </div>
             <div class="row mb-2">
@@ -65,7 +65,7 @@
                   <option value="basic">Βασικό</option>
                   <option value="optional">Προαιρετικό</option>
                 </select>
-                <small *ngIf="triedSubmittingForm && !type.valid && title.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
+                <small *ngIf="triedSubmittingForm && !type.valid && type.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
               </div>
             </div>
             <div class="row mb-2">

@@ -20,7 +20,7 @@ export class CoursesService {
     }
   }
 
-  submitNewCourse(title: string, semester: number, ects: number, category: string, type: string, jwt: string): Observable<any> {
+  submitNewCourse(jwt: string, title: string, semester: number, ects: number, category: string, type: string): Observable<any> {
     const httpParams = new HttpParams()
                       .append('title', title)
                       .append('semester', String(semester))

@@ -3,7 +3,7 @@ import {NavbarComponent} from '../navbar/navbar.component';
 import {CoursesService} from '../../services/courses.service';
 import {take} from 'rxjs/operators';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Toasts} from '../../utils/Toasts';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-coursesmanagement',
@@ -12,6 +12,7 @@ import {Toasts} from '../../utils/Toasts';
 })
 export class CoursesmanagementComponent implements OnInit, OnDestroy {
 
+  static courseDeletedEvent = new Subject();
   private user: any;
   private jwt: string;
   private courses: any[];
@@ -19,6 +20,7 @@ export class CoursesmanagementComponent implements OnInit, OnDestroy {
   private triedSubmittingForm = false;
 
   private logInOrOutSubscription;
+  private courseDeletionSubscription;
 
   constructor(private service: CoursesService) { }
 
@@ -39,10 +41,19 @@ export class CoursesmanagementComponent implements OnInit, OnDestroy {
       category: new FormControl('', [Validators.required]),
       type: new FormControl('', [Validators.required])
     });
+
+    this.courseDeletionSubscription = CoursesmanagementComponent.courseDeletedEvent.subscribe((courseId) => {
+      for (let i = 0 ; i < this.courses.length ; i++) {
+        if (this.courses[i].id === courseId) {
+          this.courses.splice(i, 1);
+        }
+      }
+    });
   }
 
   ngOnDestroy() {
     this.logInOrOutSubscription.unsubscribe();
+    this.courseDeletionSubscription.unsubscribe();
   }
 
   getCourses() {
@@ -60,13 +71,16 @@ export class CoursesmanagementComponent implements OnInit, OnDestroy {
   }
 
   submitNewCourse() {
-    this.triedSubmittingForm = true;
-    setTimeout(() => {
-      this.triedSubmittingForm = false;
-    }, 3000);
-
-    this.service.submitNewCourse(this.title.value, this.semester.value, this.ects.value,
-                                 this.category.value, this.type.value, this.jwt)
+    if (!this.newCourseForm.valid) {
+      this.triedSubmittingForm = true;
+      console.log('Invalid form' + this.triedSubmittingForm);
+      setTimeout(() => {
+        this.triedSubmittingForm = false;
+      }, 3000);
+      return;
+    }
+    this.service.submitNewCourse(this.jwt, this.title.value, this.semester.value, this.ects.value,
+                                 this.category.value, this.type.value)
       .pipe(take(1))
       .subscribe(results => {
         if (results.hasOwnProperty('error')) {
@@ -74,11 +88,16 @@ export class CoursesmanagementComponent implements OnInit, OnDestroy {
         } else {
           // re-fetch all courses
           this.getCourses();  // To improve: fetch only new one instead of all again?
+          // reset form
+          this.title.setValue('');
+          this.semester.setValue('');
+          this.ects.setValue('');
+          this.category.setValue('');
+          this.type.setValue('');
         }
       }, error => {
         alert('HTTP Error: ' + error);
       });
-    ;
   }
 
   get title() {

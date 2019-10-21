@@ -2,6 +2,7 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CourseService} from '../../services/course.service';
 import {take} from 'rxjs/operators';
 import {Toasts} from '../../utils/Toasts';
+import {CoursesmanagementComponent} from '../coursesmanagement/coursesmanagement.component';
 
 @Component({
   selector: 'app-coursemanagement',
@@ -67,6 +68,7 @@ export class CoursemanagementComponent implements OnInit {
           if (results.hasOwnProperty('error')) {
             alert('Backend Error: ' + results.message);
           } else {
+            CoursesmanagementComponent.courseDeletedEvent.next(this.course.id);
             Toasts.toast('Το μάθημα διαγράφηκε επιτυχώς!');
           }
         }, error => {

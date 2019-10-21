@@ -1,10 +1,10 @@
 <div class="course">
   <div *ngIf="!this.editing; else editingTag">
     <div class="row mb-0">
-      <div class="col-6">
+      <div class="col-7">
         <h4 class="text-color3">{{course.title}}</h4>
       </div>
-      <div class="col-6">
+      <div class="col-5">
         <button class="btn btn-outline-danger float-right" (click)="deleteCourse()" onClick="this.blur()">Διαγραφή</button>
         <button class="btn btn-warning mr-2 float-right" (click)="startEdit()" onClick="this.blur()">Επεξεργασία</button>
       </div>
@@ -18,12 +18,12 @@
   </div>
   <ng-template #editingTag>
     <div class="row mb-0">
-      <div class="col-6">
+      <div class="col-7">
         <h4 class="text-color3">
           <input class="form-control" type="text" [value]="course.title" #titleRef>
         </h4>
       </div>
-      <div class="col-6">
+      <div class="col-5">
         <button class="btn btn-outline-secondary float-right" (click)="cancelEdit()" onClick="this.blur()">Ακύρωση</button>
         <button class="btn btn-warning mr-2 float-right" (click)="updateCourse()" onClick="this.blur()">Αποθήκευση</button>
       </div>

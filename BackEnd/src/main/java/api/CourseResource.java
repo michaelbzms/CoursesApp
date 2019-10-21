@@ -105,11 +105,12 @@ public class CourseResource extends ServerResource {
             String title = form.getFirstValue("title");
             String ectsStr = form.getFirstValue("ects");
             String semesterStr = form.getFirstValue("semester");
-            String path = form.getFirstValue("path");
+            String category = form.getFirstValue("category");
             String type = form.getFirstValue("type");
             // TODO: add E1, ..., E6 options
 
-            Feedback fb = coursesDAO.editCourse(new Course(courseId, title, (ectsStr == null) ? -1 : Integer.parseInt(ectsStr), (semesterStr == null) ? -1 : Integer.parseInt(semesterStr), path, null, type));
+            Feedback fb = coursesDAO.editCourse(new Course(courseId, title, (ectsStr == null) ? -1 : Integer.parseInt(ectsStr),
+                    (semesterStr == null) ? -1 : Integer.parseInt(semesterStr), category, null, type));
             if (!fb.SUCCESS) {
                 this.setStatus(Status.CLIENT_ERROR_NOT_FOUND);
                 return null;

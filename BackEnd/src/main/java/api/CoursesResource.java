@@ -53,17 +53,25 @@ public class CoursesResource extends ServerResource {
             String title = form.getFirstValue("title");
             String ectsStr = form.getFirstValue("ects");
             String semesterStr = form.getFirstValue("semester");
-            String path = form.getFirstValue("path");
+            String category = form.getFirstValue("category");
             String type = form.getFirstValue("type");
             // TODO: add E1, ..., E6 options
 
             if (title == null || "".equals(title) ||
                 ectsStr == null || "".equals(ectsStr) ||
                 semesterStr == null || "".equals(semesterStr) ||
-                path == null || "".equals(path)) {
+                category == null || "".equals(category)) {
                 return JsonMapRepresentation.getJSONforError("Missing or empty necessary parameter(s)");
             }
-            coursesDAO.submitCourse(new Course(null, title, Integer.parseInt(ectsStr), Integer.parseInt(semesterStr), path, null, type));
+
+//            String test = getQueryValue("title");
+//
+//            System.out.println("______Ελληνικά__________\n" + title);
+//            System.out.println("__________________\n" + test);
+//
+//            return JsonMapRepresentation.getJSONforError("test");
+
+            coursesDAO.submitCourse(new Course(null, title, Integer.parseInt(ectsStr), Integer.parseInt(semesterStr), category, null, type));
             return JsonMapRepresentation.getJSONforSuccess();
         } catch (NumberFormatException e) {
             return JsonMapRepresentation.getJSONforError("Non-integer given to parameter that must be an integer number");
