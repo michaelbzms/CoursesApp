@@ -18,4 +18,23 @@ export class CourseService {
     return this.http.post(environment.apiUrl + '/courses/' + courseId, httpParams, options);
   }
 
+  deleteCourse(jwt: string, courseId: number): Observable<any> {
+    const headers = new HttpHeaders({ jwt });
+    const options = { headers };
+    return this.http.delete(environment.apiUrl + '/courses/' + courseId, options);
+  }
+
+  editCourse(jwt: string, courseId: number, title: string, semester: number, ects: number, category: string, type: string)
+    : Observable<any> {
+    const headers = new HttpHeaders({ jwt });
+    const options = { headers };
+    const httpParams = new HttpParams()
+      .append('title', title)
+      .append('semester', String(semester))
+      .append('ects', String(ects))
+      .append('category', category)
+      .append('category', type);
+    return this.http.put(environment.apiUrl + '/courses/' + courseId, httpParams, options);
+  }
+
 }

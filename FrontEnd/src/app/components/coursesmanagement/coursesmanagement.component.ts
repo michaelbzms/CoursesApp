@@ -3,6 +3,7 @@ import {NavbarComponent} from '../navbar/navbar.component';
 import {CoursesService} from '../../services/courses.service';
 import {take} from 'rxjs/operators';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Toasts} from '../../utils/Toasts';
 
 @Component({
   selector: 'app-coursesmanagement',
@@ -15,6 +16,7 @@ export class CoursesmanagementComponent implements OnInit, OnDestroy {
   private jwt: string;
   private courses: any[];
   private newCourseForm: FormGroup = null;   // Reactive form
+  private triedSubmittingForm = false;
 
   private logInOrOutSubscription;
 
@@ -28,17 +30,7 @@ export class CoursesmanagementComponent implements OnInit, OnDestroy {
       this.user = NavbarComponent.getUser();
     });
 
-    this.service.getCourses()                // do not provide jwt -> we are just an admin. don't need grades
-        .pipe(take(1))
-        .subscribe(results => {
-          if (results.hasOwnProperty('error')) {
-            alert('Backend Error: ' + results.message);
-          } else {
-            this.courses = results.courses;
-          }
-        }, error => {
-          alert('HTTP Error: ' + error);
-        });
+    this.getCourses();
 
     this.newCourseForm = new FormGroup({
       title: new FormControl('', [Validators.required]),
@@ -51,6 +43,42 @@ export class CoursesmanagementComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.logInOrOutSubscription.unsubscribe();
+  }
+
+  getCourses() {
+    this.service.getCourses()                // do not provide jwt -> we are just an admin. don't need grades
+      .pipe(take(1))
+      .subscribe(results => {
+        if (results.hasOwnProperty('error')) {
+          alert('Backend Error: ' + results.message);
+        } else {
+          this.courses = results.courses;
+        }
+      }, error => {
+        alert('HTTP Error: ' + error);
+      });
+  }
+
+  submitNewCourse() {
+    this.triedSubmittingForm = true;
+    setTimeout(() => {
+      this.triedSubmittingForm = false;
+    }, 3000);
+
+    this.service.submitNewCourse(this.title.value, this.semester.value, this.ects.value,
+                                 this.category.value, this.type.value, this.jwt)
+      .pipe(take(1))
+      .subscribe(results => {
+        if (results.hasOwnProperty('error')) {
+          alert('Backend Error: ' + results.message);
+        } else {
+          // re-fetch all courses
+          this.getCourses();  // To improve: fetch only new one instead of all again?
+        }
+      }, error => {
+        alert('HTTP Error: ' + error);
+      });
+    ;
   }
 
   get title() {

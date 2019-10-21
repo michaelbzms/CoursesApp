@@ -16,37 +16,62 @@
         <div class="bg-light-transparent p-4">
           <h2 class="text-color2">Νέο Μαθήμα</h2>
           <hr>
-          <form [formGroup]="newCourseForm">
+          <form [formGroup]="newCourseForm" (submit)="submitNewCourse()">
             <div class="row mb-2">
               <div class="col-3"><label class="mb-0" for="title">Τίτλος</label></div>
-              <div class="col-9"><input formControlName="title" id="title" class="form-control" type="text" [value]="title.value"></div>
+              <div class="col-9">
+                <input formControlName="title" id="title" class="form-control" type="text" [value]="title.value">
+                <small *ngIf="triedSubmittingForm && !title.valid && title.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
+              </div>
             </div>
             <div class="row mb-2">
               <div class="col-3"><label class="mb-0" for="semester">Εξάμηνο</label></div>
-              <div class="col-9"><input formControlName="semester" id="semester" class="form-control" type="number" [value]="semester.value"
-                                        onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')"></div>
+              <div class="col-9">
+                <input formControlName="semester" id="semester" class="form-control" type="number" [value]="semester.value"
+                                        onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')">
+                <small *ngIf="triedSubmittingForm && !semester.valid && title.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
+              </div>
             </div>
             <div class="row mb-2">
               <div class="col-3"><label class="mb-0" for="ects">ECTs</label></div>
-              <div class="col-9"><input formControlName="ects" id="ects" class="form-control" type="number" [value]="ects.value"
-                                        onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')"></div>
+              <div class="col-9">
+                <input formControlName="ects" id="ects" class="form-control" type="number" [value]="ects.value"
+                                        onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')">
+                <small *ngIf="triedSubmittingForm && !ects.valid && title.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
+              </div>
             </div>
             <div class="row mb-2">
               <div class="col-3"><label class="mb-0" for="category">Κατηγορία</label></div>
-              <div class="col-9"><select formControlName="category" id="category" class="form-control">
-                <option></option>
-              </select></div>
+              <div class="col-9">
+                <select style="cursor: pointer" formControlName="category" id="category" class="form-control">
+                  <option value="" disabled selected hidden>Επιλέξτε κατηγορία</option>
+                  <option value="core">Κορμός</option>
+                  <option value="A">Α Κατεύθυνση</option>
+                  <option value="B">Β Κατεύθυνση</option>
+                  <option value="optional_lab">Προαιρετικό Εργαστήριο</option>
+                  <option value="free">Ελεύθερο</option>
+                  <option value="general_education">Γενικής Παιδείας</option>
+                </select>
+                <small *ngIf="triedSubmittingForm && !category.valid && title.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
+              </div>
             </div>
             <div class="row mb-2">
               <div class="col-3"><label class="mb-0" for="type">Τύπος</label></div>
-              <div class="col-9"><select formControlName="type" id="type" class="form-control" type="text">
-                <option></option>
-              </select></div>
+              <div class="col-9">
+                <select style="cursor: pointer" formControlName="type" id="type" class="form-control">
+                  <option value="" disabled selected hidden>Επιλέξτε τύπο</option>
+                  <option value="obligatory">Υποχρεωτικό</option>
+                  <option value="obligatory-by-choice">Κατά Επιλογήν Υποχρεωτικό</option>
+                  <option value="basic">Βασικό</option>
+                  <option value="optional">Προαιρετικό</option>
+                </select>
+                <small *ngIf="triedSubmittingForm && !type.valid && title.hasError('required')" class="d-block rounded text-danger">Υποχρεωτικό πεδίο</small>
+              </div>
             </div>
             <div class="row mb-2">
               <div class="col-3"></div>
               <div class="col-9">
-                <button class="btn btn-success" type="submit">Προθήκη</button>
+                <button class="btn btn-success" type="submit" onClick="this.blur()">Προθήκη</button>
               </div>
             </div>
           </form>
