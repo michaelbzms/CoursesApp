@@ -26,7 +26,7 @@ export class CoursesService {
                       .append('semester', String(semester))
                       .append('ects', String(ects))
                       .append('category', category)
-                      .append('category', type);
+                      .append('type', type);
     const headers = new HttpHeaders({jwt});
     const options = {headers};
     return this.http.post(environment.apiUrl + '/courses', httpParams, options);

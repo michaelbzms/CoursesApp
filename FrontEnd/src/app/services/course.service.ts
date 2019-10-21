@@ -33,7 +33,7 @@ export class CourseService {
       .append('semester', String(semester))
       .append('ects', String(ects))
       .append('category', category)
-      .append('category', type);
+      .append('type', type);
     return this.http.put(environment.apiUrl + '/courses/' + courseId, httpParams, options);
   }
 

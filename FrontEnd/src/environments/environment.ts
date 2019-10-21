@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8765/CoursesApp/api',
+  apiUrl: 'http://localhost:8080/CoursesApp/api',
   useDummyData: false   // for when the backend is not available
 };
 

@@ -60,7 +60,7 @@
     <ng-template #AdminPage>
       <h2 class="text-color3">{{user.email}}</h2>
       <hr>
-      <h3 class="text-color3">Αλλαγή κωδικού πρόσβασης</h3>
+      <h3 class="text-color2">Αλλαγή κωδικού πρόσβασης</h3>
       <form [formGroup]="changePasswordForm" (submit)="changePassword()" id="changePasswordForm" class="py-2">
         <label class="mb-0" for="oldpassword">Παλιός κωδικός</label>
         <input formControlName="oldpassword" id="oldpassword" class="form-control" type="password" name="oldpassword">
