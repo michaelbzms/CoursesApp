@@ -56,21 +56,12 @@ public class CoursesResource extends ServerResource {
             String category = form.getFirstValue("category");
             String type = form.getFirstValue("type");
             // TODO: add E1, ..., E6 options
-
             if (title == null || "".equals(title) ||
                 ectsStr == null || "".equals(ectsStr) ||
                 semesterStr == null || "".equals(semesterStr) ||
                 category == null || "".equals(category)) {
                 return JsonMapRepresentation.getJSONforError("Missing or empty necessary parameter(s)");
             }
-
-//            String test = getQueryValue("title");
-//
-//            System.out.println("______Ελληνικά__________\n" + title);
-//            System.out.println("__________________\n" + test);
-//
-//            return JsonMapRepresentation.getJSONforError("test");
-
             coursesDAO.submitCourse(new Course(null, title, Integer.parseInt(ectsStr), Integer.parseInt(semesterStr), category, null, type));
             return JsonMapRepresentation.getJSONforSuccess();
         } catch (NumberFormatException e) {

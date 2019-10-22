@@ -1,12 +1,14 @@
 package data.jpa;
 
+import conf.Configuration;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class JPAUtil {
 
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("PERSISTENCE");
+    private static EntityManagerFactory emf = (Configuration.USE_JPA) ? Persistence.createEntityManagerFactory("PERSISTENCE") : null;
 
     public static EntityManager getNewEntityManager() {
         if (emf == null) {
@@ -17,7 +19,7 @@ public class JPAUtil {
     }
 
     public void shutdown() {
-        emf.close();
+        if (emf != null) emf.close();
     }
 
 }
