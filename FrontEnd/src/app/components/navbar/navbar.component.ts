@@ -99,8 +99,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
             this.loggedInOrOut.emit(true);
             localStorage.setItem('reset_courses', 'true');
             NavbarComponent.logInOrOutEvent.next(true);
-            if (!(window.location.pathname === '/courses' || window.location.pathname === '/courses/')) {
-              this.select_page('courses');          // redirect
+            if (!this.user.isAdmin && !(window.location.pathname === '/courses' || window.location.pathname === '/courses/')) {
+              this.select_page('courses');              // redirect
+            } else if (this.user.isAdmin &&
+                       !(window.location.pathname === '/coursesmanagement' || window.location.pathname === '/coursesmanagement/')) {
+              this.select_page('coursesmanagement');    // redirect
             }
             // clear form
             this.email.setValue('');

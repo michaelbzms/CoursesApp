@@ -12,7 +12,7 @@ public class CoursesDAOMockImpl implements CoursesDAO {
         new Course(1, "Introduction to Programming", 7, 1, "core", null, "obligatory"),
         new Course(2, "Discrete Math", 7, 1, "core", null, "obligatory"),
         new Course(3, "Logical Drawing", 6, 1, "core", null, "obligatory")
-        // TODO: More
+        // ...
     };
 
     @Override

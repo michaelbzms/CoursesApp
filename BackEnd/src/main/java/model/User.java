@@ -23,8 +23,6 @@ public class User {
     }
 
     public static User getUserFromMap(LinkedHashMap map){
-        //System.out.println("\n>>>>>>>>DEBUG<<<<<<<<<");
-        //System.out.println(map.toString());
         if ("false".equals(map.get("admin"))){
             return Student.getStudentFromMap(map);
         }

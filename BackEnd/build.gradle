@@ -34,9 +34,9 @@ dependencies {
             'io.jsonwebtoken:jjwt-jackson:0.10.5'
 }
 
-//gretty {
-//    httpEnabled = true
-//    httpPort = 8765
-//    httpsEnabled = false   // TODO: switch to https after development
-//    contextPath = 'CoursesApp'
-//}
+gretty {
+    httpEnabled = true
+    httpPort = 8080
+    httpsEnabled = false   // CONFIG: switch to https after development
+    contextPath = 'CoursesApp'
+}

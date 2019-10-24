@@ -16,7 +16,6 @@ import org.restlet.util.Series;
 
 // Jason Web Token Handling class
 public class JWT {
-    // TODO: Test when done with login logic
 
     // The secret key. This should be in a property file NOT under source
     // control and not hard coded in real life. We're putting it here for

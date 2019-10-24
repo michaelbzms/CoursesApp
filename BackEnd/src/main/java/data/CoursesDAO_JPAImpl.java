@@ -142,7 +142,7 @@ public class CoursesDAO_JPAImpl implements CoursesDAO {
             c.setSemester(course.getSemester());
             c.setCategory(course.getCategory());
             c.setType(course.getType());
-            // TODO: also E...
+            // TODO: add E1, ..., E6 options
             tx.commit();
         } catch(EntityNotFoundException e) {
             tx.rollback();
