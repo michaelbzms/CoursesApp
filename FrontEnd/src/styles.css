@@ -46,6 +46,13 @@ body {
   border-radius: 5px;
 }
 
+.bg-danger-transparent {
+  background-color: rgba(248, 215, 218, 0.75);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
 /* MACROS */
 ::-webkit-input-placeholder {
   color: darkgrey;

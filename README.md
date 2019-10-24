@@ -9,7 +9,7 @@ as well as submit their grades to them).
 
 ## Architecture
 
-This project features a  **MySQL Database**, a **Restful Backend** and an **Angular Frontend** that consumes a REST API. 
+This project features a  **MySQL Database**, a **Java Restful Backend** and an **Angular Frontend** that consumes a REST API. 
 This architecture follows the **MVC (Model-View-Controller) Architecture** where the Backend makes up the Control and 
 Model part and the View has been moved to the client.
 

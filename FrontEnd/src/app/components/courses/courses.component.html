@@ -54,7 +54,7 @@
       <div class="col-7">
         <!-- List of courses -->
         <div class="bg-light-transparent p-4">
-          <h2 class="text-color2">Μαθήματα</h2>
+          <h2 class="text-color2 d-inline-block">Μαθήματα</h2><span class="d-inline float-right pt-3 subtitle">{{courses.length}} καταχωρημένα μαθήματα</span>
           <hr>
           <div class="coursesDiv pr-2">
             <div class="text-center" *ngIf="courses === null">
@@ -83,9 +83,13 @@
           <h2 class="text-color2">Συγκεντρωμένα ECTs</h2>
           <hr>
           <div class="text-center ects"><h3>{{totalEcts}}</h3><span class="subtitle">απο 240</span></div>
+          <div *ngIf="courseNum > 0" class="mt-3 text-center">
+            Έχεις περάσει <span>{{courseNum}}</span> {{ courseNum > 1 ? 'μαθήματα' : 'μάθημα' }} και σου λείπουν
+            <span>{{240 - totalEcts}}</span> ECTs για πτυχίο!
+          </div>
         </div>
         <div *ngIf="jwt === null">
-          <div class="alert-danger p-4 rounded mt-3 text-center">
+          <div class="alert-danger bg-danger-transparent p-4 rounded mt-3 text-center">
             <h4>⚠ Προσοχή!</h4>
             Δεν είστε συνδεδεμένος. Oι αλλαγές σας δεν αποθηκεύονται!
           </div>
