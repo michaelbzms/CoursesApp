@@ -44,6 +44,9 @@ public class StudentsResource extends ServerResource {
                 lastname == null || "".equals(lastname)) {
                 return JsonMapRepresentation.getJSONforError("Missing or empty necessary parameter(s)");
             }
+            email = email.trim();
+            firstname = firstname.trim();
+            lastname = lastname.trim();
             String hashedPassword = Hashing.getHashSHA256(password);    // hash password for security
             Feedback fb = studentsDAO.registerStudent(new Student(null, email, false, firstname, lastname), hashedPassword);
             if (!fb.SUCCESS) return JsonMapRepresentation.getJSONforError(fb.MESSAGE);   // aka email already taken

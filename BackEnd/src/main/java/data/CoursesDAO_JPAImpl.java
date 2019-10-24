@@ -93,7 +93,7 @@ public class CoursesDAO_JPAImpl implements CoursesDAO {
                     "      FROM courses c, students_has_courses shc\n" +
                     "      WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?))\n" +
                     "     ) AS courses\n" +
-                    "ORDER BY semester;";
+                    "ORDER BY courses.semester, courses.title";
             List res = em.createNativeQuery(sql).setParameter(1, studentId).setParameter(2, studentId).getResultList();
             for (Object[] o : (List<Object[]>) res) {  // each column is a field of o
                 l.add(new Course(

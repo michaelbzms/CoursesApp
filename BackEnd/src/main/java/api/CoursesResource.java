@@ -62,6 +62,7 @@ public class CoursesResource extends ServerResource {
                 category == null || "".equals(category)) {
                 return JsonMapRepresentation.getJSONforError("Missing or empty necessary parameter(s)");
             }
+            title = title.trim();
             coursesDAO.submitCourse(new Course(null, title, Integer.parseInt(ectsStr), Integer.parseInt(semesterStr), category, null, type));
             return JsonMapRepresentation.getJSONforSuccess();
         } catch (NumberFormatException e) {

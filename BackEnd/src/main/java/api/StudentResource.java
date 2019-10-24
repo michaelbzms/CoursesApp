@@ -42,6 +42,9 @@ public class StudentResource extends ServerResource {
             String email = form.getFirstValue("email");
             String firstname = form.getFirstValue("firstname");
             String lastname = form.getFirstValue("lastname");
+            if (email != null) email = email.trim();
+            if (firstname != null) firstname = firstname.trim();
+            if (lastname != null) lastname = lastname.trim();
             Feedback fb = studentsDAO.editStudent(new Student(studentId, email, false, firstname, lastname));
             // noinspection Duplicates
             if (!fb.SUCCESS && fb.STATUS == -1) {

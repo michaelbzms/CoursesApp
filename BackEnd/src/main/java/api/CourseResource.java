@@ -108,6 +108,7 @@ public class CourseResource extends ServerResource {
             String category = form.getFirstValue("category");
             String type = form.getFirstValue("type");
             // TODO: add E1, ..., E6 options
+            if (title != null) title = title.trim();
 
             Feedback fb = coursesDAO.editCourse(new Course(courseId, title, (ectsStr == null) ? -1 : Integer.parseInt(ectsStr),
                     (semesterStr == null) ? -1 : Integer.parseInt(semesterStr), category, null, type));

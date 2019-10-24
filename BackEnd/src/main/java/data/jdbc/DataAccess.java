@@ -241,7 +241,7 @@ public class DataAccess {
     }
 
     public List<Course> getAllCourses() throws DataAccessException {
-        return jdbcTemplate.query("SELECT * FROM courses ORDER BY semester", new CourseRowMapper());
+        return jdbcTemplate.query("SELECT * FROM courses ORDER BY semester, title", new CourseRowMapper());
     }
 
     public List<Course> getAllCourses(int studentId) throws DataAccessException {
@@ -256,7 +256,7 @@ public class DataAccess {
                      "      FROM courses c, students_has_courses shc\n" +
                      "      WHERE c.idCourses = shc.idCourses AND shc.idStudents = ?))\n" +
                      "     ) AS courses\n" +
-                     "ORDER BY semester;";
+                     "ORDER BY courses.semester, courses.title;";
         return jdbcTemplate.query(sql, new Object[]{studentId, studentId}, new CourseForStudentRowMapper());
     }
 
