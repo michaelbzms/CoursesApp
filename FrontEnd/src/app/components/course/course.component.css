@@ -11,9 +11,9 @@
 }
 
 .passed_course_perfect {
-  -moz-box-shadow:    inset 0 0 4px #2b9b1a;
-  -webkit-box-shadow: inset 0 0 4px #2b9b1a;
-  box-shadow:         inset 0 0 4px #2b9b1a;
+  -moz-box-shadow:    inset 0 0 4px #2f9b17;
+  -webkit-box-shadow: inset 0 0 4px #2f9b17;
+  box-shadow:         inset 0 0 4px #2f9b17;
 }
 
 .passed_course_very_good {
@@ -34,10 +34,16 @@
   box-shadow:         inset 0 0 4px #7c9b0f;
 }
 
+.passed_course_below_okay {
+  -moz-box-shadow:    inset 0 0 4px #9b901d;
+  -webkit-box-shadow: inset 0 0 4px #9b901d;
+  box-shadow:         inset 0 0 4px #9b901d;
+}
+
 .passed_course_bad {
-  -moz-box-shadow:    inset 0 0 4px #9b7f16;
-  -webkit-box-shadow: inset 0 0 4px #9b7f16;
-  box-shadow:         inset 0 0 4px #9b7f16;
+  -moz-box-shadow:    inset 0 0 4px #9b7817;
+  -webkit-box-shadow: inset 0 0 4px #9b7817;
+  box-shadow:         inset 0 0 4px #9b7817;
 }
 
 .failed_course {
@@ -58,8 +64,12 @@
   margin-top: 15px;
 }
 
+.grade-holder:hover {
+  cursor: pointer;
+}
+
 .perfect_grade {
-  color: #2b9b1a;
+  color: #2f9b17;
   font-weight: 500;
 }
 
@@ -78,8 +88,13 @@
   font-weight: 500;
 }
 
+.below_okay_grade {
+  color: #9b901d;
+  font-weight: 500;
+}
+
 .bad_grade {
-  color: #9b7f16;
+  color: #9b7817;
   font-weight: 500;
 }
 

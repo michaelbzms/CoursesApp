@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {NavbarService} from '../../services/navbar.service';
 import {environment} from '../../../environments/environment';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
@@ -10,7 +10,7 @@ import {Subject} from 'rxjs';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements OnInit, OnDestroy, AfterViewInit {
   static logInOrOutEvent = new Subject();
   static userChanged = new Subject();
 
@@ -63,6 +63,24 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit() {
+    // if page selected by url select it
+    switch (window.location.pathname) {
+      case '/courses/':
+      case '/courses':
+        this.select_page('courses');
+        break;
+      case '/coursesmanagement/':
+      case '/coursesmanagement':
+        this.select_page('coursesmanagement');
+        break;
+      case '/profile/':
+      case '/profile':
+        this.select_page('profile');
+        break;
+    }
+  }
+
   ngOnDestroy() {
     this.userChangedSubscription.unsubscribe();
   }
@@ -100,10 +118,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
             localStorage.setItem('reset_courses', 'true');
             NavbarComponent.logInOrOutEvent.next(true);
             if (!this.user.isAdmin && !(window.location.pathname === '/courses' || window.location.pathname === '/courses/')) {
-              this.select_page('courses');              // redirect
-            } else if (this.user.isAdmin &&
-                       !(window.location.pathname === '/coursesmanagement' || window.location.pathname === '/coursesmanagement/')) {
-              this.select_page('coursesmanagement');    // redirect
+              setTimeout(() => {  // hack to avoid undefined
+                this.select_page('courses');              // redirect
+              }, 0);
+              // tslint:disable-next-line:max-line-length
+            } else if (this.user.isAdmin && !(window.location.pathname === '/coursesmanagement' || window.location.pathname === '/coursesmanagement/')) {
+              setTimeout(() => {  // hack to avoid undefined
+                this.select_page('coursesmanagement');    // redirect
+              }, 0);
             }
             // clear form
             this.email.setValue('');

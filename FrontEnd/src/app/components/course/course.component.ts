@@ -41,7 +41,8 @@ export class CourseComponent implements OnInit {
       Toasts.toast('Οι βαθμοί πρέπει να είναι μεταξύ 0 και 10');
       return;
     }
-    if ((grade === null || gradeStr.replace(/\s/g, '') === '') && this.course.hasOwnProperty('grade')) {  // if it had now it hasn't a grade
+    if ((grade === null || gradeStr.replace(/\s/g, '') === '')
+         && this.course.hasOwnProperty('grade')) {                                   // if it had now it hasn't a grade
       delete this.course.grade;
       if (this.jwt !== null) {    // if logged in update backend
         this.service.updateGrade(this.jwt, this.course.id)
@@ -53,7 +54,9 @@ export class CourseComponent implements OnInit {
               alert('HTTP Error:' + error);
             });
       }
-    } else if (grade !== null && gradeStr.replace(/\s/g, '') !== '') {   // if the grade is not null
+      this.gradesChanged.emit();
+    } else if (grade !== null && gradeStr.replace(/\s/g, '') !== ''        // if the grade is not null
+               && (!this.course.hasOwnProperty('grade') || this.course.grade !== grade)) {   // and it's not the same grade it had before
       this.course.grade = grade;
       if (this.jwt !== null) {    // if logged in update backend
         this.service.updateGrade(this.jwt, this.course.id, grade)
@@ -65,8 +68,8 @@ export class CourseComponent implements OnInit {
               alert('HTTP Error:' + error);
             });
       }
+      this.gradesChanged.emit();
     }
-    this.gradesChanged.emit();
   }
 
   blur() {
@@ -81,10 +84,12 @@ export class CourseComponent implements OnInit {
     } else if (this.course.grade < 6.0) {
       return 'bad_grade';
     } else if (this.course.grade < 7.0) {
-      return 'okay_grade';
+      return 'below_okay_grade';
     } else if (this.course.grade < 8.0) {
-      return 'good_grade';
+      return 'okay_grade';
     } else if (this.course.grade < 9.0) {
+      return 'good_grade';
+    } else if (this.course.grade < 10.0) {
       return 'very_good_grade';
     } else {
       return 'perfect_grade';
@@ -99,10 +104,12 @@ export class CourseComponent implements OnInit {
     } else if (this.course.grade < 6.0) {
       return 'passed_course_bad';
     } else if (this.course.grade < 7.0) {
-      return 'passed_course_okay';
+      return 'passed_course_below_okay';
     } else if (this.course.grade < 8.0) {
-      return 'passed_course_good';
+      return 'passed_course_okay';
     } else if (this.course.grade < 9.0) {
+      return 'passed_course_good';
+    } else if (this.course.grade < 10.0) {
       return 'passed_course_very_good';
     } else {
       return 'passed_course_perfect';
