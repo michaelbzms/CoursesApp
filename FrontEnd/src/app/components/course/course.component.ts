@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {NavbarComponent} from '../navbar/navbar.component';
 import {CourseService} from '../../services/course.service';
 import {Toasts} from '../../utils/Toasts';
@@ -13,6 +13,7 @@ export class CourseComponent implements OnInit {
   @Input() private user: object;
   @Input() private course: any;
   @Output() private gradesChanged = new EventEmitter();
+  @ViewChild('gradeInputTag') gradeInputSelector: ElementRef;
   private clickedGrade = false;
 
   constructor(private service: CourseService) { }
@@ -22,41 +23,16 @@ export class CourseComponent implements OnInit {
     this.user = NavbarComponent.getUser();
   }
 
-  getCategory() {
-    switch (this.course.category) {
-      case 'core':
-        return 'Κορμός';
-      case 'A':
-        return 'Κατεύθυνση Α';
-      case 'B':
-        return 'Κατεύθυνση Β';
-      case 'general_education':
-        return 'Γενικής Παιδείας';
-      case 'free':
-        return 'Ελεύθερο';
-      case 'optional_lab':
-        return 'Προαιρετικό Εργαστήριο';
-      default:
-        return 'Αγνωστο';
-    }
-  }
-
-  getType() {
-    switch (this.course.type) {
-      case 'obligatory':
-        return 'Υποχρεωτικό';
-      case 'obligatory-by-choice':
-        return 'Κατά Επιλογήν Υποχρεωτικό';
-      case 'optional':
-        return 'Προαιρετικό';
-      case 'basic':
-        return 'Βασικό';
-      default:
-        return 'Αγνωστο';
-    }
+  clickedGradeHolder() {
+    this.clickedGrade = true;
+    setTimeout(() => {
+      // this hack allows it to be done after content is no longer hidden
+      this.gradeInputSelector.nativeElement.focus();
+    }, 0);
   }
 
   changeGrade() {
+    this.clickedGrade = false;
     const gradeElem = document.getElementById('course_' + this.course.id) as HTMLInputElement;
     const gradeStr = gradeElem.value;
     const grade = parseFloat(gradeElem.value);
@@ -130,6 +106,40 @@ export class CourseComponent implements OnInit {
       return 'passed_course_very_good';
     } else {
       return 'passed_course_perfect';
+    }
+  }
+
+  getCategory() {
+    switch (this.course.category) {
+      case 'core':
+        return 'Κορμός';
+      case 'A':
+        return 'Κατεύθυνση Α';
+      case 'B':
+        return 'Κατεύθυνση Β';
+      case 'general_education':
+        return 'Γενικής Παιδείας';
+      case 'free':
+        return 'Ελεύθερο';
+      case 'optional_lab':
+        return 'Προαιρετικό Εργαστήριο';
+      default:
+        return 'Αγνωστο';
+    }
+  }
+
+  getType() {
+    switch (this.course.type) {
+      case 'obligatory':
+        return 'Υποχρεωτικό';
+      case 'obligatory-by-choice':
+        return 'Κατά Επιλογήν Υποχρεωτικό';
+      case 'optional':
+        return 'Προαιρετικό';
+      case 'basic':
+        return 'Βασικό';
+      default:
+        return 'Αγνωστο';
     }
   }
 

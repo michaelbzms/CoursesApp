@@ -10,14 +10,16 @@
       </div>
     </div>
     <div class="col-1">
-      <!--      <div *ngIf="course.hasOwnProperty('grade') && !clickedGrade; else noGradeOrEditting">-->
-      <!--        <div class="d-inline-block float-right grade-input text-center" [ngClass]="getClassForGrade()">{{this.course.grade}}</div>-->
-      <!--      </div>-->
-      <!--      <ng-template #noGradeOrEditting>-->
-      <input class="d-inline-block float-right form-control grade-input text-center p-0" type="text" onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')"
+      <div *ngIf="course.hasOwnProperty('grade') && !clickedGrade">
+        <div class="d-inline-block float-right grade-input text-center" [ngClass]="getClassForGrade()">
+          <div class="grade-holder" (click)="clickedGradeHolder()">{{this.course.grade}}</div>
+        </div>
+      </div>
+      <div [hidden]="course.hasOwnProperty('grade') && !clickedGrade" > <!-- Hidden over ngIf is needed here -->
+        <input class="d-inline-block float-right form-control grade-input text-center p-0" type="text" onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')"
                id="course_{{course.id}}" [value]="(course.hasOwnProperty('grade')) ? course.grade : ''" (focusout)="changeGrade()" (keyup.enter)="blur()"
-      [ngClass]="getClassForGrade()">
-      <!--      </ng-template>-->
+               [ngClass]="getClassForGrade()" #gradeInputTag>
+      </div>
     </div>
   </div>
 </div>
