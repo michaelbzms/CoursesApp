@@ -1,13 +1,23 @@
-<div class="course">
-  <h4 class="text-color3">{{course.title}}</h4>
+<div class="course" [ngClass]="getBorderClassForGrade()">
   <div class="row">
-    <div class="col-3 pt-2">{{course.semester}}ο εξάμηνο</div>
-    <div class="col-3 pt-2">{{course.ects}} ECTs</div>
-    <div class="col-3 pt-2">{{this.getCategory()}}</div>
-    <div class="col-3">
-      <input class="d-inline-block float-right form-control grade-input text-center" type="text" onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')"
-             id="course_{{course.id}}" [value]="(course.hasOwnProperty('grade')) ? course.grade : ''" (focusout)="changeGrade()" (keyup.enter)="blur()"
-             [ngClass]="getClassForGrade()">
+    <div class="col-11">
+      <h4 class="text-color3">{{course.title}}</h4>
+      <div class="row">
+        <div class="col-3 pt-2">{{course.semester}}ο εξάμηνο</div>
+        <div class="col-3 pt-2">{{course.ects}} ECTs</div>
+        <div class="col-3 pt-2">{{this.getCategory()}}</div>
+        <div class="col-3 pt-2">{{this.getType()}}</div>
+      </div>
+    </div>
+    <div class="col-1">
+      <!--      <div *ngIf="course.hasOwnProperty('grade') && !clickedGrade; else noGradeOrEditting">-->
+      <!--        <div class="d-inline-block float-right grade-input text-center" [ngClass]="getClassForGrade()">{{this.course.grade}}</div>-->
+      <!--      </div>-->
+      <!--      <ng-template #noGradeOrEditting>-->
+      <input class="d-inline-block float-right form-control grade-input text-center p-0" type="text" onkeyup="this.value=this.value.replace(/[^(\d|.)]/,'')"
+               id="course_{{course.id}}" [value]="(course.hasOwnProperty('grade')) ? course.grade : ''" (focusout)="changeGrade()" (keyup.enter)="blur()"
+      [ngClass]="getClassForGrade()">
+      <!--      </ng-template>-->
     </div>
   </div>
 </div>

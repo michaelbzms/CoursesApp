@@ -13,6 +13,7 @@ export class CourseComponent implements OnInit {
   @Input() private user: object;
   @Input() private course: any;
   @Output() private gradesChanged = new EventEmitter();
+  private clickedGrade = false;
 
   constructor(private service: CourseService) { }
 
@@ -35,6 +36,21 @@ export class CourseComponent implements OnInit {
         return 'Ελεύθερο';
       case 'optional_lab':
         return 'Προαιρετικό Εργαστήριο';
+      default:
+        return 'Αγνωστο';
+    }
+  }
+
+  getType() {
+    switch (this.course.type) {
+      case 'obligatory':
+        return 'Υποχρεωτικό';
+      case 'obligatory-by-choice':
+        return 'Κατά Επιλογήν Υποχρεωτικό';
+      case 'optional':
+        return 'Προαιρετικό';
+      case 'basic':
+        return 'Βασικό';
       default:
         return 'Αγνωστο';
     }
@@ -96,6 +112,24 @@ export class CourseComponent implements OnInit {
       return 'very_good_grade';
     } else {
       return 'perfect_grade';
+    }
+  }
+
+  getBorderClassForGrade() {
+    if (!this.course.hasOwnProperty('grade')) {
+      return '';
+    } else if (this.course.grade < 5.0) {
+      return 'failed_course';
+    } else if (this.course.grade < 6.0) {
+      return 'passed_course_bad';
+    } else if (this.course.grade < 7.0) {
+      return 'passed_course_okay';
+    } else if (this.course.grade < 8.0) {
+      return 'passed_course_good';
+    } else if (this.course.grade < 9.0) {
+      return 'passed_course_very_good';
+    } else {
+      return 'passed_course_perfect';
     }
   }
 

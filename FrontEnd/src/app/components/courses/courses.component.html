@@ -54,7 +54,7 @@
       <div class="col-7">
         <!-- List of courses -->
         <div class="bg-light-transparent p-4">
-          <h2 class="text-color2 d-inline-block">Μαθήματα</h2><span class="d-inline float-right pt-3 subtitle">{{courses.length}} καταχωρημένα μαθήματα</span>
+          <h2 class="text-color2 d-inline-block">Μαθήματα</h2><span *ngIf="courses !== null" class="d-inline float-right pt-3 subtitle">{{courses.length}} καταχωρημένα μαθήματα</span>
           <hr>
           <div class="coursesDiv pr-2">
             <div class="text-center" *ngIf="courses === null">
