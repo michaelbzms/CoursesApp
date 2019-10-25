@@ -82,10 +82,17 @@
         <div class="bg-light-transparent p-4 mt-3">
           <h2 class="text-color2">Συγκεντρωμένα ECTs</h2>
           <hr>
+          <div class="progress mb-3">
+            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [ngStyle]="{ width: progress + '%' }"></div>
+          </div>
           <div class="text-center ects"><h3>{{totalEcts}}</h3><span class="subtitle">απο 240</span></div>
           <div *ngIf="courseNum > 0" class="mt-3 text-center">
-            Έχεις περάσει <span>{{courseNum}}</span> {{ courseNum > 1 ? 'μαθήματα' : 'μάθημα' }} και σου λείπουν
-            <span>{{240 - totalEcts}}</span> ECTs για πτυχίο!
+            Έχεις περάσει <span>{{courseNum}}</span> {{ courseNum > 1 ? 'μαθήματα' : 'μάθημα' }} και σου λείπουν {{240 - totalEcts}}
+            ECTs για πτυχίο!
+          </div>
+          <div *ngIf="failedCourseNum > 0" class="mt-3 text-center">
+            Χρωστάς <span>{{failedCourseNum}}</span> {{ failedCourseNum > 1 ? 'μαθήματα τα οποία συνιστούν' : 'μάθημα τo οποίο έχει' }}
+            {{failedECTs}} ECTs!
           </div>
         </div>
         <div *ngIf="jwt === null">

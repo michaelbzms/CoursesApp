@@ -17,6 +17,9 @@ export class CoursesComponent implements OnInit, OnDestroy {
   private avgGrade: number;
   private totalEcts: number;
   private courseNum = 0;
+  private failedCourseNum = 0;
+  private failedECTs = 0;
+  private progress = 0;
 
   // filter inputs:
   private semesterFilter = 0;
@@ -93,18 +96,26 @@ export class CoursesComponent implements OnInit, OnDestroy {
     let totalEcts = 0;
     let sumCoefGrades = 0.0;
     let courseNum = 0;
+    let failedCourseNum = 0;
+    let failedECTs = 0;
     if (this.courses !== null) {
       this.courses.forEach((course) => {
         if (course.hasOwnProperty('grade') && course.grade >= 5) {
           totalEcts += course.ects;
           sumCoefGrades += course.ects * course.grade;
           courseNum++;
+        } else if (course.hasOwnProperty('grade')) {
+          failedCourseNum++;
+          failedECTs += course.ects;
         }
       });
       this.totalEcts = totalEcts;
       this.avgGrade = (totalEcts > 0) ? sumCoefGrades / totalEcts : 0.0;
       this.avgGrade = CoursesComponent.roundUp(this.avgGrade, 2);
       this.courseNum = courseNum;
+      this.failedCourseNum = failedCourseNum;
+      this.failedECTs = failedECTs;
+      this.progress = Math.min(Math.round((totalEcts * 100) / 240), 100);
     }
   }
 
