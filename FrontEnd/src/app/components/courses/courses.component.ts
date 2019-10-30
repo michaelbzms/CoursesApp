@@ -2,6 +2,7 @@ import {Component, Input, OnDestroy, OnInit, SimpleChanges} from '@angular/core'
 import {NavbarComponent} from '../navbar/navbar.component';
 import {CoursesService} from '../../services/courses.service';
 import {environment} from '../../../environments/environment';
+import {CourseService} from '../../services/course.service';
 
 @Component({
   selector: 'app-courses',
@@ -42,7 +43,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
     return Math.ceil(num * precision) / precision;
   }
 
-  constructor(private service: CoursesService) { }
+  constructor(private service: CoursesService, private courseService: CourseService) { }
 
   ngOnInit() {
     this.jwt = NavbarComponent.getJWT();
@@ -117,6 +118,33 @@ export class CoursesComponent implements OnInit, OnDestroy {
       this.failedECTs = failedECTs;
       this.progress = Math.min(Math.round((totalEcts * 100) / 240), 100);
     }
+  }
+
+  reset_all_grades() {
+    if (!confirm('Διαγραφή των καταχωρημένων βαθμών σε όλα τα μαθήματα;')) {
+      return;
+    }
+    for (const c of this.courses) {
+      if (c.hasOwnProperty('grade')) { delete c.grade; }
+      if (this.jwt !== null) {    // if logged in update backend
+        this.courseService.updateGrade(this.jwt, c.id)
+          .subscribe(results => {
+            if (results.hasOwnProperty('error')) {
+              alert('Backend Error: ' + results.message);
+            }
+          }, error => {
+            alert('HTTP Error:' + error);
+          });
+      }
+    }
+    // reset
+    this.progress = 0;
+    this.totalEcts = 0;
+    this.avgGrade = 0.0;
+    this.avgGrade = 0.0;
+    this.courseNum = 0;
+    this.failedCourseNum = 0;
+    this.failedECTs = 0;
   }
 
   getClassNameForAVG(): string {

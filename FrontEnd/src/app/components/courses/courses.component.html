@@ -50,11 +50,18 @@
             <div class="form-check"><label><input [(ngModel)]="optional" class="mr-3" type="checkbox" name="category" value="B">Προαιρετικά</label></div>
           </form>
         </div>
+        <div class="bg-light-transparent p-4 mt-3">
+          <h2 class="text-color2">Επιλογές</h2>
+          <hr>
+          <button class="btn btn-outline-danger" onclick="this.blur();" (click)="reset_all_grades()"><span style="font-size: 90%">Διαγραφή βαθμών</span></button>
+        </div>
       </div>
+
       <div class="col-7">
         <!-- List of courses -->
         <div class="bg-light-transparent p-4">
-          <h2 class="text-color2 d-inline-block">Μαθήματα</h2><span *ngIf="courses !== null" class="d-inline float-right pt-3 subtitle">{{courses.length}} καταχωρημένα μαθήματα</span>
+          <h2 class="text-color2 d-inline">Μαθήματα</h2>
+          <span *ngIf="courses !== null" class="d-inline float-right mt-3 subtitle">{{courses.length}} καταχωρημένα μαθήματα συνολικά</span>
           <hr>
           <div class="coursesDiv pr-2">
             <div class="text-center" *ngIf="courses === null">
@@ -67,10 +74,11 @@
           </div>
         </div>
       </div>
+
       <div class="col-3">
         <!-- Grade Average and ECTs total -->
         <div class="bg-light-transparent p-4">
-          <h2 class="text-color2">Μέσος Όρος</h2>
+          <h2 class="text-color2 d-inline">Μέσος Όρος</h2>
           <hr>
           <div class="text-center grade">
             <h3 [className]="getClassNameForAVG()">
@@ -87,11 +95,12 @@
           </div>
           <div class="text-center ects"><h3>{{totalEcts}}</h3><span class="subtitle">απο 240</span></div>
           <div *ngIf="courseNum > 0" class="mt-3 text-center">
-            Έχεις περάσει <span>{{courseNum}}</span> {{ courseNum > 1 ? 'μαθήματα' : 'μάθημα' }} και σου λείπουν {{240 - totalEcts}}
+            Έχεις περάσει <span>{{courseNum}}</span> {{ courseNum > 1 ? 'μαθήματα' : 'μάθημα' }} και
+            {{ totalEcts < 240 ? 'σου λείπουν ' + (240 - totalEcts) : 'έχεις συμπληρώσει τα απαραίτητα'}}
             ECTs για πτυχίο!
           </div>
           <div *ngIf="failedCourseNum > 0" class="mt-3 text-center">
-            Χρωστάς <span>{{failedCourseNum}}</span> {{ failedCourseNum > 1 ? 'μαθήματα τα οποία συνιστούν' : 'μάθημα τo οποίο έχει' }}
+            Χρωστάς <span>{{failedCourseNum}}</span> {{ failedCourseNum > 1 ? 'μαθήματα τα οποία αθροίζουν σε' : 'μάθημα τo οποίο έχει' }}
             {{failedECTs}} ECTs!
           </div>
         </div>

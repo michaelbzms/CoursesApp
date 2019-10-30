@@ -28,6 +28,7 @@ export class CourseComponent implements OnInit {
     setTimeout(() => {
       // this hack allows it to be done after content is no longer hidden
       this.gradeInputSelector.nativeElement.focus();
+      this.gradeInputSelector.nativeElement.select();
     }, 0);
   }
 
