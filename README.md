@@ -45,3 +45,46 @@ We determine if the user is authorized from the _user_ object in the Jason Web T
 ### Password Hashing
 The passwords are not stored plaintext into the database. Instead, the salted **SHA256** hashing algorithm is used and 
 only their salted hashes are stored.
+
+## Overview
+
+This is the home page of CoursesApp. Here is where student registration happens.
+
+![alt text][homepage]
+
+After registration and/or login the student is navigated to the Courses page, where he can filter courses and submit 
+grades for them. In the following example Ονούφριος has already submitted some grades and is currently not using any 
+filters so all courses are shown.
+
+![alt_text][main1]
+
+After applying a semester restriction he sees and interacts only with courses in the 3rd semester. He is about to add 
+a grade to a course. Grades can be changed simply by clicking on them.
+
+Notice that his progress and GPA for his degree is being tracked in the right sidebar and a variety of filters are 
+available for him in the left sidebar to help him find courses of his interest. Also, notice that grades are coloured in 
+a way to reflect how "good" they are.
+
+![alt_text][main2]
+
+Ονούφριος can also edit his profile or delete it from the profile page as shown below.
+
+![alt_text][profile]
+
+This app also supports admin accounts. Admin accounts are not "registerable" but have to be manually inserted into the 
+database when setting up the app. 
+
+After a login, the admin is navigated to the Course Management page where he can add, edit or delete Courses.
+
+![alt_text][admin1] 
+
+The editing of a course is shown below and can be canceled at any time.
+
+![alt_text][admin2] 
+
+[homepage]: ./Imgs/homepage.PNG "Homepage"
+[main1]: ./Imgs/main1.PNG "Courses Page"
+[main2]: ./Imgs/main2.PNG "Courses Page with filter"
+[profile]: ./Imgs/profile.PNG "Profile Page"
+[admin1]: ./Imgs/admin1.PNG "Profile Page"
+[admin2]: ./Imgs/admin2.PNG "Profile Page"
